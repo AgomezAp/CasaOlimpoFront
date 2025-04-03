@@ -1,44 +1,38 @@
-<!-- <div class="receta-container">
-    <!-- Indicador de carga 
+<div class="receta-container">
+    <!-- Indicador de carga -->
     <div *ngIf="loading" class="loading-overlay">
       <div class="loading-indicator">
         <div class="spinner"></div>
         <p>Cargando...</p>
       </div>
     </div>
-    
-    <!-- Mensaje de error -
-    <div *ngIf="error" class="error-message">
-      <p>{{ error }}</p>
-      <button class="btn-close" (click)="error = ''">×</button>
-    </div>
-    
+  
     <div class="card recetas-card">
       <div class="card-header">
         <h3>Recetas Médicas</h3>
-        <button class="btn btn-primary" (click)="mostrarFormularioReceta = !mostrarFormularioReceta">
-          {{ mostrarFormularioReceta ? 'Cancelar' : '+ Nueva Receta' }}
+        <button class="btn btn-primary" (click)="toggleFormularioReceta()" *ngIf="!mostrarFormularioReceta">
+          + Nueva Receta
         </button>
       </div>
-      
+  
       <div class="card-body">
-        <!-- Formulario para nueva receta 
+        <!-- Formulario para nueva receta -->
         <div *ngIf="mostrarFormularioReceta" class="form-receta">
           <h4>Nueva Receta</h4>
           <form [formGroup]="recetaForm" (ngSubmit)="guardarReceta()">
             <div class="form-row">
               <div class="form-group">
-                <label for="medicamento">Medicamento</label>
-                <input type="text" id="medicamento" formControlName="medicamento" class="form-control" placeholder="Nombre del medicamento">
-                <div *ngIf="recetaForm.get('medicamento')?.invalid && recetaForm.get('medicamento')?.touched" class="error-text">
+                <label for="medicamentos">Medicamentos</label>
+                <input type="text" id="medicamentos" formControlName="medicamentos" class="form-control" placeholder="Nombre de medicamentos">
+                <div *ngIf="recetaForm.get('medicamentos')?.invalid && recetaForm.get('medicamentos')?.touched" class="error-text">
                   Este campo es obligatorio
                 </div>
               </div>
               
               <div class="form-group">
-                <label for="dosis">Dosis</label>
-                <input type="text" id="dosis" formControlName="dosis" class="form-control" placeholder="Ej: 1 tableta cada 8 horas">
-                <div *ngIf="recetaForm.get('dosis')?.invalid && recetaForm.get('dosis')?.touched" class="error-text">
+                <label for="instrucciones">Instrucciones</label>
+                <input type="text" id="instrucciones" formControlName="instrucciones" class="form-control" placeholder="Ej: 1 tableta cada 8 horas">
+                <div *ngIf="recetaForm.get('instrucciones')?.invalid && recetaForm.get('instrucciones')?.touched" class="error-text">
                   Este campo es obligatorio
                 </div>
               </div>
@@ -46,13 +40,28 @@
             
             <div class="form-row">
               <div class="form-group">
-                <label for="duracion">Duración</label>
-                <input type="text" id="duracion" formControlName="duracion" class="form-control" placeholder="Ej: 7 días">
+                <label for="duracion_tratamiento">Duración del Tratamiento</label>
+                <input type="text" id="duracion_tratamiento" formControlName="duracion_tratamiento" class="form-control" placeholder="Ej: 7 días">
               </div>
               
               <div class="form-group">
+                <label for="diagnostico">Diagnóstico</label>
+                <input type="text" id="diagnostico" formControlName="diagnostico" class="form-control" placeholder="Diagnóstico del paciente">
+                <div *ngIf="recetaForm.get('diagnostico')?.invalid && recetaForm.get('diagnostico')?.touched" class="error-text">
+                  Este campo es obligatorio
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
                 <label for="observaciones">Observaciones</label>
-                <textarea id="observaciones" formControlName="observaciones" class="form-control" placeholder="Observaciones o instrucciones adicionales"></textarea>
+                <textarea id="observaciones" formControlName="observaciones" class="form-control" placeholder="Observaciones para el paciente"></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="anotaciones">Anotaciones</label>
+                <textarea id="anotaciones" formControlName="anotaciones" class="form-control" placeholder="Anotaciones internas (solo personal médico)"></textarea>
               </div>
             </div>
             
@@ -61,40 +70,49 @@
                 <span *ngIf="submitting" class="spinner-small"></span>
                 <span *ngIf="!submitting">Guardar Receta</span>
               </button>
-              <button type="button" class="btn btn-secondary" (click)="mostrarFormularioReceta = false">Cancelar</button>
+              <button type="button" class="btn btn-secondary" (click)="cancelarFormulario()">Cancelar</button>
             </div>
           </form>
         </div>
         
-        <!-- Tabla de recetas 
+        <!-- Tabla de recetas -->
         <div class="table-responsive">
           <table class="recetas-table">
             <thead>
               <tr>
-                <th>N°</th>
+                <th>#</th>
                 <th>Fecha</th>
-                <th>Profesional</th>
-                <th>Medicamento</th>
+                <th>Médico</th>
+                <th>Medicamentos</th>
+                <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="recetas.length === 0">
-                <td colspan="5" class="empty-message">
+              <tr *ngIf="recetas.length === 0 && !loading">
+                <td colspan="6" class="empty-message">
                   No hay recetas médicas registradas para este paciente
                 </td>
               </tr>
-              <tr *ngFor="let receta of recetas; let i = index">
+              <tr *ngFor="let receta of recetas; let i = index" [ngClass]="{'inactive-row': receta.estado !== 'ACTIVA'}">
                 <td class="numero-column">{{ i + 1 }}</td>
-                <td>{{ formatFecha(receta.fecha) }}</td>
-                <td>{{ receta.profesional }}</td>
-                <td>{{ receta.medicamento }}</td>
+                <td>{{ formatFecha(receta.fecha_emision) }}</td>
+                <td>{{ getNombreDoctor(receta) }}</td>
+                <td>{{ receta.medicamentos }}</td>
                 <td>
-                  <button class="btn-icon btn-view" title="Ver detalles" (click)="verDetalles(receta)">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                  <button class="btn-icon btn-download" title="Descargar PDF" (click)="descargarPDF(receta)">
-                    <i class="fas fa-file-download"></i>
+                  <span class="status-badge"
+                        [ngClass]="{
+                          'active-badge': receta.estado === 'ACTIVA',
+                          'completed-badge': receta.estado === 'COMPLETADA',
+                          'expired-badge': receta.estado === 'CADUCADA'
+                        }">
+                    {{ receta.estado }}
+                  </span>
+                </td>
+                <td>
+                  <button class="info-button" title="Ver detalles" (click)="verDetalles(receta)">
+                    <img src="/Info.png" alt="Ver detalles" class="icon-img">
+                    <span>Ver detalle</span>
                   </button>
                 </td>
               </tr>
@@ -104,7 +122,7 @@
       </div>
     </div>
     
-    <!-- Modal para ver detalles de receta 
+    <!-- Modal para ver detalles de receta -->
     <div *ngIf="recetaSeleccionada" class="modal-overlay" (click)="cerrarModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
@@ -114,41 +132,69 @@
         <div class="modal-body">
           <div class="receta-detalle">
             <div class="receta-header-info">
+              <div class="receta-status">
+                <span class="status-badge"
+                      [ngClass]="{
+                        'active-badge': recetaSeleccionada.estado === 'ACTIVA',
+                        'completed-badge': recetaSeleccionada.estado === 'COMPLETADA',
+                        'expired-badge': recetaSeleccionada.estado === 'CADUCADA'
+                      }">
+                  {{ recetaSeleccionada.estado }}
+                </span>
+              </div>
               <div class="receta-fecha">
-                <strong>Fecha:</strong> {{ formatFecha(recetaSeleccionada.fecha) }}
+                <strong>Fecha:</strong> {{ formatFecha(recetaSeleccionada.fecha_emision) }}
               </div>
               <div class="receta-profesional">
-                <strong>Profesional:</strong> {{ recetaSeleccionada.profesional }}
+                <strong>Médico:</strong> {{ getNombreDoctor(recetaSeleccionada) }}
               </div>
             </div>
             
             <div class="receta-section">
-              <h4>Medicamento</h4>
-              <p>{{ recetaSeleccionada.medicamento }}</p>
+              <h4>Medicamentos</h4>
+              <p>{{ recetaSeleccionada.medicamentos }}</p>
             </div>
             
             <div class="receta-section">
-              <h4>Dosis</h4>
-              <p>{{ recetaSeleccionada.dosis }}</p>
+              <h4>Instrucciones</h4>
+              <p>{{ recetaSeleccionada.instrucciones }}</p>
             </div>
             
-            <div class="receta-section" *ngIf="recetaSeleccionada.duracion">
-              <h4>Duración</h4>
-              <p>{{ recetaSeleccionada.duracion }}</p>
+            <div class="receta-section">
+              <h4>Diagnóstico</h4>
+              <p>{{ recetaSeleccionada.diagnostico }}</p>
+            </div>
+            
+            <div class="receta-section" *ngIf="recetaSeleccionada.duracion_tratamiento">
+              <h4>Duración del Tratamiento</h4>
+              <p>{{ recetaSeleccionada.duracion_tratamiento }}</p>
             </div>
             
             <div class="receta-section" *ngIf="recetaSeleccionada.observaciones">
               <h4>Observaciones</h4>
               <p>{{ recetaSeleccionada.observaciones }}</p>
             </div>
+            
+            <div class="receta-section" *ngIf="recetaSeleccionada.anotaciones">
+              <h4>Anotaciones Internas</h4>
+              <p class="staff-only">{{ recetaSeleccionada.anotaciones }}</p>
+            </div>
+            
+            <div class="receta-section" *ngIf="recetaSeleccionada.editada">
+              <div class="edited-tag">Esta receta ha sido editada</div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
+          <button *ngIf="recetaSeleccionada.estado === 'ACTIVA'" class="btn btn-complete" (click)="completarReceta(recetaSeleccionada); cerrarModal()">
+            Marcar como Completada
+          </button>
           <button class="btn btn-primary" (click)="descargarPDF(recetaSeleccionada)">
-            <i class="fas fa-file-download"></i> Descargar PDF
+            <img src="/Pdf.png" alt="Descargar" class="icon-img">
+            Descargar PDF
           </button>
           <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
