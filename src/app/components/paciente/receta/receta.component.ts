@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './receta.component.css'
 })
 export class RecetaComponent {
+  @Input() pacienteId: string = '';
  /*  @Input() pacienteId: string = '';
   recetas: Receta[] = [];
   recetaSeleccionada: Receta | null = null;
