@@ -1,0 +1,27 @@
+.nav-tabs {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .tab-btn {
+    padding: 12px 20px;
+    background-color: #e1e1e1;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 5px;
+  }
+  
+  .tab-btn:hover {
+    background-color: #d1d1d1;
+  }
+  
+  .tab-btn.active {
+    background-color: #7d746b;
+    color: white;
+  }

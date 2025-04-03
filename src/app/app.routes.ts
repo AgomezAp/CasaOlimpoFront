@@ -47,9 +47,6 @@ export const routes: Routes = [
         path: 'descuento-dashboard', component: DescuentoDashboardComponent
     },
     {
-        path: 'Login', component: LoginComponent
-    },
-    {
         path: 'receta', component: RecetaComponent
     },
     {
