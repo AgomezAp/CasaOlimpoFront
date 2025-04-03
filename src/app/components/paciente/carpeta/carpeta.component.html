@@ -1,1 +1,170 @@
-<p>carpeta works!</p>
+<div class="carpeta-container">
+    <!-- Indicador de carga -->
+    <div *ngIf="loading" class="loading-overlay">
+      <div class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    </div>
+    
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="error-message">
+      <p>{{ error }}</p>
+      <button class="btn-close" (click)="error = ''">×</button>
+    </div>
+    
+    <!-- Si hay carpeta existente, mostrar contenido -->
+    <ng-container *ngIf="carpeta">
+      <!-- Información de la carpeta -->
+      <div class="carpeta-header">
+        <div class="header-content">
+          <h3>Imágenes del Paciente</h3>
+          <p class="carpeta-descripcion">{{ carpeta.descripcion }}</p>
+        </div>
+      </div>
+      
+      <!-- Galería de imágenes con acciones integradas -->
+      <div class="card gallery-section">
+        <div class="card-header">
+          <h4>Galería de Imágenes</h4>
+        </div>
+        <div class="card-body">
+          <!-- Panel de acciones siempre visible -->
+          <div class="gallery-actions">
+            <button class="btn btn-upload" (click)="mostrarFormularioSubida = !mostrarFormularioSubida">
+              {{ mostrarFormularioSubida ? '← Ocultar formulario' : '+ Nueva imagen' }}
+            </button>
+          </div>
+  
+          <!-- Formulario de carga condicional -->
+          <div *ngIf="mostrarFormularioSubida" class="upload-mini-form">
+            <div class="form-group">
+              <label for="fileInputGallery">Seleccionar imagen:</label>
+              <div class="file-input-wrapper">
+                <input 
+                  type="file" 
+                  id="fileInputGallery" 
+                  accept="image/jpeg, image/png" 
+                  (change)="onFileSelected($event)"
+                >
+                <label for="fileInputGallery" class="file-input-label">
+                  <i class="upload-icon"></i> Seleccionar archivo
+                </label>
+              </div>
+              <span *ngIf="archivoSeleccionado" class="selected-file">
+                <i class="file-icon"></i>
+                {{ archivoSeleccionado.name }} ({{ (archivoSeleccionado.size / 1024).toFixed(2) }} KB)
+              </span>
+            </div>
+            
+            <div class="form-group">
+              <label for="descripcionInputGallery">Descripción:</label>
+              <input 
+                type="text" 
+                id="descripcionInputGallery" 
+                placeholder="Describa la imagen..." 
+                [(ngModel)]="descripcionImagen"
+                class="form-control"
+              >
+            </div>
+            
+            <button class="btn btn-upload" (click)="subirImagen()" [disabled]="!archivoSeleccionado">
+              <i class="upload-icon"></i> Subir
+            </button>
+          </div>
+  
+          <!-- Mensaje cuando no hay imágenes -->
+          <div *ngIf="imagenes.length === 0" class="no-images">
+            <div class="empty-state">
+              <div class="empty-icon">🖼️</div>
+              <p>No hay imágenes en la carpeta</p>
+              <span>Agregue imágenes usando el botón "Nueva imagen"</span>
+            </div>
+          </div>
+          
+          <!-- Grid de imágenes -->
+          <div *ngIf="imagenes.length > 0" class="gallery-grid">
+            <div *ngFor="let imagen of imagenes" class="image-card">
+              <div class="image-container" (click)="verImagen(imagen)">
+                <img 
+                  [src]="getImageUrl(imagen.ruta)" 
+                  [alt]="imagen.descripcion || 'Imagen del paciente'"
+                  (error)="handleImageError($event)"
+                >
+                <div class="image-overlay">
+                  <span class="view-icon">🔍</span>
+                </div>
+              </div>
+              <div class="image-info">
+                <p *ngIf="imagen.descripcion" class="image-description" [title]="imagen.descripcion">
+                  {{ imagen.descripcion.length > 30 ? (imagen.descripcion | slice:0:27) + '...' : imagen.descripcion }}
+                </p>
+                <p class="image-date">
+                  <i class="calendar-icon"></i>
+                  {{ obtenerFechaFormateada(imagen.fecha_subida) }}
+                </p>
+                <button class="btn-delete" (click)="$event.stopPropagation(); eliminarImagen(imagen)" title="Eliminar imagen">
+                  <i class="delete-icon"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    
+    <!-- Si NO hay carpeta, mostrar formulario de creación -->
+    <div *ngIf="!carpeta && !loading" class="card create-carpeta-card">
+      <div class="card-header">
+        <h3>Crear Carpeta de Imágenes</h3>
+      </div>
+      <div class="card-body">
+        <div class="empty-state">
+          <div class="folder-icon">📁</div>
+          <p>Este paciente aún no tiene una carpeta de imágenes</p>
+          <div class="create-form">
+            <div class="form-group">
+              <label for="nombreCarpeta">Nombre de la carpeta:</label>
+              <input 
+                type="text" 
+                id="nombreCarpeta" 
+                class="form-control" 
+                placeholder="Ej: Procedimiento facial, Imágenes de seguimiento..."
+                [(ngModel)]="nuevaCarpetaNombre"
+              >
+            </div>
+            <button class="btn btn-create" (click)="crearCarpeta()">
+              <i class="folder-plus-icon"></i> Crear Carpeta
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Vista previa ampliada de imagen -->
+    <div *ngIf="imagenSeleccionada" class="image-preview-overlay" (click)="cerrarVistaPrevia()">
+      <div class="image-preview-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ imagenSeleccionada.descripcion || 'Imagen del paciente' }}</h2>
+          <button class="btn-close" (click)="cerrarVistaPrevia()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <img 
+            [src]="getImageUrl(imagenSeleccionada.ruta)" 
+            [alt]="imagenSeleccionada.descripcion || 'Imagen del paciente'"
+            (error)="handleImageError($event)"
+          >
+          <div class="modal-info">
+            <div class="info-item">
+              <span class="info-label">Fecha:</span>
+              <span class="info-value">{{ obtenerFechaFormateada(imagenSeleccionada.fecha_subida) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Archivo:</span>
+              <span class="info-value">{{ imagenSeleccionada.nombre_archivo }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -96,7 +96,7 @@ export class AgregarPacienteComponent implements OnInit {
       next: (response) => {
         this.loading = false;
         this.toastr.success('Paciente creado exitosamente', 'Éxito');
-        this.router.navigate(['/paciente']);
+        this.router.navigate(['/paciente-dashboard']);
       },
       error: (error) => {
         console.error('Error al guardar paciente:', error);

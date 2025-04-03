@@ -4,10 +4,16 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PacienteService } from '../../../services/paciente.service';
+import { PacienteNavComponent } from '../paciente-nav/paciente-nav.component';
+import { CarpetaComponent } from '../carpeta/carpeta.component';
+import { DashboardCitasComponent } from '../citas/dashboard-citas/dashboard-citas.component';
+import { RecetaComponent } from '../receta/receta.component';
+import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 
 @Component({
   selector: 'app-info-paciente',
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,PacienteNavComponent,CarpetaComponent,DashboardCitasComponent,RecetaComponent,HistoriaClinicaComponent],
   templateUrl: './info-paciente.component.html',
   styleUrl: './info-paciente.component.css'
 })
@@ -19,7 +25,7 @@ export class InfoPacienteComponent  implements OnInit {
   nombreDoctor: string = 'Casa Olimpo'; // Por defecto
   loading: boolean = false;
   error: string = '';
-  
+  activeTab: string = 'info';
   pacienteForm: FormGroup;
 
   constructor(
@@ -175,5 +181,8 @@ export class InfoPacienteComponent  implements OnInit {
         // Mostrar mensaje de error
       }
     });
+  }
+  onTabChange(tabId: string): void {
+    this.activeTab = tabId;
   }
 }

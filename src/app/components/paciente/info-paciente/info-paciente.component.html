@@ -1,4 +1,5 @@
 <div class="main-content">
+
     <div class="info-container">
       <!-- Panel izquierdo - Foto y datos básicos -->
       <div class="profile-panel">
@@ -29,8 +30,14 @@
       </div>
       
       <!-- Panel derecho - Datos detallados -->
+       <div class="right-column">
+        <app-paciente-nav 
+        [pacienteId]="pacienteId" 
+        [activeTab]="activeTab" 
+        (tabChange)="onTabChange($event)">
+      </app-paciente-nav>
       <div class="details-panel">
-        <form [formGroup]="pacienteForm">
+        <form *ngIf="activeTab === 'info'" [formGroup]="pacienteForm">
           <!-- Datos Personales -->
           <div class="data-section">
             <h3 class="section-title">Datos Personales</h3>
@@ -177,6 +184,12 @@
             </div>
           </div>
         </form>
+        <app-historia-clinica *ngIf="activeTab === 'hclinica'" [pacienteId]="pacienteId"></app-historia-clinica>
+        <app-carpeta *ngIf="activeTab === 'carpeta'" [pacienteId]="pacienteId"></app-carpeta>
+        <app-dashboard-citas *ngIf="activeTab === 'citas'" [pacienteId]="pacienteId"></app-dashboard-citas>
+        <app-receta *ngIf="activeTab === 'recetas'" [pacienteId]="pacienteId"></app-receta>
       </div>
+     </div>
+
     </div>
   </div>
