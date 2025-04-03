@@ -14,19 +14,22 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  correo: string = ''
-  contrasena: string = ''
-  loading: boolean = false
+  correo: string = '';
+  contrasena: string = '';
+  loading: boolean = false;
+  errorMessage: string = '';
 
   constructor(private userService: LoginService,private toastr: ToastrService,private router:Router,private errorService:ErrorsService) { }
   logIn() {
     if (this.correo === '' || this.contrasena === '') {
       this.toastr.error('Todos los campos son obligatorios', 'Error');
+      this.errorMessage = 'Todos los campos son obligatorios';
       return;
     }
 
     const user = { correo: this.correo, contrasena: this.contrasena };
     this.loading = true;
+    this.errorMessage = '';
 
     this.userService.iniciarSesion(user).subscribe({
       next: (response: any) => {
@@ -46,6 +49,7 @@ export class LoginComponent {
       },
       error: (e: HttpErrorResponse) => {
         this.loading = false;
+        this.errorMessage = 'No se pudo iniciar sesión. Verifica tus datos'
         this.errorService.messageError(e);
       }
     });

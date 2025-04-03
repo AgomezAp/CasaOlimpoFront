@@ -1,12 +1,20 @@
-<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15%;">
-    <label for="message" style="font-size: 16px;">Escribe un mensaje:</label>
-    <input 
-        id="message" 
-        type="text" 
-        placeholder="Ingresa tu mensaje aquí" 
-        style="width: 80%; padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
-    <button 
-        style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
-        Guardar
-    </button>
+<div class="cumple">
+    <div class="mensaje">
+        <label for="message" >🎉🎁🎉 Escribe el mensaje que quieras compartir con tus clientes: 🎉🎁🎉</label>
+        <input 
+            id="message" 
+            type="text" 
+            placeholder="Ingresa tu mensaje aquí"
+            value="¡Feliz cumpleaños! En CasaOlimpo, celebramos contigo este día especial. Que la luz de tu sonrisa brille aún más fuerte y que cada deseo de tu corazón se haga realidad. ¡Te enviamos un abrazo lleno de energía positiva!">
+        <button>Guardar</button>
+    </div>
+    <div class="lista-cumple">
+        <ul>
+            <li *ngFor="let persona of personas">
+                <span>Nombre: {{ persona.nombre }}</span> - 
+                <span>Fecha de Nacimiento: {{ persona.fechaNacimiento }}</span> - 
+                <span>Edad: {{ persona.edad }}</span>
+            </li>
+        </ul>
+    </div>
 </div>
