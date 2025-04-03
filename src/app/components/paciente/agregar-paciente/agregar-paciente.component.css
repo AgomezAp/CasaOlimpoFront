@@ -1,0 +1,237 @@
+/* Estilos generales y contenedor */
+:host {
+    display: block;
+    padding-left: 300px;
+    padding-top: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+  
+  .page-title {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 0px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+  }
+  
+  .content-container {
+    width: 1000px;
+    background-color: rgba(255, 255, 255, 0.85); /* Blanco con 85% opacidad */
+    border-radius: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 100px;
+  }
+  
+  /* Estilos del formulario y secciones */
+  .paciente-form {
+    width: 100%;
+  }
+  
+  .form-section {
+    margin-bottom: 25px;
+  }
+  
+  .section-title {
+    color: #7d746b;
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  
+  .section-content {
+    background-color: rgba(138, 136, 134, 0.35); /* Color #8a8886 con 35% opacidad */
+    border-radius: 25px;
+    padding: 25px;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .form-row:last-child {
+    margin-bottom: 0;
+  }
+  
+  .form-group {
+    width: calc(33.33% - 15px); /* 3 columnas con espacio entre ellas */
+    position: relative;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  /* Campos de formulario */
+  .form-control {
+    width: 100%;
+    height: 48px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    font-size: 16px;
+    color: #333;
+    box-sizing: border-box;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.3);
+  }
+  
+  .form-control::placeholder {
+    color: #999;
+  }
+  
+  select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%237d746b' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+  }
+  
+  .textarea {
+    height: 100px;
+    resize: none;
+  }
+  
+  /* Mensajes de error */
+  .error-message {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  .hint-text {
+    color: #888;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  /* Sección de foto */
+  .photo-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .photo-preview, .photo-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 20px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .photo-icon {
+    font-size: 50px;
+    color: #ccc;
+  }
+  
+  .photo-controls {
+    flex: 1;
+  }
+  
+  /* Botones */
+  .btn-upload {
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .btn-upload:hover {
+    background-color: #64594e;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .btn-cancel {
+    background-color: #f1f1f1;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .btn-save {
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .btn-save:hover {
+    background-color: #64594e;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .content-container {
+      width: 90%;
+      padding: 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    :host {
+      padding-left: 90px;
+    }
+    
+    .form-row {
+      flex-direction: column;
+    }
+    
+    .form-group {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }

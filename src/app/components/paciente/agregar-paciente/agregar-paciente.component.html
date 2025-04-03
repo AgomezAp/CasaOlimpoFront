@@ -1,0 +1,233 @@
+<h1 class="page-title">Nuevo Paciente</h1>
+<div class="main-content">
+  <div class="content-container">
+    <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()" class="paciente-form">
+      
+      <!-- 1. Datos Personales -->
+      <div class="form-section">
+        <h2 class="section-title">Datos Personales</h2>
+        <div class="section-content">
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" placeholder="Nombre/s" formControlName="nombre" class="form-control">
+              <div *ngIf="submitted && f['nombre'].errors" class="error-message">
+                Este campo es requerido
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" placeholder="Apellidos" formControlName="apellidos" class="form-control">
+              <div *ngIf="submitted && f['apellidos'].errors" class="error-message">
+                Este campo es requerido
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input type="date" placeholder="Fecha de nacimiento" formControlName="fecha_nacimiento" class="form-control">
+              <div *ngIf="submitted && f['fecha_nacimiento'].errors" class="error-message">
+                Este campo es requerido
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" placeholder="Ciudad de nacimiento" formControlName="ciudad_nacimiento" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <input type="number" placeholder="Edad" formControlName="edad" class="form-control" readonly>
+              <small class="hint-text">Se calcula automáticamente</small>
+            </div>
+            
+            <div class="form-group">
+              <select formControlName="sexo" class="form-control">
+                <option value="" disabled selected>Sexo</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 2. Identificación del paciente -->
+      <div class="form-section">
+        <h2 class="section-title">Identificación del paciente</h2>
+        <div class="section-content">
+          <div class="form-row">
+            <div class="form-group">
+              <select formControlName="tipo_documento" class="form-control">
+                <option value="" disabled selected>Tipo de documento</option>
+                <option value="Cedula">Cédula</option>
+                <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+                <option value="Pasaporte">Pasaporte</option>
+                <option value="Registro Civil">Registro Civil</option>
+              </select>
+              <div *ngIf="submitted && f['tipo_documento'].errors" class="error-message">
+                Este campo es requerido
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" placeholder="Número de documento" formControlName="numero_documento" class="form-control">
+              <div *ngIf="submitted && f['numero_documento'].errors" class="error-message">
+                Este campo es requerido
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" placeholder="Ciudad de expedición" formControlName="ciudad_expedicion" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 3. Datos del contacto -->
+      <div class="form-section">
+        <h2 class="section-title">Datos del contacto</h2>
+        <div class="section-content">
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" placeholder="Ciudad de domicilio" formControlName="ciudad_domicilio" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <input type="text" placeholder="Barrio" formControlName="barrio" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <input type="text" placeholder="Dirección de domicilio" formControlName="direccion_domicilio" class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <input type="tel" placeholder="Teléfono" formControlName="telefono" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <input type="email" placeholder="Email" formControlName="email" class="form-control">
+              <div *ngIf="submitted && f['email'].errors?.['email']" class="error-message">
+                Ingrese un correo válido
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input type="tel" placeholder="Celular" formControlName="celular" class="form-control">
+              <div *ngIf="submitted && f['celular'].errors" class="error-message">
+                Este campo es requerido
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 4. Información del paciente -->
+      <div class="form-section">
+        <h2 class="section-title">Información del paciente</h2>
+        <div class="section-content">
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" placeholder="Ocupación" formControlName="ocupacion" class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <select formControlName="estado_civil" class="form-control">
+                <option value="" disabled selected>Estado civil</option>
+                <option value="Soltero">Soltero</option>
+                <option value="Casado">Casado</option>
+                <option value="Divorciado">Divorciado</option>
+                <option value="Viudo">Viudo</option>
+                <option value="Unión Libre">Unión Libre</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" placeholder="EPS" formControlName="eps" class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <select formControlName="tipo_afiliacion" class="form-control">
+                <option value="" disabled selected>Tipo de afiliación</option>
+                <option value="Contributivo">Contributivo</option>
+                <option value="Subsidiado">Subsidiado</option>
+                <option value="Particular">Particular</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <select formControlName="grupo_sanguineo" class="form-control">
+                <option value="" disabled selected>Grupo sanguíneo</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="AB">AB</option>
+                <option value="O">O</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <select formControlName="rh" class="form-control">
+                <option value="" disabled selected>Factor RH</option>
+                <option value="+">Positivo (+)</option>
+                <option value="-">Negativo (-)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 5. Información médica adicional -->
+      <div class="form-section">
+        <h2 class="section-title">Información médica adicional</h2>
+        <div class="section-content">
+          <div class="form-row">
+            <div class="form-group full-width">
+              <textarea formControlName="alergias" placeholder="Alergias" class="form-control textarea"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group full-width">
+              <textarea formControlName="antecedentes" placeholder="Antecedentes" class="form-control textarea"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group full-width">
+              <textarea formControlName="antecedentes_familiares" placeholder="Antecedentes familiares" class="form-control textarea"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 6. Foto del paciente -->
+      <div class="form-section">
+        <h2 class="section-title">Foto del paciente</h2>
+        <div class="section-content photo-section">
+          <div class="photo-preview" *ngIf="photoPreview">
+            <img [src]="photoPreview" alt="Vista previa de foto">
+          </div>
+          <div class="photo-placeholder" *ngIf="!photoPreview">
+            <span class="photo-icon">📷</span>
+          </div>
+          <div class="photo-controls">
+            <button type="button" class="btn-upload" (click)="fileInput.click()">
+              Seleccionar foto
+            </button>
+            <input #fileInput type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display:none">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn-save">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

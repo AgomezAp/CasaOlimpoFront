@@ -1,0 +1,182 @@
+<div class="main-content">
+    <div class="info-container">
+      <!-- Panel izquierdo - Foto y datos básicos -->
+      <div class="profile-panel">
+        <div class="profile-photo">
+          <img *ngIf="paciente?.foto" [src]="pacientePhotoUrl" alt="Foto del paciente">
+          <div *ngIf="!paciente?.foto" class="profile-placeholder">
+            <span class="profile-initials">{{getInitials()}}</span>
+          </div>
+        </div>
+        
+        <div class="profile-details">
+          <h2 class="patient-name">{{paciente?.nombre}} {{paciente?.apellidos}}</h2>
+          <p class="patient-id">C.C. {{paciente?.numero_documento}}</p>
+          <p class="doctor-info">Dr. {{nombreDoctor || 'Sistema'}}</p>
+        </div>
+        
+        <div class="action-buttons" *ngIf="!editMode">
+          <button class="btn-primary" (click)="enableEditMode()">
+            <i class="edit-icon"></i>
+            Editar Datos
+          </button>
+        </div>
+        
+        <div class="action-buttons" *ngIf="editMode">
+          <button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
+          <button class="btn-save" (click)="guardarCambios()">Guardar</button>
+        </div>
+      </div>
+      
+      <!-- Panel derecho - Datos detallados -->
+      <div class="details-panel">
+        <form [formGroup]="pacienteForm">
+          <!-- Datos Personales -->
+          <div class="data-section">
+            <h3 class="section-title">Datos Personales</h3>
+            <div class="section-divider"></div>
+            
+            <div class="data-grid">
+              <div class="data-row">
+                <div class="data-field">
+                  <label>Nombre</label>
+                  <input type="text" formControlName="nombre" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <label>Apellidos</label>
+                  <input type="text" formControlName="apellidos" [readonly]="!editMode">
+                </div>
+              </div>
+              
+              <div class="data-row alt-bg">
+                <div class="data-field">
+                  <label>Fecha de<br>Nacimiento</label>
+                  <input type="date" formControlName="fecha_nacimiento" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <label>Edad</label>
+                  <input type="text" formControlName="edad" readonly>
+                </div>
+              </div>
+              
+              <div class="data-row">
+                <div class="data-field">
+                  <label>Ciudad de Nacimiento</label>
+                  <input type="text" formControlName="ciudad_nacimiento" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <label>Sexo</label>
+                  <select formControlName="sexo" [disabled]="!editMode">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Datos de Identificación -->
+          <div class="data-section">
+            <h3 class="section-title">Datos de identificación del paciente</h3>
+            <div class="section-divider"></div>
+            
+            <div class="data-grid">
+              <div class="data-row">
+                <div class="data-field">
+                  <label>Tipo de documento</label>
+                  <select formControlName="tipo_documento" [disabled]="!editMode">
+                    <option value="Cedula">Cédula</option>
+                    <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                    <option value="Registro Civil">Registro Civil</option>
+                  </select>
+                </div>
+                <div class="data-field">
+                  <label>No. documento</label>
+                  <input type="text" formControlName="numero_documento" [readonly]="!editMode">
+                </div>
+              </div>
+              
+              <div class="data-row alt-bg">
+                <div class="data-field">
+                  <label>Ciudad de<br>expedición</label>
+                  <input type="text" formControlName="ciudad_expedicion" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <!-- Campo vacío para mantener la estructura -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Datos de Contacto -->
+          <div class="data-section">
+            <h3 class="section-title">De Contacto</h3>
+            <div class="section-divider"></div>
+            
+            <div class="data-grid">
+              <div class="data-row">
+                <div class="data-field">
+                  <label>Ciudad de<br>domicilio</label>
+                  <input type="text" formControlName="ciudad_domicilio" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <label>Barrio</label>
+                  <input type="text" formControlName="barrio" [readonly]="!editMode">
+                </div>
+              </div>
+              
+              <div class="data-row alt-bg">
+                <div class="data-field">
+                  <label>Dirección de<br>domicilio</label>
+                  <input type="text" formControlName="direccion_domicilio" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <label>Teléfono</label>
+                  <input type="text" formControlName="telefono" [readonly]="!editMode">
+                </div>
+              </div>
+              
+              <div class="data-row">
+                <div class="data-field">
+                  <label>Email</label>
+                  <input type="email" formControlName="email" [readonly]="!editMode">
+                </div>
+                <div class="data-field">
+                  <label>Celular</label>
+                  <input type="text" formControlName="celular" [readonly]="!editMode">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Información Médica -->
+          <div class="data-section">
+            <h3 class="section-title">Información Médica</h3>
+            <div class="section-divider"></div>
+            
+            <div class="data-grid">
+              <div class="data-row">
+                <div class="data-field">
+                  <label>Alergias</label>
+                  <textarea formControlName="alergias" [readonly]="!editMode"></textarea>
+                </div>
+                <div class="data-field">
+                  <label>Antecedentes</label>
+                  <textarea formControlName="antecedentes" [readonly]="!editMode"></textarea>
+                </div>
+              </div>
+              
+              <div class="data-row alt-bg">
+                <div class="data-field full-width">
+                  <label>Antecedentes<br>familiares</label>
+                  <textarea formControlName="antecedentes_familiares" [readonly]="!editMode"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
