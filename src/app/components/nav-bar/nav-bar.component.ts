@@ -10,7 +10,7 @@ import { Router, RouterModule } from '@angular/router';
 export class NavBarComponent {
   constructor(private router: Router) { }
   menuItems = [
-    { path: '/agenda', label: 'Agenda', icon: 'calendar' },
+    { path: '/agenda-dashboard', label: 'Agenda', icon: 'calendar' },
     { path: '/paciente-dashboard', label: 'Pacientes', icon: 'people' },
     { path: '/cumpleaños', label: 'Cumpleaños', icon: 'cake' },
     { path: '/descuentos', label: 'Descuentos', icon: 'discount' },

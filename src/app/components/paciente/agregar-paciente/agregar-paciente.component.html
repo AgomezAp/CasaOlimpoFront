@@ -23,11 +23,16 @@
             </div>
             
             <div class="form-group">
-              <input type="date" placeholder="Fecha de nacimiento" formControlName="fecha_nacimiento" class="form-control">
+              <input type="date" 
+              formControlName="fecha_nacimiento" 
+              class="form-control" 
+              [max]="maxDate"
+              [ngClass]="{'is-invalid': submitted && f['fecha_nacimiento'].errors}">
               <div *ngIf="submitted && f['fecha_nacimiento'].errors" class="error-message">
                 Este campo es requerido
               </div>
             </div>
+            
           </div>
           
           <div class="form-row">
@@ -41,11 +46,8 @@
             </div>
             
             <div class="form-group">
-              <select formControlName="sexo" class="form-control">
-                <option value="" disabled selected>Sexo</option>
-                <option value="Masculino">Masculino</option>
-                <option value="Femenino">Femenino</option>
-                <option value="Otro">Otro</option>
+              <select id="sexo" formControlName="sexo" class="form-control">
+                <option *ngFor="let opcion of sexoOpciones" [value]="opcion">{{ opcion }}</option>
               </select>
             </div>
           </div>
@@ -58,12 +60,9 @@
         <div class="section-content">
           <div class="form-row">
             <div class="form-group">
-              <select formControlName="tipo_documento" class="form-control">
-                <option value="" disabled selected>Tipo de documento</option>
-                <option value="Cedula">Cédula</option>
-                <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
-                <option value="Pasaporte">Pasaporte</option>
-                <option value="Registro Civil">Registro Civil</option>
+              <select formControlName="tipo_documento" class="form-control" [ngClass]="{'is-invalid': submitted && f['tipo_documento'].errors}">
+                <option value="" disabled>Seleccione un tipo de documento</option>
+                <option *ngFor="let tipo of tiposDocumentoPermitidos" [value]="tipo">{{ tipo }}</option>
               </select>
               <div *ngIf="submitted && f['tipo_documento'].errors" class="error-message">
                 Este campo es requerido
@@ -134,13 +133,8 @@
             </div>
             
             <div class="form-group">
-              <select formControlName="estado_civil" class="form-control">
-                <option value="" disabled selected>Estado civil</option>
-                <option value="Soltero">Soltero</option>
-                <option value="Casado">Casado</option>
-                <option value="Divorciado">Divorciado</option>
-                <option value="Viudo">Viudo</option>
-                <option value="Unión Libre">Unión Libre</option>
+              <select id="estado_civil" formControlName="estado_civil" class="form-control">
+                <option *ngFor="let opcion of estadoCivilOpciones" [value]="opcion">{{ opcion }}</option>
               </select>
             </div>
             
@@ -227,6 +221,30 @@
       <div class="form-actions">
         <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
         <button type="submit" class="btn-save">Guardar</button>
+      </div>
+      <div *ngIf="mostrarOverlay" class="loading-overlay">
+        <div class="loading-content">
+          <div class="spinner"></div>
+          <p>{{ mensajeOverlay }}</p>
+        </div>
+      </div>
+      <div *ngIf="mostrarOverlay" class="loading-overlay">
+        <div class="loading-content">
+          <!-- Spinner de carga si estamos procesando datos -->
+          <div *ngIf="!pacienteCreado || mensajeOverlay.includes('Subiendo')" class="spinner"></div>
+          
+          <p>{{ mensajeOverlay }}</p>
+          
+          <!-- Botones para subir foto o finalizar (solo visibles después de crear paciente) -->
+          <div *ngIf="pacienteCreado && !mensajeOverlay.includes('Subiendo')" class="overlay-actions">
+            <button *ngIf="photoFile" class="btn btn-primary" (click)="subirFoto()">
+              Subir foto
+            </button>
+            <button class="btn btn-secondary" (click)="finalizarProceso()">
+              Finalizar
+            </button>
+          </div>
+        </div>
       </div>
     </form>
   </div>

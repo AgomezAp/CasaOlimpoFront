@@ -34,13 +34,11 @@ export class LoginComponent {
         const token = response.token;
         const Uid = response.Uid;
         const nombre =  response.nombre;
-        const apellido = response.apellido;
-        const nombreCompleto = `${nombre} ${apellido}`;
         this.loading = false;
         this.toastr.success('', 'Bienvenido');
         localStorage.setItem('token', token);
         localStorage.setItem('userId', Uid); 
-        localStorage.setItem('nombreCompleto', nombreCompleto);
+        localStorage.setItem('nombreCompleto', nombre);
         console.log(response.nombre);
         this.router.navigate(['/paciente-dashboard']);
       },
