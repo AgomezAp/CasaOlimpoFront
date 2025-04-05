@@ -1,1 +1,38 @@
-<p>generar-factura works!</p>
+<div class="facturacion">
+    <h3>Datos de facturacion</h3>
+    <form>
+        <div class="id">
+            <label for="cliente">Nombre Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required>
+            <label for="cliente">Documento Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required>
+        </div>
+        <div>
+            <label for="Gmail">Gmail:</label>
+            <input type="email" id="Gmail" name="Gmail" required>
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required>
+        </div>
+        <div>
+            <label for="Direccion">Direccion:</label>
+            <input type="text" id="Direccion" name="Direccion" required>
+            <label for="Telefono">Telefono:</label>
+            <input type="text" id="Telefono" name="Telefono" required>
+        </div>
+
+        <div>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" step="0.01" required>
+            <label for="precio">Descuento:</label>
+            <input type="number" id="precio" name="precio" step="0.01" required>
+
+        </div>
+        <div>
+            <label for="total">Tipo de Pago:</label>
+            <input type="number" id="total" name="total" step="0.01" readonly>
+            <label for="total">Total:</label>
+            <input type="number" id="total" name="total" step="0.01" readonly>
+        </div>
+        <button type="submit">Generar Factura</button>
+    </form>
+</div>

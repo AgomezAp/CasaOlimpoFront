@@ -1,20 +1,26 @@
 <div class="cumple">
     <div class="mensaje">
         <label for="message" >🎉🎁🎉 Escribe el mensaje que quieras compartir con tus clientes: 🎉🎁🎉</label>
-        <input 
-            id="message" 
-            type="text" 
-            placeholder="Ingresa tu mensaje aquí"
-            value="¡Feliz cumpleaños! En CasaOlimpo, celebramos contigo este día especial. Que la luz de tu sonrisa brille aún más fuerte y que cada deseo de tu corazón se haga realidad. ¡Te enviamos un abrazo lleno de energía positiva!">
+        <textarea id="message" placeholder="Ingresa tu mensaje aquí">{{mensaje}}</textarea>
         <button>Guardar</button>
     </div>
     <div class="lista-cumple">
-        <ul>
-            <li *ngFor="let persona of personas">
-                <span>Nombre: {{ persona.nombre }}</span> - 
-                <span>Fecha de Nacimiento: {{ persona.fechaNacimiento }}</span> - 
-                <span>Edad: {{ persona.edad }}</span>
-            </li>
-        </ul>
+        <h2>Cumpleaños de hoy</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Edad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let persona of personas">
+                    <td>{{persona.nombre}}</td>
+                    <td>{{persona.fecha_nacimiento}}</td>
+                    <td>{{persona.edad}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

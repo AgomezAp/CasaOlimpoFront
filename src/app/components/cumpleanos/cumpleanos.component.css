@@ -1,41 +1,139 @@
-.mensaje {
+/* Estilos generales */
+.cumple {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 15%;
+    align-items: center; /* Centra los elementos hijos */
+    gap: 30px;
+    padding: 20px 40px; /* Más padding a los lados */
+    margin-left: 300px; /* Igual al ancho del navbar en desktop */
+    width: calc(100% - 300px); /* Resta el ancho del navbar */
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: rgba(195, 181, 170, 0.6); /* c3b5aa con 60% de opacidad */
+    
+}
+
+/* Contenedor del mensaje - ahora centrado y con ancho controlado */
+.mensaje {
+    width: 100%;
+    max-width: 700px; /* Ancho máximo controlado */
+    background: #dbd3cc;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin: 0 auto; /* Centrado horizontal */
 }
 
 .mensaje label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    color: #7d746b;
+    display: block;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-.mensaje input {
-    width: 80%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    height: 70px;
+.mensaje textarea {
+    width: 100%; /* Ajuste para considerar el padding */
+    min-height: 100px;
+    max-height: 300px;
+    padding: 15px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 2px solid #e0d7ce;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    resize: none;
+    transition: border 0.3s, height 0.2s;
+    box-sizing: border-box; /* Evita que el padding afecte el ancho total */
+    overflow-y: hidden;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.mensaje textarea:focus{
+    border-color: #7d746b;
+    outline: none;
+    min-height: 120px;
 }
 
 .mensaje button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     font-size: 16px;
+    font-weight: 600;
     background-color: #7d746b;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s;
+    display: block;
+    margin: 0 auto;
 }
 
-.mensaje button:hover {
-    background-color: #7d746b63;
+/* Tabla de cumpleaños - ahora con ancho controlado */
+.lista-cumple {
+    width: 100%;
+    max-width: 700px; /* Mismo ancho máximo que el mensaje */
+    background: #dbd3cc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin: 0 auto; /* Centrado horizontal */
+    
+}
+.lista-cumple h2 {
+    color: #7d746b;
+    text-align: center;
 }
 
-.mensaje {
+.lista-cumple table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+/* Ajustes para las celdas de la tabla */
+.lista-cumple th, .lista-cumple td {
+    border: 1px solid #e0d7ce;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 15px;
+    max-width: 200px; /* Evita que las celdas sean demasiado anchas */
+    word-wrap: break-word; /* Rompe palabras largas */
+}
+
+.lista-cumple th {
+    background-color: #f8f5f2;
+    font-weight: 600;
+    color: #7d746b;
+}
+
+.lista-cumple tr:nth-child(even) {
+    background-color: rgba(195, 181, 170, 1.5);
+}
+
+/* Responsive para móvil (768px) */
+@media (max-width: 768px) {
+    .cumple {
+        margin-left: 90px;
+        width: calc(100% - 90px);
+        padding: 15px 20px; /* Menos padding en móvil */
+    }
+    
+    .mensaje, .lista-cumple {
+        max-width: 100%; /* Ocupa todo el ancho disponible en móvil */
+        padding: 15px;
+    }
+    
+    .mensaje input {
+        height: 80px;
+        padding: 10px;
+        width: calc(100% - 20px); /* Ajuste para móvil */
+    }
+    
+    .lista-cumple th, .lista-cumple td {
+        padding: 8px 10px;
+        font-size: 14px;
+        max-width: 150px; /* Menor ancho máximo en móvil */
+    }
 }

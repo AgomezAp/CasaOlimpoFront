@@ -1,0 +1,114 @@
+.facturacion {
+    width: calc(100% - 300px);
+    max-width: 700px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    margin: 20px auto 20px 340px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.facturacion h2 {
+    color: #7d746b;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.facturacion form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.facturacion .id {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.facturacion .id > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.facturacion .motivo 
+.facturacion .descuento {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.facturacion label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #7d746b;
+}
+
+.facturacion input {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #e0d7ce;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.facturacion input[type="date"] {
+    padding: 11px 15px;
+}
+
+.facturacion input:focus {
+    border-color: #7d746b;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2);
+}
+
+.facturacion button {
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.facturacion button:hover {
+    background-color: #6b635a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(125, 116, 107, 0.2);
+}
+
+@media (max-width: 768px) {
+    .facturacion {
+        width: calc(100% - 90px);
+        margin-left: 90px;
+        padding: 20px 15px;
+        max-width: none;
+    }
+
+    .facturacion h2 {
+        font-size: 20px;
+    }
+
+    .facturacion .fechas{
+        grid-template-columns: 1fr;
+    }
+
+    .facturacion input {
+        padding: 10px 12px;
+    }
+
+    .facturacion button {
+        padding: 12px 15px;
+    }
+    
+}

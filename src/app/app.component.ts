@@ -21,7 +21,7 @@ export class AppComponent {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         const currentUrl = event.urlAfterRedirects;
-        this.showNavBar = !['/','Login', '/register'].includes(currentUrl);
+        this.showNavBar = !['/','Login', '/factura-generar'].includes(currentUrl);
       });
   }
 }
