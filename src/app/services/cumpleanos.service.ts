@@ -19,4 +19,8 @@ import { Observable } from "rxjs";
         const headers = { Autorization: `Bearer ${localStorage.getItem('token')}`};
         return this.http.get(`${this.appUrl}${this.apiUrl}/obtenerCumple`)
     }
+
+    obtenerMensaje(data: any): Observable<any> {
+      return this.http.post(`${this.appUrl}${this.apiUrl}/obtenerMensaje`, data);
+    }
   }

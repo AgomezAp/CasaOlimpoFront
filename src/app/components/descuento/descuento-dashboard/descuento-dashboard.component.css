@@ -1,8 +1,22 @@
+.descuentos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0 20px 300px;
+}
+
+.descuentos h2 {
+    text-decoration-line: underline;
+}
+
 .lista-descuentos {
-    width: calc(100% -350px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 350px);
     max-width: 900px;
-    margin: 20px 0 20px 350px;
-    padding: 20px; /* Más padding a los lados */
+    margin: 20px 0 20px 300;
+    padding: 20px 40px; /* Más padding a los lados */
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -92,7 +106,7 @@
 
 @media (max-width: 768px){
     .lista-descuentos {
-        width: calc(100%-110px);
+        width: calc(100% - 110px);
         margin-left: 110px;
         padding: 15px;
     }

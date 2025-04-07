@@ -57,6 +57,18 @@
     min-height: 120px;
 }
 
+.mensaje input {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 2px solid #e0d7ce;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    transition: border 0.3s;
+}
+
 .mensaje button {
     padding: 12px 25px;
     font-size: 16px;

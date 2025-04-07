@@ -1,38 +1,39 @@
 <div class="facturacion">
-    <h3>Datos de facturacion</h3>
-    <form>
-        <div class="id">
-            <label for="cliente">Nombre Cliente:</label>
-            <input type="text" id="cliente" name="cliente" required>
-            <label for="cliente">Documento Cliente:</label>
-            <input type="text" id="cliente" name="cliente" required>
-        </div>
-        <div>
-            <label for="Gmail">Gmail:</label>
-            <input type="email" id="Gmail" name="Gmail" required>
-            <label for="ciudad">Ciudad:</label>
-            <input type="text" id="ciudad" name="ciudad" required>
-        </div>
-        <div>
-            <label for="Direccion">Direccion:</label>
-            <input type="text" id="Direccion" name="Direccion" required>
-            <label for="Telefono">Telefono:</label>
-            <input type="text" id="Telefono" name="Telefono" required>
-        </div>
-
-        <div>
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" name="precio" step="0.01" required>
-            <label for="precio">Descuento:</label>
-            <input type="number" id="precio" name="precio" step="0.01" required>
-
-        </div>
-        <div>
-            <label for="total">Tipo de Pago:</label>
-            <input type="number" id="total" name="total" step="0.01" readonly>
-            <label for="total">Total:</label>
-            <input type="number" id="total" name="total" step="0.01" readonly>
-        </div>
-        <button type="submit">Generar Factura</button>
-    </form>
+    <h2>Facturacion</h2>
+    <div class="facturacion-form">
+        <h3>Datos de facturacion</h3>
+        <form>
+            <div class="id">
+                <label for="cliente">Nombre Cliente:</label>
+                <input type="text" id="cliente" name="cliente" required>
+                <label for="idcliente">Documento Cliente:</label>
+                <input type="text" id="idcliente" name="idcliente" required>
+            </div>
+            <div class="contact">
+                <label for="Gmail">Gmail:</label>
+                <input type="email" id="Gmail" name="Gmail" required>
+                <label for="ciudad">Ciudad:</label>
+                <input type="text" id="ciudad" name="ciudad" required>
+            </div>
+            <div class="direcion">
+                <label for="Direccion">Direccion:</label>
+                <input type="text" id="Direccion" name="Direccion" required>
+                <label for="Telefono">Telefono:</label>
+                <input type="text" id="Telefono" name="Telefono" required>
+            </div>
+            <div class="precio">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" required>
+                <label for="descuento">Descuento:</label>
+                <input type="number" id="descuento" name="descuento" required>    
+            </div>
+            <div class="total">
+                <label for="tipo">Tipo de Pago:</label>
+                <input type="number" id="tipo" name="tipo" required>
+                <label for="total">Total:</label>
+                <input type="number" id="total" name="total" required>
+            </div>
+            <button type="submit">Generar Factura</button>
+        </form>
+    </div>
 </div>
