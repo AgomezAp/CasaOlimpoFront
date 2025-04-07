@@ -44,7 +44,12 @@ app-paciente-nav {
   flex-shrink: 0;
 }
 
-
+.patient-history-date {
+  font-size: 16px;
+  color: #666;
+  margin-top: 5px;
+  font-style: italic;
+}
 .profile-photo {
   width: 160px;
   height: 160px;

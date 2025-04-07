@@ -38,6 +38,7 @@ export class LoginComponent {
         this.toastr.success('', 'Bienvenido');
         localStorage.setItem('token', token);
         localStorage.setItem('userId', Uid); 
+        localStorage.setItem('correo', this.correo);
         localStorage.setItem('nombreCompleto', nombre);
         console.log(response.nombre);
         this.router.navigate(['/paciente-dashboard']);

@@ -13,6 +13,8 @@ import { PacienteDashboardComponent } from './components/paciente/paciente-dashb
 import { FacturaDashboardComponent } from './components/facturacion/factura-dashboard/factura-dashboard.component';
 import { GenerarFacturaComponent } from './components/facturacion/generar-factura/generar-factura.component';
 import { InfoPacienteComponent } from './components/paciente/info-paciente/info-paciente.component';
+import { HistoriaClinicaComponent } from './components/paciente/historia-clinica/historia-clinica.component';
+import { CrearConsultaComponent } from './components/paciente/crear-consulta/crear-consulta.component';
 
 export const routes: Routes = [
     {
@@ -60,7 +62,9 @@ export const routes: Routes = [
     },
     {
         path:'info-paciente/:numero_documento',component: InfoPacienteComponent
+    },
+    {
+        path:'crear-consulta/:numero_documento',component: CrearConsultaComponent
     }
-
 
 ];

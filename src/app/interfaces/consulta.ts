@@ -1,4 +1,5 @@
 export interface Consulta {
+     Uid:number;
      Cid: number;
      motivo: string;
      enfermedad_actual: string;
@@ -13,7 +14,7 @@ export interface Consulta {
      numero_documento: string;
      fecha: Date;
      correo: string;
-     consentimiento_info : Buffer;
+     consentimiento_info : Blob;
      consentimiento_check : boolean;
      abierto : boolean;
 }
