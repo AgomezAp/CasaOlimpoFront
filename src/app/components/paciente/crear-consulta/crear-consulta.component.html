@@ -22,7 +22,9 @@
   
         <div class="action-buttons">
           <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
-          <button class="btn-save" (click)="guardarConsulta()" [disabled]="!consultaForm.valid">Guardar</button>
+          <button type="button" class="btn-save" (click)="guardarConsulta()" [disabled]="guardando" >  <div *ngIf="guardando" class="spinner-small"></div>
+            <span *ngIf="!guardando">Guardar Consulta</span>
+            <span *ngIf="guardando">Guardando...</span></button>
         </div>
       </div>
   

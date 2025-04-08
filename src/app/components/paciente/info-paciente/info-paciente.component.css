@@ -33,14 +33,15 @@ app-paciente-nav {
 
 .profile-panel {
   background-color: rgba(255, 255, 255, 0.85);
+  width: 270px; /* Reducido de lo que tenía anteriormente */
+  min-width: 200px;
   border-radius: 20px;
-  height: 400px;
-  padding: 25px;
+  height: 350px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  width: 350px;
   flex-shrink: 0;
 }
 
@@ -51,8 +52,8 @@ app-paciente-nav {
   font-style: italic;
 }
 .profile-photo {
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 30px;

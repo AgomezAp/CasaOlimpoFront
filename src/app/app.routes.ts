@@ -15,6 +15,7 @@ import { GenerarFacturaComponent } from './components/facturacion/generar-factur
 import { InfoPacienteComponent } from './components/paciente/info-paciente/info-paciente.component';
 import { HistoriaClinicaComponent } from './components/paciente/historia-clinica/historia-clinica.component';
 import { CrearConsultaComponent } from './components/paciente/crear-consulta/crear-consulta.component';
+import { EditarDatosComponent } from './components/paciente/editar-datos/editar-datos.component';
 
 export const routes: Routes = [
     {
@@ -65,6 +66,10 @@ export const routes: Routes = [
     },
     {
         path:'crear-consulta/:numero_documento',component: CrearConsultaComponent
+    },
+    {
+        path:'paciente/:numero_documento/consulta/:consulta_id/editar',component: EditarDatosComponent
     }
+    
 
 ];

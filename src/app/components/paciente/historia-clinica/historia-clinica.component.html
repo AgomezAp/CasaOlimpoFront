@@ -53,14 +53,27 @@
                   <div class="action-icon edit" (click)="editarConsulta(consulta)" title="Editar consulta">
                     <img src="/Editar.png" alt="Editar">
                   </div>
-                  <div class="action-icon close" (click)="cerrarConsulta(consulta)" title="Cerrar historia">
-                    <img src="/close.png" alt="Cerrar">
+                  <div class="action-icon close" 
+                       [class.disabled]="cargandoCierre[consulta.Cid]"
+                       (click)="!cargandoCierre[consulta.Cid] && cerrarConsulta(consulta)" 
+                       title="Cerrar historia">
+                    <div *ngIf="cargandoCierre[consulta.Cid]" class="spinner-small"></div>
+                    <img *ngIf="!cargandoCierre[consulta.Cid]" src="/Cerrar.png" alt="Cerrar">
                   </div>
                 </ng-container>
                 
                 <!-- Consulta cerrada: botón de ver detalles -->
                 <div *ngIf="!consulta.abierto" class="action-icon checked" (click)="verDetalles(consulta)" title="Ver detalle">
                   <img src="/Check.png" alt="Completado">
+                </div>
+                
+                <!-- Botón de PDF para todas las consultas -->
+                <div class="action-icon pdf" 
+                     [class.disabled]="cargandoPDF[consulta.Cid]"
+                     (click)="!cargandoPDF[consulta.Cid] && verConsentimientoPDF(consulta)" 
+                     title="Ver consentimiento">
+                  <div *ngIf="cargandoPDF[consulta.Cid]" class="spinner-small"></div>
+                  <img *ngIf="!cargandoPDF[consulta.Cid]" src="/Pdf.png" alt="Ver PDF">
                 </div>
               </div>
             </td>

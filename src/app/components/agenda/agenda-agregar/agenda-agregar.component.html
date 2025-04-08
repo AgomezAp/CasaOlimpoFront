@@ -1,1 +1,316 @@
-<p>agenda-agregar works!</p>
+<div class="agenda-container">
+    <div class="agenda-header">
+      <h1 class="agenda-title">Agenda de Citas</h1>
+      <div class="agenda-controls">
+        <div class="date-navigation">
+          <button class="nav-btn" (click)="prevMonth()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <h2 class="current-month">{{ currentMonthName }} {{ currentYear }}</h2>
+          <button class="nav-btn" (click)="nextMonth()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="view-controls">
+          <button class="view-btn" [class.active]="viewMode === 'month'" (click)="setViewMode('month')">Mes</button>
+          <button class="view-btn" [class.active]="viewMode === 'week'" (click)="setViewMode('week')">Semana</button>
+          <button class="view-btn" [class.active]="viewMode === 'day'" (click)="setViewMode('day')">Día</button>
+        </div>
+        <button class="add-appointment-btn" (click)="openNewAppointmentModal()">
+          <i class="fas fa-plus"></i> Nueva Cita
+        </button>
+      </div>
+    </div>
+  
+    <!-- Filtros -->
+    <div class="filters-container">
+      <div class="search-container">
+        <input type="text" placeholder="Buscar paciente..." [(ngModel)]="searchTerm" (input)="filterAppointments()">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      <div class="filter-options">
+        <div class="filter-group">
+          <label>Estado:</label>
+          <select [(ngModel)]="statusFilter" (change)="filterAppointments()">
+            <option value="all">Todos</option>
+            <option value="scheduled">Programada</option>
+            <option value="completed">Completada</option>
+            <option value="cancelled">Cancelada</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Tipo:</label>
+          <select [(ngModel)]="typeFilter" (change)="filterAppointments()">
+            <option value="all">Todos</option>
+            <option value="registered">Pacientes Registrados</option>
+            <option value="unregistered">Pacientes No Registrados</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Vista Mensual -->
+    <div class="calendar-container" *ngIf="viewMode === 'month'">
+      <div class="calendar-weekdays">
+        <div class="weekday">Dom</div>
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mié</div>
+        <div class="weekday">Jue</div>
+        <div class="weekday">Vie</div>
+        <div class="weekday">Sáb</div>
+      </div>
+      <div class="calendar-grid">
+        <div class="calendar-day" 
+             *ngFor="let day of calendarDays" 
+             [class.other-month]="day.isOtherMonth"
+             [class.today]="day.isToday">
+          <div class="day-header">
+            <span class="day-number">{{ day.dayNumber }}</span>
+          </div>
+          <div class="day-content">
+            <div class="appointment-preview" 
+                 *ngFor="let appointment of day.appointments | slice:0:3" 
+                 [ngClass]="getAppointmentClass(appointment)"
+                 (click)="openAppointmentDetails(appointment)">
+           <!-- Donde tengas el error, cambia tu código así: -->
+<span class="time">{{ $any(appointment).time }}</span>
+<span class="name">{{ $any(appointment).patientName }}</span>
+            </div>
+            <div class="more-appointments" *ngIf="day.appointments.length > 3" (click)="viewAllDayAppointments(day)">
+              +{{ day.appointments.length - 3 }} más
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Vista Semanal -->
+    <div class="week-view" *ngIf="viewMode === 'week'">
+      <div class="timeline-container">
+        <div class="timeline-header">
+          <div class="time-column"></div>
+          <div class="day-column" *ngFor="let day of weekDays">
+            <div class="day-name">{{ day.dayName }}</div>
+            <div class="day-date" [class.today]="day.isToday">{{ day.dayNumber }}</div>
+          </div>
+        </div>
+        <div class="timeline-body">
+          <div class="time-slots">
+            <div class="time-column">
+              <div class="time-slot" *ngFor="let hour of hours">
+                <span>{{ hour }}:00</span>
+              </div>
+            </div>
+            <div class="day-column" *ngFor="let day of weekDays">
+              <div class="appointment-slot" *ngFor="let appointment of getAppointmentsByDay(day)">
+                <div class="appointment-card" 
+                     [ngClass]="getAppointmentClass(appointment)" 
+                     [ngStyle]="getAppointmentStyle(appointment)"
+                     (click)="openAppointmentDetails(appointment)">
+                  <div class="appointment-time">{{ appointment.time }}</div>
+                  <div class="appointment-patient">{{ appointment.patientName }}</div>
+                  <div class="appointment-type">{{ appointment.type }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Vista Diaria -->
+    <div class="day-view" *ngIf="viewMode === 'day'">
+      <div class="day-header">
+        <button class="nav-btn" (click)="prevDay()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <h3 class="selected-day">{{ selectedDayFormatted }}</h3>
+        <button class="nav-btn" (click)="nextDay()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="day-timeline">
+        <div class="hour-column">
+          <div class="hour-slot" *ngFor="let hour of hours">
+            <span>{{ hour }}:00</span>
+          </div>
+        </div>
+        <div class="appointments-column">
+          <div class="appointment-container" *ngFor="let appointment of dayAppointments" [ngStyle]="getDayViewAppointmentStyle(appointment)">
+            <div class="appointment-card day-view-card" 
+                 [ngClass]="getAppointmentClass(appointment)"
+                 (click)="openAppointmentDetails(appointment)">
+              <div class="appointment-time">{{ appointment.time }}</div>
+              <div class="appointment-patient">{{ appointment.patientName }}</div>
+              <div class="appointment-type">{{ appointment.type }}</div>
+              <div class="appointment-details">{{ appointment.notes | slice:0:50 }}{{ appointment.notes.length > 50 ? '...' : '' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para Nueva Cita -->
+    <div class="modal" [class.active]="showNewAppointmentModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Nueva Cita</h3>
+          <button class="close-btn" (click)="closeNewAppointmentModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
+            <div class="form-group">
+              <label>Paciente:</label>
+              <div class="patient-selection">
+                <div class="selection-tabs">
+                  <button type="button" class="tab-btn" [class.active]="patientType === 'registered'" (click)="setPatientType('registered')">
+                    Paciente Registrado
+                  </button>
+                  <button type="button" class="tab-btn" [class.active]="patientType === 'unregistered'" (click)="setPatientType('unregistered')">
+                    Paciente No Registrado
+                  </button>
+                </div>
+                
+                <div *ngIf="patientType === 'registered'">
+                  <input type="text" placeholder="Buscar paciente..." formControlName="patientSearch" (input)="searchPatients()">
+                  <div class="patient-results" *ngIf="searchResults.length > 0">
+                    <div class="patient-result" *ngFor="let result of searchResults" (click)="selectPatient(result)">
+                      {{ result.nombre }} {{ result.apellido }} - {{ result.numero_documento }}
+                    </div>
+                  </div>
+                  <div class="selected-patient" *ngIf="selectedPatient">
+                    <div class="patient-info">
+                      <span>{{ selectedPatient.nombre }} {{ selectedPatient.apellido }}</span>
+                      <span class="document">{{ selectedPatient.numero_documento }}</span>
+                    </div>
+                    <button type="button" class="remove-btn" (click)="clearSelectedPatient()">&times;</button>
+                  </div>
+                </div>
+                
+                <div *ngIf="patientType === 'unregistered'">
+                  <div class="form-row">
+                    <div class="form-group half">
+                      <input type="text" placeholder="Nombre" formControlName="unregisteredName">
+                    </div>
+                    <div class="form-group half">
+                      <input type="text" placeholder="Apellido" formControlName="unregisteredLastName">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group half">
+                      <input type="tel" placeholder="Teléfono" formControlName="unregisteredPhone">
+                    </div>
+                    <div class="form-group half">
+                      <input type="email" placeholder="Email" formControlName="unregisteredEmail">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group half">
+                <label>Fecha:</label>
+                <input type="date" formControlName="date">
+              </div>
+              <div class="form-group half">
+                <label>Hora:</label>
+                <input type="time" formControlName="time">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Tipo de Consulta:</label>
+              <select formControlName="appointmentType">
+                <option value="first">Primera Vez</option>
+                <option value="followup">Seguimiento</option>
+                <option value="control">Control</option>
+                <option value="emergency">Urgencia</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Duración (minutos):</label>
+              <select formControlName="duration">
+                <option value="30">30 minutos</option>
+                <option value="45">45 minutos</option>
+                <option value="60">1 hora</option>
+                <option value="90">1 hora 30 minutos</option>
+                <option value="120">2 horas</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Notas:</label>
+              <textarea formControlName="notes" rows="3"></textarea>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="cancel-btn" (click)="closeNewAppointmentModal()">Cancelar</button>
+              <button type="submit" class="save-btn" [disabled]="appointmentForm.invalid || saving">
+                <span *ngIf="!saving">Guardar</span>
+                <span *ngIf="saving">Guardando...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para Ver Detalles de Cita -->
+    <div class="modal" [class.active]="showAppointmentDetailsModal">
+      <div class="modal-content">
+        <div class="modal-header" [ngClass]="selectedAppointment ? getAppointmentStatusClass(selectedAppointment.status) : ''">
+          <h3>Detalles de la Cita</h3>
+          <button class="close-btn" (click)="closeAppointmentDetailsModal()">&times;</button>
+        </div>
+        <div class="modal-body" *ngIf="selectedAppointment">
+          <div class="appointment-detail-header">
+            <div class="appointment-time-info">
+              <div class="appointment-date">{{ formatAppointmentDate(selectedAppointment.date) }}</div>
+              <div class="appointment-time">{{ selectedAppointment.time }}</div>
+            </div>
+            <div class="appointment-status-badge" [ngClass]="getAppointmentStatusClass(selectedAppointment.status)">
+              {{ getStatusText(selectedAppointment.status) }}
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h4>Información del Paciente</h4>
+            <div class="patient-details">
+              <p><strong>Nombre:</strong> {{ selectedAppointment.patientName }}</p>
+              <p *ngIf="selectedAppointment.patientId"><strong>Documento:</strong> {{ selectedAppointment.patientId }}</p>
+              <p *ngIf="selectedAppointment.phone"><strong>Teléfono:</strong> {{ selectedAppointment.phone }}</p>
+              <p *ngIf="selectedAppointment.email"><strong>Email:</strong> {{ selectedAppointment.email }}</p>
+              <p><strong>Tipo de paciente:</strong> {{ selectedAppointment.isRegistered ? 'Registrado' : 'No Registrado' }}</p>
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h4>Detalles de la Cita</h4>
+            <div class="appointment-details">
+              <p><strong>Tipo de consulta:</strong> {{ getAppointmentTypeText(selectedAppointment.type) }}</p>
+              <p><strong>Duración:</strong> {{ selectedAppointment.duration }} minutos</p>
+              <p *ngIf="selectedAppointment.notes"><strong>Notas:</strong> {{ selectedAppointment.notes }}</p>
+            </div>
+          </div>
+          
+          <div class="appointment-actions">
+            <button class="action-btn edit" (click)="editAppointment(selectedAppointment)">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="action-btn complete" *ngIf="selectedAppointment.status === 'scheduled'" (click)="completeAppointment(selectedAppointment)">
+              <i class="fas fa-check"></i> Completar
+            </button>
+            <button class="action-btn cancel" *ngIf="selectedAppointment.status === 'scheduled'" (click)="cancelAppointment(selectedAppointment)">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button class="action-btn delete" (click)="deleteAppointment(selectedAppointment)">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

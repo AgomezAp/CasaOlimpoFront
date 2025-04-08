@@ -40,6 +40,7 @@ export class CrearConsultaComponent implements OnInit,AfterViewInit {
   ultimaPosicionY: number = 0;
   canvasFirmaActual: ElementRef<HTMLCanvasElement> | null = null;
   contextoActual: CanvasRenderingContext2D | null = null;
+  guardando: boolean = false;
   private tipoConsentimientoChangeSub?: Subscription;
   @ViewChild('firmaPacienteCanvas') firmaPacienteCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('firmaDoctorCanvas') firmaDoctorCanvas!: ElementRef<HTMLCanvasElement>;
@@ -442,7 +443,6 @@ export class CrearConsultaComponent implements OnInit,AfterViewInit {
   
     if (!userEmail) {
       alert('No se pudo obtener el correo del usuario. Por favor inicie sesión nuevamente.');
-      // Redirigir a login o manejar el error
       return;
     }
     if (this.consultaForm.invalid) {
@@ -453,7 +453,9 @@ export class CrearConsultaComponent implements OnInit,AfterViewInit {
       return;
     }
     
-   
+    // Activar indicador de guardando
+    this.guardando = true;
+    
     // Crear objeto consulta
     const consulta: Partial<Consulta> = {
       ...this.consultaForm.value,
@@ -464,58 +466,63 @@ export class CrearConsultaComponent implements OnInit,AfterViewInit {
       abierto: true,
       consentimiento_info: this.pdfGenerado
     };
-
+  
     this.enviarConsulta(consulta);
   }
-
-enviarConsulta(consulta: Partial<Consulta>): void {
-  // Convertir el PDF base64 a un archivo Blob/File
-  let pdfBlob: Blob | null = null;
-  
-  if (this.pdfGenerado) {
-    // Extraer la parte de datos del data URI (eliminar "data:application/pdf;base64,")
-    const base64Data = this.pdfGenerado.split(',')[1];
-    // Convertir base64 a array de bytes
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+  enviarConsulta(consulta: Partial<Consulta>): void {
+    // Convertir el PDF base64 a un archivo Blob/File
+    let pdfBlob: Blob | null = null;
+    
+    if (this.pdfGenerado) {
+      // Extraer la parte de datos del data URI (eliminar "data:application/pdf;base64,")
+      const base64Data = this.pdfGenerado.split(',')[1];
+      // Convertir base64 a array de bytes
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      // Crear blob
+      pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
     }
-    const byteArray = new Uint8Array(byteNumbers);
-    // Crear blob
-    pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
-  }
-  
-  // Crear FormData para enviar datos mixtos (json + archivo)
-  const formData = new FormData();
-  
-  // Agregar todos los campos de texto
-  Object.keys(consulta).forEach(key => {
-    // No incluir consentimiento_info en los campos normales
-    if (key !== 'consentimiento_info') {
-      // Use type assertion to tell TypeScript this is a valid key
-      formData.append(key, consulta[key as keyof Partial<Consulta>] as string);
-    }
-  });
-  
-  // Agregar el archivo PDF si existe
-  if (pdfBlob) {
-    formData.append('consentimiento_info', pdfBlob, `consentimiento_${this.numeroDocumento}.pdf`);
-  }
-  
-  // Enviar usando el servicio, pero con FormData en lugar de JSON
-  this.consultaService.crearConsultaConArchivo(this.numeroDocumento, formData)
-    .subscribe({
-      next: (response) => {
-        alert('Consulta creada correctamente');
-        this.router.navigate(['/info-paciente', this.numeroDocumento]);
-      },
-      error: (err) => {
-        console.error('Error al crear consulta:', err);
-        alert('Error al crear la consulta: ' + (err.message || 'Error desconocido'));
+    
+    // Crear FormData para enviar datos mixtos (json + archivo)
+    const formData = new FormData();
+    
+    // Agregar todos los campos de texto
+    Object.keys(consulta).forEach(key => {
+      // No incluir consentimiento_info en los campos normales
+      if (key !== 'consentimiento_info') {
+        // Use type assertion to tell TypeScript this is a valid key
+        formData.append(key, consulta[key as keyof Partial<Consulta>] as string);
       }
     });
-}
+    
+    // Agregar el archivo PDF si existe
+    if (pdfBlob) {
+      formData.append('consentimiento_info', pdfBlob, `consentimiento_${this.numeroDocumento}.pdf`);
+    }
+    
+    // Estado de guardando ya activado desde el método guardarConsulta
+    
+    // Enviar usando el servicio, pero con FormData en lugar de JSON
+    this.consultaService.crearConsultaConArchivo(this.numeroDocumento, formData)
+      .subscribe({
+        next: (response) => {
+          // Desactivar el indicador de carga
+          this.guardando = false;
+          alert('Consulta creada correctamente');
+          this.router.navigate(['/info-paciente', this.numeroDocumento]);
+        },
+        error: (err) => {
+          // Desactivar el indicador de carga en caso de error
+          this.guardando = false;
+          console.error('Error al crear consulta:', err);
+          alert('Error al crear la consulta: ' + (err.message || 'Error desconocido'));
+        }
+      });
+  }
   cancelar(): void {
     this.router.navigate(['/info-paciente', this.numeroDocumento]);
   }
