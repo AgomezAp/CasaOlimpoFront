@@ -5,33 +5,42 @@
         <form>
             <div class="id">
                 <label for="cliente">Nombre Cliente:</label>
-                <input type="text" id="cliente" name="cliente" required>
+                <input type="text" id="cliente" name="cliente" readonly value="{{paciente.nombre}} {{paciente.apellidos}}">
                 <label for="idcliente">Documento Cliente:</label>
-                <input type="text" id="idcliente" name="idcliente" required>
+                <input type="text" id="idcliente" name="idcliente" readonly value="{{paciente.numero_documento}}" >
             </div>
             <div class="contact">
                 <label for="Gmail">Gmail:</label>
-                <input type="email" id="Gmail" name="Gmail" required>
+                <input type="email" id="Gmail" name="Gmail" readonly value="{{paciente.email}}" >
                 <label for="ciudad">Ciudad:</label>
-                <input type="text" id="ciudad" name="ciudad" required>
+                <input type="text" id="ciudad" name="ciudad" readonly value="{{paciente.ciudad_domicilio}}" >
             </div>
             <div class="direcion">
                 <label for="Direccion">Direccion:</label>
-                <input type="text" id="Direccion" name="Direccion" required>
+                <input type="text" id="Direccion" name="Direccion" readonly value="{{paciente.direccion_domicilio}}" >
                 <label for="Telefono">Telefono:</label>
-                <input type="text" id="Telefono" name="Telefono" required>
+                <input type="text" id="Telefono" name="Telefono" readonly value="{{paciente.telefono}}">
             </div>
             <div class="precio">
                 <label for="precio">Precio:</label>
-                <input type="number" id="precio" name="precio" required>
+                <input type="number" id="precio" name="precio" required [(ngModel)]="precio" (input)="calcularTotal()">
                 <label for="descuento">Descuento:</label>
-                <input type="number" id="descuento" name="descuento" required>    
+                <select name="descuento id="descuento [(ngModel)]="descuento" (change)="calcularTotal()" required="">
+                    <option *ngFor="let descuento of descuentos" [value]="descuento.porcentaje">
+                        {{ descuento.motivo_descuento }} - {{descuento.porcentaje}}%
+                    </option>
+                </select>
             </div>
             <div class="total">
                 <label for="tipo">Tipo de Pago:</label>
-                <input type="number" id="tipo" name="tipo" required>
+                <select id="tipo" name="tipo" [(ngModel)]="tipoPago" required>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Debito">Tarjeta Débito</option>
+                    <option value="Credito">Tarjeta Crédito</option>
+                    <option value="Transferencia">Transferencia</option>
+                </select>
                 <label for="total">Total:</label>
-                <input type="number" id="total" name="total" required>
+                <input type="number" id="total" name="total" [value]="total" readonly>
             </div>
             <button type="submit">Generar Factura</button>
         </form>

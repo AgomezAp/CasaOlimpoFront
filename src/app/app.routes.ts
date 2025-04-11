@@ -13,6 +13,7 @@ import { PacienteDashboardComponent } from './components/paciente/paciente-dashb
 import { FacturaDashboardComponent } from './components/facturacion/factura-dashboard/factura-dashboard.component';
 import { GenerarFacturaComponent } from './components/facturacion/generar-factura/generar-factura.component';
 import { InfoPacienteComponent } from './components/paciente/info-paciente/info-paciente.component';
+import { FacturaIdComponent } from './components/facturacion/factura-id/factura-id.component';
 
 export const routes: Routes = [
     {
@@ -57,6 +58,9 @@ export const routes: Routes = [
     },
     {
         path: 'factura-generar', component: GenerarFacturaComponent
+    },
+    {
+        path: 'facturas', component: FacturaIdComponent
     },
     {
         path:'info-paciente/:numero_documento',component: InfoPacienteComponent

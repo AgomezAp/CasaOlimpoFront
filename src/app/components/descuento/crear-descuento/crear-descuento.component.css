@@ -1,24 +1,28 @@
+html, body {
+    height: 1000px;
+    background-color: rgba(195, 181, 170, 0.6);
+}
 .descuentos {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px 0 20px 300px;
+    margin: 20px 0 400px 300px;
 }
 
 .descuentos h2 {
     text-decoration-line: underline;
+    font-size: 45px;
+    color: #7d746b;
 }
 
 .crear-descuento {
-    display: flex;
-    flex-direction: column;
     width: calc(100% - 300px);
     max-width: 700px;
     background-color: #fff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-    margin: 20px 0 20px 300;
+    margin: 20px auto 20px 300;
     box-sizing: border-box;
     position: relative;
 }
@@ -35,26 +39,27 @@
     flex-direction: column;
     gap: 20px;
 }
-
-.crear-descuento .fechas {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
+.crear-descuento .motivo > div,
+.crear-descuento .descuento > div,
 .crear-descuento .fechas > div {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-.crear-descuento .motivo 
-.crear-descuento .descuento {
+.crear-descuento .motivo,
+.crear-descuento .descuento,
+.crear-descuento .fechas {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
 }
 
 .crear-descuento label {
+    flex: 0 0 150px;
+    text-align: right;
+    margin-right: 10px;
     font-size: 16px;
     font-weight: 600;
     color: #7d746b;
@@ -67,7 +72,11 @@
     border-radius: 8px;
     transition: all 0.3s ease;
     box-sizing: border-box;
-    width: 100%;
+    width: 350px;
+    height: 50px;
+    background-color: #e0dece;
+    min-width: 200px;
+    max-width: 350px;
 }
 
 .crear-descuento input[type="date"] {

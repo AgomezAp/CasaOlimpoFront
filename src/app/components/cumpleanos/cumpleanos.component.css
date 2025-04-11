@@ -1,38 +1,69 @@
 /* Estilos generales */
+html, body {
+    height: 1000px;
+    background-color: rgba(195, 181, 170, 0.6);
+}
+
 .cumple {
     display: flex;
     flex-direction: column;
     align-items: center; /* Centra los elementos hijos */
     gap: 30px;
-    padding: 20px 40px; /* Más padding a los lados */
-    margin-left: 300px; /* Igual al ancho del navbar en desktop */
-    width: calc(100% - 300px); /* Resta el ancho del navbar */
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-    background-color: rgba(195, 181, 170, 0.6); /* c3b5aa con 60% de opacidad */
-    
+    margin: 20px 0 400px 300px; 
+}
+
+.cumple h2 {
+    text-decoration-line: underline;
+    font-size: 25px;
+    color: #7d746b;
+    margin-bottom: auto;
 }
 
 /* Contenedor del mensaje - ahora centrado y con ancho controlado */
-.mensaje {
-    width: 100%;
+.mensaje,
+.lista-cumple {
+    width: calc(100% - 300px);
     max-width: 700px; /* Ancho máximo controlado */
-    background: #dbd3cc;
-    padding: 25px;
+    background: #fff;
+    padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    margin: 0 auto; /* Centrado horizontal */
+    margin: 20px auto 20px 300;
+}
+
+.mensaje h2,
+.lista-cumple h2 {
+    color: #7d746b;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
 }
 
 .mensaje label {
-    font-size: 18px;
+    flex: 0 0 150px;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 16px;
     font-weight: 600;
     color: #7d746b;
     display: block;
-    margin-bottom: 15px;
-    text-align: center;
 }
 
+.mensaje input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 2px solid #e0d7ce;
+    border-radius: 8px;
+    margin: 15px auto;
+    transition: border 0.3s;
+    box-sizing: border-box;
+    height: 50px;
+    background-color: #e0dece;
+    flex: 1;
+    min-width: 200px;
+}
 .mensaje textarea {
     width: 100%; /* Ajuste para considerar el padding */
     min-height: 100px;
@@ -42,7 +73,8 @@
     font-family: inherit;
     border: 2px solid #e0d7ce;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin: 15px auto;
+    background-color: #e0dece;
     resize: none;
     transition: border 0.3s, height 0.2s;
     box-sizing: border-box; /* Evita que el padding afecte el ancho total */
@@ -51,26 +83,15 @@
     word-wrap: break-word;
 }
 
-.mensaje textarea:focus{
+.mensaje textarea:focus
+.mensaje input:focus {
     border-color: #7d746b;
     outline: none;
     min-height: 120px;
 }
 
-.mensaje input {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-family: inherit;
-    border: 2px solid #e0d7ce;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    transition: border 0.3s;
-}
-
 .mensaje button {
-    padding: 12px 25px;
+    padding: 14px 25px;
     font-size: 16px;
     font-weight: 600;
     background-color: #7d746b;
@@ -83,46 +104,47 @@
     margin: 0 auto;
 }
 
-/* Tabla de cumpleaños - ahora con ancho controlado */
-.lista-cumple {
-    width: 100%;
-    max-width: 700px; /* Mismo ancho máximo que el mensaje */
-    background: #dbd3cc;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin: 0 auto; /* Centrado horizontal */
-    
+.mensaje button:hover {
+    background-color: #6b635a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(125, 116, 107, 0.2);
 }
-.lista-cumple h2 {
+
+.lista-cumple h3 {
     color: #7d746b;
-    text-align: center;
-}
-
-.lista-cumple table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-/* Ajustes para las celdas de la tabla */
-.lista-cumple th, .lista-cumple td {
-    border: 1px solid #e0d7ce;
-    padding: 12px 15px;
     text-align: left;
-    font-size: 15px;
-    max-width: 200px; /* Evita que las celdas sean demasiado anchas */
-    word-wrap: break-word; /* Rompe palabras largas */
 }
 
-.lista-cumple th {
-    background-color: #f8f5f2;
-    font-weight: 600;
-    color: #7d746b;
+.table-cumple {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
-.lista-cumple tr:nth-child(even) {
-    background-color: rgba(195, 181, 170, 1.5);
+.table-cumple th {
+    background-color: #7d746b;
+    color: white;
+    text-align: left;
+    padding: 15px 20px;
+    font-weight: 500;
 }
+
+.table-cumple td {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+}
+
+.table-cumple tr {
+    background-color: white;
+}
+
+.table-cumple tr.odd-row {
+    background-color: rgba(238, 238, 238, 0.5);
+}
+
+
 
 /* Responsive para móvil (768px) */
 @media (max-width: 768px) {

@@ -1,8 +1,12 @@
+html, body {
+    height: 1000px;
+    background-color: rgba(195, 181, 170, 0.6);
+}
 .facturacion {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px 0 20px 300px;
+    margin: 20px 0 400px 300px;
 }
 
 .facturacion h2 {
@@ -35,73 +39,39 @@
     gap: 20px;
 }
 
+.facturacion-form .precio,
+.facturacion-form .contact,
+.facturacion-form .direcion,
+.facturacion-form .total,
 .facturacion-form .id {
     display: flex;
+    flex-wrap: wrap;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    align-items: center;
 }
 
+.facturacion-form .contact > div,
+.facturacion-form .direcion > div,
+.facturacion-form .precio > div,
+.facturacion-form .total > div,
 .facturacion-form .id > div {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.facturacion-form .contact {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.facturacion-form .contact > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.facturacion-form .direcion {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.facturacion-form .direcion > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.facturacion-form .precio {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.facturacion-form .precio > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.facturacion-form .total {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.facturacion-form .total > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
 .facturacion-form label {
+    flex: 0 0 150px;
+    text-align: right;
+    margin-right: 10px;
     font-size: 16px;
     font-weight: 600;
     color: #7d746b;
 }
 
-.facturacion-form input {
+.facturacion-form input,
+.facturacion-form select {
     padding: 12px 15px;
     font-size: 16px;
     border: 2px solid #e0d7ce;
@@ -111,6 +81,9 @@
     width: 350px;
     height: 50px;
     background-color: #e0dece;
+    flex: 1;
+    min-width: 200px;
+    max-width: 350px;
 }
 
 .facturacion-form input[type="date"] {

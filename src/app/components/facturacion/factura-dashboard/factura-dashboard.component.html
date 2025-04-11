@@ -8,7 +8,6 @@
         <input type="text" placeholder="Buscar pacientes..." [(ngModel)]="searchTerm" (input)="filtrarFacturas()">
         <i class="search-icon"></i>
       </div>
-      <button class="btn-new" (click)="nuevaFactura()">Nueva Factura</button>
     </div>
     
     <!-- Tabla de pacientes para facturación -->
@@ -35,6 +34,10 @@
               <button class="btn-generate" (click)="generarFactura(paciente)">
                 <img src="/Sell.png" alt="Generar Factura" class="btn-icon">
                 <span>Facturar</span>
+              </button>
+              <button class="btn-ver">
+                <img src="/Pacientes.png" alt="ver" class="btn-icon">
+                <span>Facturas</span>
               </button>
             </td>
           </tr>
