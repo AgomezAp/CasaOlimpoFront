@@ -3,7 +3,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     background-color: rgba(195, 181, 170, 0.6); /* c3b5aa con 60% de opacidad */
   }

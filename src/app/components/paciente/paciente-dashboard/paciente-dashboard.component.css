@@ -4,6 +4,7 @@
     padding-left: 300px; /* Ajuste para el navbar */
     padding-top: 20px;
     height: 100vh;
+    overflow: hidden !important;
     box-sizing: border-box;
   }
   
@@ -25,13 +26,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: hidden !important;
     padding-top: 0px; 
   }
   
   .content-container {
     width: 1000px;
-    height: 608px; /* Cambiamos max-height por height fija */
+    height: 570px; /* Cambiamos max-height por height fija */
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 40px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -41,7 +42,7 @@
     align-items: center;
     justify-content: flex-start;
     overflow: hidden;
-    margin-bottom: 80px;
+    margin-bottom: 90px;
   }
   
   .table-container {
@@ -112,7 +113,7 @@
     top: 0;
     background-color: #7d746b;
     color: #fffaec;
-    padding: 14px 20px;
+    padding: 12px 20px;
     text-align: left;
     font-weight: 600;
   }
@@ -127,7 +128,7 @@
   }
   
   .patients-table tbody td {
-    padding: 14px 20px;
+    padding: 12px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
   
@@ -202,7 +203,150 @@
     height: 30px;
     animation: spin 1s linear infinite;
   }
+  /* Contenedor global de paginación */
+.pagination-container {
+  margin-top: 25px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Controles de paginación */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Botones de anterior/siguiente */
+.pagination-btn {
+  padding: 9px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #dce0e5;
+  border-radius: 6px;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #e9ecef;
+  border-color: #cbd3df;
+  color: #2d3748;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-arrow {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Botones de página numerados */
+.pagination-page-btn {
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #dce0e5;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-page-btn:hover {
+  background-color: #e9ecef;
+  border-color: #cbd3df;
+}
+
+.pagination-page-btn.active {
+  background-color: #7d746b;
+  color: #ffffff;
+  border-color: #7d746b;
+  font-weight: 600;
+}
+
+/* Puntos suspensivos */
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+/* Información de paginación */
+.pagination-info {
+  font-size: 14px;
+  color: #718096;
+  margin-bottom: 8px;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .pagination-controls {
+    gap: 5px;
+  }
   
+  .pagination-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .pagination-page-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  
+  .pagination-info {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 576px) {
+  .pagination-controls {
+    gap: 4px;
+  }
+  
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .pagination-page-btn {
+    min-width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  
+  /* En móviles muy pequeños, ocultar el texto y dejar solo flechas */
+  @media (max-width: 350px) {
+    .pagination-btn span:not(.pagination-arrow) {
+      display: none;
+    }
+  }
+}
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }

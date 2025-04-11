@@ -4,7 +4,6 @@ import { AgregarCitasComponent } from './components/paciente/citas/agregar-citas
 import { AgregarPacienteComponent } from './components/paciente/agregar-paciente/agregar-paciente.component';
 import { RegistrarComponent } from './components/registrar/registrar.component';
 import { RecetaComponent } from './components/paciente/receta/receta.component';
-import { AgendaAgregarComponent } from './components/agenda/agenda-agregar/agenda-agregar.component';
 import { AgendaDashboardComponent } from './components/agenda/agenda-dashboard/agenda-dashboard.component';
 import { CumpleanosComponent } from './components/cumpleanos/cumpleanos.component';
 import { CrearDescuentoComponent } from './components/descuento/crear-descuento/crear-descuento.component';
@@ -33,9 +32,6 @@ export const routes: Routes = [
     },
     {
         path: 'agregar-citas', component: AgregarCitasComponent
-    },
-    {
-        path: 'agregar-citas-agenda', component: AgendaAgregarComponent
     },
     {
         path: 'agenda-dashboard', component: AgendaDashboardComponent

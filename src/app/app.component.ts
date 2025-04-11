@@ -4,10 +4,11 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { NotificacionComponent } from './components/notificaciones/notificacion/notificacion.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,NavBarComponent,CommonModule],
+  imports: [RouterOutlet,NavBarComponent,CommonModule,NotificacionComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

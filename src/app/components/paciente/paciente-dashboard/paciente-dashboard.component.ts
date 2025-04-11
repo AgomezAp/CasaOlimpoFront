@@ -16,14 +16,18 @@ export class PacienteDashboardComponent implements OnInit {
   // Propiedades existentes
   pacientes: any[] = [];
   pacientesTodos: any[] = [];
+  pacientesPaginados: any[] = [];
   loading: boolean = false;
   error: string = '';
   searchTerm: string = '';
+  
   // Propiedades para paginación
   paginaActual: number = 1;
-  pacientesPorPagina: number = 7;
+  pacientesPorPagina: number = 5;
   totalPaginas: number = 1;
-  pacientesPaginados: any[] = [];
+  
+  // Para usar Math en el template
+  Math = Math;
 
   constructor(
     private pacienteService: PacienteService,
@@ -87,6 +91,7 @@ export class PacienteDashboardComponent implements OnInit {
       }
     });
   }
+  
   cargarTodosPacientes(): void {
     this.loading = true;
     this.pacienteService.obtenerPacientes().subscribe({
@@ -135,6 +140,8 @@ export class PacienteDashboardComponent implements OnInit {
     // Si la página actual ya no es válida (por ejemplo, al filtrar)
     if (this.paginaActual > this.totalPaginas && this.totalPaginas > 0) {
       this.paginaActual = this.totalPaginas;
+    } else if (this.totalPaginas === 0) {
+      this.paginaActual = 1; // Si no hay resultados, mantener en página 1
     }
     
     // Obtener pacientes para la página actual
@@ -143,6 +150,9 @@ export class PacienteDashboardComponent implements OnInit {
       startIndex, 
       startIndex + this.pacientesPorPagina
     );
+    
+    console.log(`Paginación: Página ${this.paginaActual} de ${this.totalPaginas}`);
+    console.log(`Mostrando ${this.pacientesPaginados.length} de ${this.pacientes.length} pacientes`);
   }
 
   // Métodos de navegación de páginas
@@ -174,8 +184,8 @@ export class PacienteDashboardComponent implements OnInit {
     } else {
       const term = this.searchTerm.toLowerCase();
       this.pacientes = this.pacientesTodos.filter(p => 
-        p.nombre.toLowerCase().includes(term) ||
-        p.apellidos.toLowerCase().includes(term) ||
+        p.nombre?.toLowerCase().includes(term) ||
+        p.apellidos?.toLowerCase().includes(term) ||
         p.numero_documento?.toString().includes(term)
       );
     }
@@ -185,7 +195,26 @@ export class PacienteDashboardComponent implements OnInit {
     this.actualizarPaginacion();
   }
 
-  // Otros métodos existentes...
+  // Genera un array para usar en el ngFor de páginas
+  getPaginasVisibles(): number[] {
+    const paginas: number[] = [];
+    const totalBotones = 5; // Número de botones de página a mostrar
+    let inicio = Math.max(1, this.paginaActual - Math.floor(totalBotones/2));
+    let fin = Math.min(this.totalPaginas, inicio + totalBotones - 1);
+    
+    // Ajustar cuando estamos cerca del final
+    if (fin - inicio + 1 < totalBotones) {
+      inicio = Math.max(1, fin - totalBotones + 1);
+    }
+    
+    for (let i = inicio; i <= fin; i++) {
+      paginas.push(i);
+    }
+    
+    return paginas;
+  }
+
+  // Otros métodos existentes
   calcularEdad(fechaNacimiento: string): number {
     if (!fechaNacimiento) return 0;
     

@@ -5,7 +5,7 @@
   padding-top: 40px;
   height: 100vh;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden !important;
 }
 
 .main-content {
@@ -33,7 +33,7 @@ app-paciente-nav {
 
 .profile-panel {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 270px; /* Reducido de lo que tenía anteriormente */
+  width: 290px; /* Reducido de lo que tenía anteriormente */
   min-width: 200px;
   border-radius: 20px;
   height: 350px;
@@ -54,7 +54,7 @@ app-paciente-nav {
 .profile-photo {
   width: 140px;
   height: 140px;
-  border-radius: 50%;
+  border-radius: 60%;
   overflow: hidden;
   margin-bottom: 30px;
   background-color: #f0f0f0;

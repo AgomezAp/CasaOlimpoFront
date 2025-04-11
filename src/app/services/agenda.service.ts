@@ -20,7 +20,26 @@ export class AgendaService {
       // 'Authorization': `Bearer ${this.authService.getToken()}`
     });
   }
-
+  private normalizeDateFormat(dateInput: string | Date): string {
+    // Asegura que las fechas siempre tengan el mismo formato YYYY-MM-DD
+    if (!dateInput) return '';
+    
+    let dateObj: Date;
+    if (typeof dateInput === 'string') {
+      // Si ya es string, eliminamos la parte de tiempo si existe
+      dateInput = dateInput.split('T')[0];
+      
+      // Crear objeto Date con mediodía para evitar problemas de zona horaria
+      const [year, month, day] = dateInput.split('-').map(Number);
+      dateObj = new Date(year, month - 1, day, 12, 0, 0);
+    } else {
+      dateObj = new Date(dateInput);
+      // Establecer a mediodía para evitar problemas de zona horaria
+      dateObj.setHours(12, 0, 0, 0);
+    }
+    
+    return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+  }
   // ====== MÉTODOS PARA CITAS DE PERSONAS REGISTRADAS ======
 
   /**
@@ -151,39 +170,88 @@ export class AgendaService {
     return this.http.get<any>(`${this.apiUrl}api/agendaNoRegistrado/obtener_citas`, { headers: this.getHeaders() })
       .pipe(
         map(response => {
-          // Primero verificamos qué tipo de respuesta estamos recibiendo
-          console.log('Respuesta de citas no registradas:', response);
+          console.log('Respuesta citas no registradas:', response);
           
-          // Si la respuesta es un objeto con una propiedad que contiene el array
-          let appointments = Array.isArray(response) ? response : 
-                            (response.data || response.citas || response.appointments || []);
+          // Extraer el array de citas según la estructura de la respuesta
+          const citasNoRegistradas = Array.isArray(response) ? response : 
+                                    (response.data || response.citas || []);
           
-          // Si seguimos sin tener un array, devolvemos un array vacío
-          if (!Array.isArray(appointments)) {
-            console.error('No se pudo extraer el array de citas no registradas', response);
-            return [];
-          }
-          
-          // Transformar cada cita para agregar isRegistered
-          return appointments.map(appointment => ({
-            ...appointment,
-            isRegistered: false
+          // Transformar cada cita al formato común usado en el componente
+          return citasNoRegistradas.map((cita:any) => ({
+            id: cita.ANRid, // El ID para citas no registradas es ANRid
+            patientName: `${cita.nombre} ${cita.apellidos}`,
+            date: this.formatDateString(cita.fecha_cita),
+            time: cita.hora_cita,
+            type: 'consulta',
+            duration: 60, // Duración predeterminada
+            status: this.mapBackendToFrontendStatus(cita.estado || 'Pendiente'),
+            notes: '',
+            isRegistered: false, // IMPORTANTE: Marcar explícitamente como no registrado
+            phone: cita.telefono || ''
           }));
         }),
-        catchError(this.handleError<any[]>('getUnregisteredAppointments', []))
+        catchError(error => {
+          console.error('Error obteniendo citas no registradas:', error);
+          return of([]);
+        })
       );
   }
-
+  private formatDateString(dateValue: any): string {
+    if (!dateValue) return '';
+    
+    let dateObj;
+    if (typeof dateValue === 'string') {
+      dateObj = new Date(dateValue);
+    } else {
+      dateObj = new Date(dateValue);
+    }
+    
+    if (isNaN(dateObj.getTime())) {
+      console.error('Fecha inválida:', dateValue);
+      return '';
+    }
+    
+    return dateObj.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  }
+  private mapBackendToFrontendStatus(status: string): string {
+    const mapping: {[key: string]: string} = {
+      'Pendiente': 'scheduled',
+      'Confirmada': 'completed',
+      'Cancelada': 'cancelled'
+    };
+    return mapping[status] || 'scheduled';
+  }
   /**
    * Crear una cita para persona no registrada
    */
   createUnregisteredAppointment(appointmentData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}api/agendaNoRegistrado/crear`, appointmentData, { headers: this.getHeaders() })
+    // Copia profunda para no modificar los datos originales
+    const processedData = {...appointmentData};
+    
+    // CORRECCIÓN: Normalizar el formato de fecha para evitar problemas de zona horaria
+    if (processedData.fecha_cita) {
+      // Si es un string, asegúrate de que sea YYYY-MM-DD sin componente de tiempo
+      if (typeof processedData.fecha_cita === 'string') {
+        // Eliminar componente de tiempo si existe
+        processedData.fecha_cita = processedData.fecha_cita.split('T')[0];
+      } else if (processedData.fecha_cita instanceof Date) {
+        // Si es un objeto Date, asegurarnos de crear el string sin ajustes de zona horaria
+        const d = processedData.fecha_cita;
+        // Usar UTC para evitar cualquier ajuste de zona horaria
+        processedData.fecha_cita = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+      }
+    }
+    
+    console.log('Datos normalizados para crear cita no registrada:', processedData);
+    
+    return this.http.post<any>(`${this.apiUrl}api/agendaNoRegistrado/crear`, processedData, { headers: this.getHeaders() })
       .pipe(
-        catchError(this.handleError<any>('createUnregisteredAppointment'))
+        catchError(error => {
+          console.error('Error al crear cita para paciente no registrado:', error);
+          return of({ error: true, message: error.error?.message || 'Error al crear la cita' });
+        })
       );
   }
-
   /**
    * Actualizar cita de persona no registrada
    */
@@ -240,17 +308,16 @@ export class AgendaService {
       return this.createRegisteredAppointment(registeredData);
     } else {
       const unregisteredData = {
-        nombre: appointmentData.unregisteredName || appointmentData.patientName?.split(' ')[0],
-        apellido: appointmentData.unregisteredLastName || appointmentData.patientName?.split(' ')[1],
-        telefono: appointmentData.phone || appointmentData.unregisteredPhone,
-        email: appointmentData.email || appointmentData.unregisteredEmail,
-        date: appointmentData.date,
-        time: appointmentData.time,
-        appointmentType: appointmentData.appointmentType,
-        duration: appointmentData.duration,
-        notes: appointmentData.notes,
-        status: appointmentData.status || 'scheduled'
+        nombre: appointmentData.nombre, // Antes estaba usando unregisteredName
+        apellidos: appointmentData.apellidos, // Antes estaba usando unregisteredLastName
+        correo: appointmentData.doctorEmail || localStorage.getItem('correo') || '',
+        fecha_cita: appointmentData.date,
+        hora_cita: appointmentData.time,
+        telefono: appointmentData.telefono || '', // Antes estaba usando unregisteredPhone
+        estado: 'Pendiente'
       };
+      
+      console.log('Enviando datos de cita no registrada:', unregisteredData);
       return this.createUnregisteredAppointment(unregisteredData);
     }
   }

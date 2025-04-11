@@ -1,933 +1,1925 @@
-/* Estilos generales */
+/* Estilos generales y reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:host {
+  display: block; /* Asegura que el componente ocupe espacio */
+  width: 80%; /* Ocupa el ancho disponible en su contenedor padre */
+  box-sizing: border-box;
+  /* overflow-x: hidden; /* CAMBIO: Quitado de aquí, se maneja en contenedores internos si es necesario */
+}
+
+body {
+  /* Estos estilos aplican si no están sobreescritos por el framework */
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  color: #333;
+  background-color: #f5f7fa;
+  line-height: 1.6;
+}
+
+/* Contenedor principal de la agenda */
 .agenda-container {
-    font-family: 'Roboto', sans-serif;
-    color: #333;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* CAMBIO: Quitado margin: 0 auto; y max-width / margin-left de las MQs de abajo */
+  /* El centrado y ancho máximo debe controlarse en el contenedor PADRE de este componente,
+     especialmente si tienes una sidebar */
+  overflow-y: visible !important; /* Prevenir desbordamiento accidental del contenedor principal */
+  margin-left: 300px
+}
+
+/* Wrapper para las vistas de calendario (mensual, semanal, diaria) */
+.calendar-wrapper {
+  width: 100%;
+  overflow-x: auto !important; /* PERMITE SCROLL HORIZONTAL SI EL CONTENIDO ES MÁS ANCHO */
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 10px;
+  border: 1px solid #e2e8f0; /* Opcional: borde para visualizar el wrapper */
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+/* Encabezado de la agenda */
+.agenda-header {
+  display: flex;
+  /* CAMBIO: Quitar space-between para que no empuje todo a los extremos */
+  /* justify-content: space-between; */
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 15px; /* CAMBIO: Usar gap para espaciado general */
+}
+.agenda-title {
+  color: #2c3e50;
+  font-size: 22px;
+  font-weight: 700;
+  white-space: nowrap;
+  /* CAMBIO: Quitar margin-right, el gap del header lo maneja */
+}
+
+.agenda-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  /* CAMBIO: Quitar flex-grow y justify-content para que no se expanda ni alinee al final */
+  margin-left: auto; /* EMPUJARÁ este bloque a la derecha, pero los items DENTRO no estarán pegados al borde */
+}
+
+/* Navegación de fechas */
+.date-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.current-month {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 150px; /* Un poco más flexible */
+  text-align: center;
+  white-space: nowrap;
+}
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #dbe0e6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* Evita que los botones se encojan */
+}
+
+.nav-btn:hover {
+  background-color: #f0f4f8;
+  transform: translateY(-1px);
+}
+
+/* Controles de vista */
+.view-controls {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.view-btn {
+  padding: 8px 16px;
+  border: none;
+  background-color: #f0f4f8;
+  color: #4a5568;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.view-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.view-btn.active {
+  background-color: #4299e1;
+  color: white;
+}
+
+/* Botón de nueva cita */
+.add-appointment-btn {
+  padding: 8px 16px;
+  background-color: #7d746b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-appointment-btn:hover {
+  background-color: #6a635b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.add-appointment-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Contenedor de filtros */
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8fafc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.search-container {
+  position: relative;
+  min-width: 200px; /* Ancho mínimo */
+  flex: 1; /* Ocupa espacio disponible */
+}
+
+.search-container input {
+  width: 40%;
+  padding: 10px 12px 10px 35px;
+  border: 1px solid #dbe0e6;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.2s ease;
+}
+
+.search-container input:focus {
+  border-color: #4299e1;
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0aec0;
+}
+
+.filter-options {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; /* Permite que los filtros se reordenen */
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #4a5568;
+  white-space: nowrap;
+}
+
+.filter-group select {
+  padding: 8px 12px;
+  border: 1px solid #dbe0e6;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  min-width: 120px; /* Ancho mínimo para los selects */
+}
+
+/* --- CALENDARIO MENSUAL --- */
+.calendar-container {
+  /* CAMBIO: ELIMINADO min-width: 700px; */
+  border-radius: 8px; /* Heredado del wrapper */
+  overflow: hidden; /* Contiene los elementos flotantes internos */
+  /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Heredado del wrapper */
+  /* display: table; /* CAMBIO: Usar grid ayuda más al responsive */
+  /* width: 100%; /* Necesario si el padre es auto */
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(
+    7,
+    minmax(0, 1fr)
+  ); /* CAMBIO: minmax(0, 1fr) es más robusto */
+  background-color: #edf2f7;
+}
+
+.weekday {
+  padding: 10px 5px; /* Un poco menos padding */
+  text-align: center;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 13px; /* Un poco más pequeño */
+  overflow: hidden; /* Evita que textos largos rompan el layout */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  /* CAMBIO: Aumentar ligeramente altura mínima base de filas */
+  grid-auto-rows: minmax(
+    100px,
+    auto
+  ); 
+  border-top: 1px solid #e2e8f0;
+  border-left: 1px solid #e2e8f0;
+  background-color: white;
+  /* min-height: 400px; */ /* Altura mínima general */
+}
+
+.calendar-day {
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 5px; /* CAMBIO: Un poco más de padding base */
+  /* CAMBIO: Aumentar ligeramente altura mínima base de días */
+  min-height: 100px; /* Era 80px en la MQ más pequeña, probar con 100px */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.calendar-day.other-month {
+  background-color: #f8fafc;
+}
+.calendar-day.other-month .day-number {
+  color: #a0aec0; /* Atenuar número de día */
+}
+
+.calendar-day.today {
+  background-color: #ebf8ff;
+}
+.calendar-day.today .day-number {
+  color: #2c3e50;
+  background-color: #bee3f8; /* Resaltar el número del día actual */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.day-header {
+  margin-bottom: 4px; /* Menos espacio */
+  text-align: right; /* Alinea el número a la derecha */
+}
+
+.day-number {
+  font-weight: 500; /* Un poco menos bold */
+  color: #4a5568;
+  font-size: 13px;
+  padding: 2px; /* Pequeño padding alrededor */
+}
+
+.day-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto; /* Mantiene el scroll vertical si hay DEMASIADAS citas */
+}
+/* --- ESTILOS PARA LAS CITAS (Preview Mensual) --- */
+.appointment-preview {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid;
+  overflow: hidden;
+}
+.appointment-preview:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Colores base por tipo de paciente */
+.appointment-preview:not(.unregistered) {
+  background-color: #e9f5fe;
+  border-left-color: #3182ce;
+  color: #2b6cb0;
+}
+.appointment-preview.unregistered {
+  background-color: #fefcbf;
+  border-left-color: #d69e2e;
+  color: #975a16;
+}
+
+/* Colores por estado (sobrescriben los de tipo) */
+.appointment-preview.status-completed {
+  background-color: #c6f6d5 !important;
+  border-left-color: #38a169 !important;
+  color: #276749 !important;
+}
+.appointment-preview.status-cancelled {
+  background-color: #fed7d7 !important;
+  border-left-color: #e53e3e !important;
+  color: #c53030 !important;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.appointment-content {
+  display: flex;
+  /* CAMBIO: Alinear al inicio */
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.search-container .search-icon {
+  width: 16px;  /* Ajusta según el tamaño que necesites */
+  height: 16px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.time {
+  font-weight: 600;
+  font-size: 10px;
+  white-space: nowrap;
+  padding-top: 1px;
+}
+.hover-enabled:hover {
+  transform: scale(1.05) !important;
+  z-index: 100 !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+  cursor: pointer !important;
+}
+.name {
+  white-space: normal;
+  overflow: visible; 
+  text-overflow: clip; 
+  word-break: break-all;
+  overflow-wrap: break-word; 
+
+  font-weight: 500;
+  flex-shrink: 1;
+}
+
+.patient-type-indicator {
+  font-size: 9px; /* Más pequeño */
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 600;
+  margin-left: 2px;
+  flex-shrink: 0; /* No se encoge */
+}
+.appointment-preview:not(.unregistered) .patient-type-indicator {
+  background-color: #3182ce;
+  color: white;
+}
+.appointment-preview.unregistered .patient-type-indicator {
+  background-color: #d69e2e;
+  color: white;
+}
+
+/* Iconos de estado en preview */
+.status-indicators {
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+  /* CAMBIO: Añadir padding top para alinear mejor */
+  padding-top: 1px;
+}
+.status-icon {
+  font-weight: bold;
+  font-size: 10px;
+  width: 12px;
+  height: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.appointment-preview.status-completed .status-icon {
+  color: #38a169;
+}
+.appointment-preview.status-cancelled .status-icon {
+  color: #e53e3e;
+}
+/* Icono para pendiente/programado */
+.appointment-preview:not(.status-completed):not(.status-cancelled)
+  .status-icon {
+    width: 6px; height: 6px;
+  background-color: currentColor; /* Usa el color del texto de la cita */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Botón de más citas */
+.more-appointments {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 9px; /* Más pequeño */
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 1px 3px;
+  margin-top: 2px;
+  background: #f0f4f8;
+  border-radius: 3px;
+}
+.more-appointments:hover {
+  color: #3182ce;
+  text-decoration: underline;
+}
+.week-view {
+  overflow: hidden;
+  background-color: white;
+  min-width: 600px;
+  height: 100%; /* Asegura que ocupe todo el alto disponible */
+}
+
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.timeline-header {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.time-column {
+  width: 60px;
+  flex-shrink: 0;
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+}
+
+.timeline-header .time-column {
+  height: 60px;
+}
+
+.day-column {
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+  padding: 10px 5px;
+  border-left: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+.day-name {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.day-date {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 5px;
+  color: #2c3e50;
+}
+
+.day-column.today .day-name,
+.day-column.today .day-date {
+  color: #3182ce; /* Resaltar día actual */
+}
+.day-column.today {
+  background-color: #ebf8ff; /* Fondo diferente para hoy */
+}
+
+.timeline-body {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  overflow-y: auto; /* Permitir scroll vertical */
+  height: calc(100% - 60px); /* Altura total menos el header */
+}
+
+
+.time-slots-column {
+  width: 60px;
+  flex-shrink: 0;
+  border-right: 1px solid #e2e8f0;
+  z-index: 10; /* Mantenerla por encima para scrolling */
+}
+
+.time-slot {
+  height: 60px; /* Esto representa 1 hora */
+  padding: 5px;
+  text-align: right;
+  padding-right: 10px;
+  border-top: 1px solid #e2e8f0;
+  color: #718096;
+  font-size: 12px;
+  position: relative;
+}
+.time-slot:first-child {
+  border-top: none; /* Sin borde superior en la primera hora */
+}
+.time-slot span {
+  position: relative;
+  top: -0.6em;
+  background: white;
+  padding: 0 2px;
+}
+
+
+.days-columns-container {
+  display: flex;
+  flex: 1;
+  min-height: 100%;
+}
+
+/* Columna de día en el cuerpo */
+.day-column-body {
+  flex: 1;
+  min-width: 80px;
+  border-left: 1px solid #e2e8f0;
+  position: relative; /* Para posicionar citas */
+  height: 100%;
+  background-image: linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+  background-size: 100% 60px; /* Coincide con altura de time-slot */
+}
+.day-column-body:first-child {
+  border-left: none;
+}
+.day-column-body.today {
+  background-color: rgba(235, 248, 255, 0.4); /* Fondo sutil para hoy */
+}
+
+/* --- VISTA DIARIA --- */
+.day-view {
+  /* border-radius: 8px; /* Heredado del wrapper */
+  /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Heredado del wrapper */
+  background-color: white;
+  padding: 15px;
+  min-width: 400px; /* Ancho mínimo para vista diaria */
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.selected-day {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.day-timeline {
+  display: flex;
+  /* height: 700px; /* Quitado, deja que crezca */
+  min-height: 500px; /* Altura mínima */
+}
+
+.hour-column {
+  /* Columna de horas */
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.hour-slot {
+  /* Renglón de hora */
+  height: 60px;
+  padding: 5px;
+  text-align: right;
+  padding-right: 10px;
+  border-right: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0; /* Línea superior */
+  color: #718096;
+  font-size: 12px;
+  position: relative;
+}
+.hour-slot:first-child {
+  border-top: none;
+}
+.hour-slot span {
+  position: relative;
+  top: -0.6em;
+  background: white;
+  padding: 0 2px;
+}
+
+.appointments-column {
+  /* Columna donde van las citas */
+  flex: 1;
+  position: relative;
+  margin-left: 10px;
+  background-image: linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+  background-size: 100% 60px; /* Coincide con altura de hour-slot */
+}
+
+/* --- Citas en vista Semanal/Diaria (Tarjetas) --- */
+.appointment-card {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-left: 4px solid; /* El color se definirá en las clases específicas */
+  background-color: white; /* Asegura fondo visible */
+}
+/* Agregar esto a tu CSS si es necesario */
+.appointment-preview.hover-enabled:hover {
+  z-index: 100;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.appointment-card:hover .appointment-patient,
+.appointment-card:hover .appointment-time,
+.appointment-card:hover .appointment-type {
+  white-space: normal; /* Permitir saltos de línea */
+  overflow: visible; /* Mostrar todo el contenido */
+}
+.appointment-card::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #555;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.appointment-card:hover::after {
+  visibility: visible;
+  opacity: 1;
+}
+.appointment-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  z-index: 100 !important; /* Asegura que siempre esté por encima al hacer hover */
+  height: auto !important; /* Permitir que se expanda para mostrar todo el contenido */
+  min-height: unset !important;
+}
+.day-column-body .appointment-card {
+  width: auto; /* Usar derecha e izquierda para el ancho */
+}
+/* Manejo de solapamientos */
+.day-column-body .appointment-card.overlapping-2 {
+  right: 52%; /* Primera cita ocupa la mitad izquierda */
+}
+.day-column-body .appointment-card.overlapping-2.second {
+  left: 50%; /* Segunda cita ocupa la mitad derecha */
+}
+
+.day-column-body .appointment-card.overlapping-3 {
+  right: 66%; /* Primera cita usa 1/3 izquierdo */
+}
+.day-column-body .appointment-card.overlapping-3.second {
+  left: 34%; /* Segunda cita usa medio central */
+  right: 34%;
+}
+.day-column-body .appointment-card.overlapping-3.third {
+  left: 66%; /* Tercera cita usa 1/3 derecho */
+}
+.day-column-body, .appointments-column {
+  background-size: 100% 60px; /* Debe coincidir con la altura de .hour-slot */
+}
+/* Colores base por tipo */
+.appointment-card:not(.unregistered) {
+  background-color: #e9f5fe;
+  border-left-color: #3182ce;
+  color: #2b6cb0;
+}
+/* --- Estilos específicos para citas en la vista diaria --- */
+.appointment-card-daily {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-left: 4px solid; /* El color se definirá en las clases específicas */
+  background-color: white; /* Asegura fondo visible */
+}
+
+/* SIN EFECTO DE HOVER DE ESCALA/TRANSFORM */
+.appointment-card-daily:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+/* Colores base por tipo de paciente */
+.appointment-card-daily:not(.unregistered) {
+  background-color: #e9f5fe;
+  border-left-color: #3182ce;
+  color: #2b6cb0;
+}
+
+.appointment-card-daily.unregistered {
+  background-color: #fefcbf;
+  border-left-color: #d69e2e;
+  color: #975a16;
+  padding: 4px 8px; 
+  height: auto !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Colores por estado */
+.appointment-card-daily.status-completed {
+  background-color: #c6f6d5 !important;
+  border-left-color: #38a169 !important;
+  color: #276749 !important;
+}
+
+.appointment-card-daily.status-cancelled {
+  background-color: #fed7d7 !important;
+  border-left-color: #e53e3e !important;
+  color: #c53030 !important;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+/* Estilos para los indicadores de paciente registrado/no registrado */
+.appointment-card-daily .patient-type-indicator.weekly {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #555;
+  z-index: 2;
+}
+
+/* Estilos específicos para los colores de los indicadores */
+.appointment-card-daily:not(.unregistered) .patient-type-indicator.weekly {
+  background-color: rgba(49, 130, 206, 0.15);
+  color: #2b6cb0;
+}
+
+.appointment-card-daily.unregistered .patient-type-indicator.weekly {
+  background-color: rgba(224, 122, 95, 0.15);
+  color: #c05621;
+}
+
+/* Elementos internos de las citas */
+.appointment-card-daily .appointment-time {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.appointment-card-daily .appointment-patient {
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin: 2px 0;
+  color: #333;
+}
+
+.appointment-card-daily .appointment-type {
+  font-size: 10px;
+  color: #777;
+  font-style: italic;
+}
+
+/* Media Queries para la vista diaria */
+@media screen and (max-width: 575px) {
+  .appointment-card-daily {
+    padding: 3px 5px;
+    border-left-width: 3px;
   }
   
-  .agenda-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+  .appointment-card-daily .appointment-time {
+    font-size: 10px;
   }
   
+  .appointment-card-daily .appointment-patient {
+    font-size: 11px;
+    margin: 1px 0;
+  }
+  
+  .appointment-card-daily .appointment-type {
+    font-size: 9px;
+  }
+}
+
+/* Tablets */
+@media screen and (min-width: 576px) and (max-width: 991px) {
+  .appointment-card-daily {
+    font-size: 11px;
+  }
+}
+
+/* Laptops y pantallas medianas */
+@media screen and (min-width: 992px) and (max-width: 1399px) {
+  .appointment-card-daily {
+    font-size: 12px;
+  }
+}
+.appointment-card.unregistered {
+  background-color: #fefcbf; /* Color más suave */
+  border-left: 3px solid #d69e2e; /* Borde distintivo */
+  padding: 4px 8px; /* Padding igual que citas registradas */
+  height: auto !important;
+  min-height: 20px; /* Altura mínima REDUCIDA */
+  max-height: 30px; /* Altura máxima REDUCIDA */
+  overflow: hidden; /* Oculta contenido extra */
+  display: flex;
+  flex-direction: column; /* Cambio a columna como las registradas */
+  align-items: flex-start; /* Alineación a la izquierda */
+}
+.patient-type-indicator.weekly {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #555;
+  z-index: 2;
+}
+
+.appointment-card.unregistered .compact-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.appointment-card.unregistered .compact-time {
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+.appointment-card.unregistered .compact-label {
+  font-size: 0.7em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.appointment-card.unregistered:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  max-height: none !important; /* Permitir expandirse en hover */
+  z-index: 100; /* Traer al frente */
+  background-color: #f3d5cd; /* Color de fondo más oscuro en hover */
+}
+.appointment-card.unregistered:hover::before {
+  content: attr(title); /* Usa el título como contenido */
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 0;
+  background: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 101;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.appointment-card.unregistered:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+.appointment-card.unregistered.status-completed {
+  background-color: #e8f4ea;
+  border-left-color: #57cc99;
+}
+
+.appointment-card.unregistered.status-cancelled {
+  background-color: #f8f9fa;
+  border-left-color: #adb5bd;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+/* Colores por estado */
+.appointment-card.status-completed {
+  background-color: #c6f6d5 !important;
+  border-left-color: #38a169 !important;
+  color: #276749 !important;
+}
+.appointment-card.status-cancelled {
+  background-color: #fed7d7 !important;
+  border-left-color: #e53e3e !important;
+  color: #c53030 !important;
+  text-decoration: line-through;
+  opacity: 0.8 !important;
+}
+
+.appointment-time {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.appointment-patient {
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin: 2px 0;
+  color: #333;
+  display: block !important; /* Forzar que siempre se muestre */
+  visibility: visible !important; /* Asegurar visibilidad */
+}
+.appointment-patient,
+.appointment-card .name {
+  font-weight: 500;
+  /* CAMBIO: Permitir wrapping */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  /* overflow-wrap: break-word; */
+  margin: 2px 0;
+  display: block;
+}
+.appointment-type {
+  font-size: 10px;
+  color: #777;
+  font-style: italic;
+}
+
+.appointment-details {
+  /* Notas (si se muestran) */
+  margin-top: 5px;
+  font-size: 10px;
+  opacity: 0.8;
+  /* Evitar que texto largo rompa la tarjeta */
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-height: 3em; /* Limitar altura de notas */
+  overflow: hidden;
+}
+
+/* --- MODALES (Sin cambios mayores, parecían correctos) --- */
+/* ... (Estilos de .modal, .modal-content, .modal-header, .modal-body, etc. van aquí) ... */
+/* Pega aquí todos los estilos desde .modal hasta .remove-btn:hover del código que proporcionaste */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column; /* Para que header/body/actions funcionen bien */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f7fafc;
+  flex-shrink: 0; /* Evita que se encoja */
+}
+
+.modal-header h3 {
+  color: #2c3e50;
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #718096;
+  transition: all 0.2s ease;
+  padding: 0 5px; /* Área de click más grande */
+}
+
+.close-btn:hover {
+  color: #2c3e50;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto; /* Scroll si el contenido es muy largo */
+  flex-grow: 1; /* Ocupa espacio disponible */
+}
+
+/* Estilos para el encabezado del modal según el estado */
+.status-scheduled {
+  background-color: #ebf8ff;
+  color: #2b6cb0;
+}
+.status-completed {
+  background-color: #e6fffa;
+  color: #276749;
+}
+.status-cancelled {
+  background-color: #fff5f5;
+  color: #c53030;
+}
+
+/* Detalles de la cita */
+.appointment-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinear arriba */
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap; /* Por si no cabe en una línea */
+  gap: 10px;
+}
+
+.appointment-time-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-date {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.appointment-time {
+  font-size: 16px;
+  color: #4a5568;
+}
+
+.appointment-status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Color de badges (asegurar consistencia) */
+.appointment-status-badge.status-scheduled {
+  background-color: #bee3f8;
+  color: #2b6cb0;
+}
+.appointment-status-badge.status-completed {
+  background-color: #b2f5ea;
+  color: #276749;
+}
+.appointment-status-badge.status-cancelled {
+  background-color: #fed7d7;
+  color: #c53030;
+}
+
+.detail-section {
+  margin-bottom: 20px;
+}
+
+.detail-section h4 {
+  color: #4a5568;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.detail-section p {
+  margin: 8px 0;
+  color: #2d3748;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.detail-section p strong {
+  color: #4a5568;
+  font-weight: 600;
+  margin-right: 5px;
+  display: inline-block; /* Opcional: mejor alineación */
+}
+
+/* Botones de acción en Modal */
+.appointment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px; /* Menos margen */
+  padding-top: 15px; /* Menos padding */
+  border-top: 1px solid #e2e8f0;
+  justify-content: flex-end; /* Alinear a la derecha */
+}
+
+.action-btn {
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; /* Mejor que flex para botones solos */
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent; /* Borde base transparente */
+}
+.action-btn i {
+  /* Estilo para iconos FontAwesome si los usas */
+  font-size: 1em;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px); /* Más sutil */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn.edit {
+  background-color: #ebf8ff;
+  color: #3182ce;
+  border-color: #bee3f8;
+}
+.action-btn.edit:hover {
+  background-color: #bee3f8;
+}
+.action-btn.complete {
+  background-color: #e6fffa;
+  color: #38a169;
+  border-color: #b2f5ea;
+}
+.action-btn.complete:hover {
+  background-color: #b2f5ea;
+}
+.action-btn.cancel {
+  background-color: #fefcbf;
+  color: #d69e2e;
+  border-color: #faf089;
+}
+.action-btn.cancel:hover {
+  background-color: #faf089;
+}
+.action-btn.delete {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  border-color: #fed7d7;
+}
+.action-btn.delete:hover {
+  background-color: #fed7d7;
+}
+
+/* Formularios (Sin cambios mayores) */
+/* ... (Estilos de form, form-group, input, select, textarea, form-row, etc.) ... */
+/* Pega aquí todos los estilos desde form hasta .remove-btn:hover del código que proporcionaste */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dbe0e6;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
+  color: #2d3748;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #4299e1;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); /* Sombra más sutil */
+}
+/* Placeholder color */
+::placeholder {
+  color: #a0aec0;
+  opacity: 1;
+}
+
+textarea {
+  min-height: 80px; /* Altura mínima para textarea */
+  resize: vertical; /* Permitir redimensionar verticalmente */
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; /* Permitir que pasen a la siguiente línea */
+}
+
+.half {
+  flex: 1;
+  min-width: 150px; /* Ancho mínimo para campos en fila */
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px; /* Más espacio antes de los botones */
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  flex-shrink: 0; /* Evita que se encoja en el modal */
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #dbe0e6;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #edf2f7;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+  background-color: #2b6cb0;
+}
+
+.save-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Selección de pacientes */
+.patient-selection {
+  border: 1px solid #dbe0e6;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: #f8fafc;
+}
+
+.selection-tabs {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  background-color: #f0f4f8;
+  color: #4a5568;
+  border: 1px solid #dbe0e6; /* Borde entre tabs */
+  margin-left: -1px; /* Solapar bordes */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.tab-btn:first-child {
+  border-radius: 6px 0 0 6px;
+  margin-left: 0;
+}
+.tab-btn:last-child {
+  border-radius: 0 6px 6px 0;
+}
+.tab-btn.active {
+  background-color: #3182ce;
+  color: white;
+  border-color: #3182ce;
+  z-index: 1; /* Poner tab activa por encima */
+}
+
+/* Resultados de búsqueda de pacientes */
+.patient-selection-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.patient-results {
+  max-height: 150px; /* Más compacto */
+  overflow-y: auto;
+  border: 1px solid #dbe0e6;
+  border-radius: 6px;
+  margin-top: 5px;
+  background-color: white;
+}
+
+.patient-result {
+  padding: 8px 12px; /* Más compacto */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 14px;
+}
+.patient-result:last-child {
+  border-bottom: none;
+}
+.patient-result:hover {
+  background-color: #edf2f7;
+}
+.no-results {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #718096;
+}
+
+.dropdown-option label {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.selected-patient {
+  margin-top: 10px;
+  background-color: #ebf8ff;
+  border: 1px solid #bee3f8;
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+}
+.patient-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+.patient-document {
+  font-size: 12px;
+  color: #718096;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #718096;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.remove-btn:hover {
+  color: #e53e3e;
+}
+
+/* --- MEDIA QUERIES REVISADAS --- */
+
+/* Muy Pequeños (< 576px) */
+@media screen and (max-width: 575px) {
+  .agenda-container {
+    padding: 10px;
+  }
   .agenda-title {
-    font-size: 1.8rem;
-    color: #7d746b;
-    margin: 0;
+    font-size: 20px;
   }
-  
-  .agenda-controls {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  
-  .date-navigation {
-    display: flex;
-    align-items: center;
+  .agenda-header {
+    margin-bottom: 15px;
     gap: 10px;
   }
-  
-  .current-month {
-    font-size: 1.4rem;
-    margin: 0;
-    min-width: 180px;
-    text-align: center;
-  }
-  
-  .nav-btn {
-    background-color: transparent;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .nav-btn:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .view-controls {
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  
-  .view-btn {
-    padding: 8px 16px;
-    background-color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .view-btn:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .view-btn.active {
-    background-color: #7d746b;
-    color: white;
-  }
-  
-  .add-appointment-btn {
-    background-color: #7d746b;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s ease;
-  }
-  
-  .add-appointment-btn:hover {
-    background-color: #6a635c;
-  }
-  
-  /* Filtros */
-  .filters-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-  
-  .search-container {
-    position: relative;
-    width: 300px;
-  }
-  
-  .search-container input {
+  .agenda-controls {
+    /* Apilar controles verticalmente */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
     width: 100%;
-    padding: 10px 32px 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
   }
-  
+  .date-navigation {
+    justify-content: space-between; /* Distribuir flechas y mes */
+    width: 100%;
+  }
+  .current-month {
+    min-width: 100px;
+    font-size: 16px;
+    flex-grow: 1; /* Ocupar espacio */
+  }
+  .nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .view-controls {
+    /* Botones de vista en toda la fila */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+  }
+  .view-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  .add-appointment-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    gap: 6px;
+  }
+  .add-appointment-btn img {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Filtros apilados */
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch; /* Ocupar todo el ancho */
+    padding: 10px; /* Menos padding */
+    margin-bottom: 15px; /* Menos espacio abajo */
+    gap: 10px;
+  }
+  .search-container input {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 13px;
+  }
   .search-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
+    left: 10px;
   }
-  
-  .filter-options {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
-  
-  .filter-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .filter-group label {
-    color: #666;
-    font-weight: 500;
-  }
-  
   .filter-group select {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
+    padding: 6px 10px;
+    font-size: 13px;
   }
-  
-  /* Calendario Mensual */
-  .calendar-container {
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+  .filter-options {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
   }
-  
-  .calendar-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #eee;
+
+  .filter-group select {
+    flex-grow: 1; /* Ocupar espacio */
   }
-  
+
+  /* Calendario Mensual Más Compacto */
   .weekday {
-    padding: 12px;
-    text-align: center;
-    font-weight: 500;
-    color: #666;
+    padding: 8px 4px; /* Menos padding */
+    font-size: 12px;
   }
-  
   .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    min-height: 700px;
-  }
-  
+    grid-auto-rows: minmax(90px, auto);
+  } /* Era 80px */
   .calendar-day {
-    border: 1px solid #eee;
-    padding: 8px;
-    min-height: 100px;
-    position: relative;
+    min-height: 90px;/* Era 80px */
+    padding: 4px;
   }
-  
-  .calendar-day.other-month {
-    background-color: #f9f9f9;
-    color: #aaa;
+  .name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
-  
-  .calendar-day.today {
-    background-color: #fff8e6;
-  }
-  
   .day-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
   }
-  
   .day-number {
-    font-weight: 500;
+    font-size: 11px;
   }
-  
-  .day-content {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  .calendar-day.today .day-number {
+    width: 18;
+    height: 18px;
   }
-  
+
   .appointment-preview {
-    background-color: #e6f7ff;
-    border-left: 3px solid #1890ff;
-    padding: 6px 8px;
-    border-radius: 3px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    padding: 3px 5px; /* Menos padding */
+  font-size: 10px; /* Más pequeño */
+  border-radius: 3px;
+  border-left-width: 2px; /* Borde más fino */
   }
-  
-  .appointment-preview:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .appointment-preview.status-completed {
-    background-color: #f6ffed;
-    border-left-color: #52c41a;
-  }
-  
-  .appointment-preview.status-cancelled {
-    background-color: #fff1f0;
-    border-left-color: #ff4d4f;
-    text-decoration: line-through;
-  }
-  
-  .appointment-preview.unregistered {
-    background-color: #fff7e6;
-    border-left-color: #fa8c16;
-  }
-  
   .time {
-    font-weight: bold;
-    margin-right: 5px;
-    color: #555;
+    font-size: 9px;
   }
-  
+  .patient-type-indicator {
+    display: none; /* Ocultar en los más pequeños */
+  }
+  .status-icon {
+    font-size: 10px;
+    width: 12px;
+    height: 12px;
+  }
   .more-appointments {
-    text-align: center;
-    color: #1890ff;
-    font-size: 0.8rem;
-    cursor: pointer;
-    padding: 3px;
+    font-size: 9px;
+    padding: 1px 3px;
   }
-  
-  .more-appointments:hover {
-    text-decoration: underline;
-  }
-  
-  /* Vista Semanal */
-  .week-view {
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-  }
-  
-  .timeline-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .timeline-header {
-    display: flex;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .time-column {
-    width: 60px;
-    flex-shrink: 0;
-    border-right: 1px solid #eee;
-  }
-  
-  .day-column {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    border-right: 1px solid #eee;
-  }
-  
-  .day-column:last-child {
-    border-right: none;
-  }
-  
-  .day-name {
-    font-weight: 500;
-  }
-  
-  .day-date {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-top: 5px;
-  }
-  
-  .day-date.today {
-    color: #1890ff;
-  }
-  
-  .timeline-body {
-    position: relative;
-    min-height: 600px;
-  }
-  
-  .time-slots {
-    display: flex;
-  }
-  
-  .time-slot {
-    height: 60px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 5px;
-    color: #999;
-    font-size: 0.8rem;
-  }
-  
-  .appointment-slot {
-    position: relative;
-  }
-  
-  .appointment-card {
-    position: absolute;
-    background-color: #e6f7ff;
-    border-left: 3px solid #1890ff;
-    padding: 8px;
-    border-radius: 4px;
-    width: calc(100% - 8px);
-    cursor: pointer;
-    overflow: hidden;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-  }
-  
-  .appointment-card:hover {
-    transform: translateX(2px);
-    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .appointment-time {
-    font-weight: bold;
-    font-size: 0.9rem;
-  }
-  
-  .appointment-patient {
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .appointment-type {
-    font-size: 0.8rem;
-    color: #666;
-  }
-  
-  /* Vista Diaria */
+
+  /* Vistas Semanal/Diaria más compactas */
+  .week-view,
   .day-view {
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    min-width: unset; /* Quitar ancho mínimo */
+  }
+  .time-column,
+  .hour-column {
+    width: 45px;
+  } /* Columna de hora más estrecha */
+  .day-column,
+  .day-column-body {
+    min-width: 60px;
+  } /* Columna de día más estrecha */
+  .day-name {
+    font-size: 10px;
+  }
+  .day-date {
+    font-size: 14px;
+  }
+  .time-slot,
+  .hour-slot {
+    height: 45px;
+    font-size: 10px;
+    padding-right: 5px;
+  }
+  .time-slot span,
+  .hour-slot span {
+    top: -0.5em;
+  }
+  .day-column-body,
+  .appointments-column {
+    background-size: 100% 45px;
+  }
+
+  .appointment-card {
+    padding: 4px 6px;
+    border-left-width: 3px;
+  }
+  .appointment-time {
+    font-size: 10px;
+  }
+  .appointment-patient,
+  .appointment-card .name {
+    font-size: 11px;
+    margin: 1px 0;
+  }
+  .appointment-type,
+  .appointment-details {
+    font-size: 9px;
+    margin-top: 2px;
+  }
+
+  .selected-day {
+    font-size: 18px;
+  } /* Vista diaria */
+
+  /* Modal más compacto */
+  .modal-content {
+    width: 95%;
+  }
+  .modal-header h3 {
+    font-size: 16px;
+  }
+  .modal-body {
     padding: 15px;
   }
-  
-  .day-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
+  .detail-section h4 {
+    font-size: 14px;
   }
-  
-  .selected-day {
-    font-size: 1.3rem;
-    margin: 0;
+  .detail-section p {
+    font-size: 13px;
   }
-  
-  .day-timeline {
-    display: flex;
-    height: 600px;
+  .action-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+    gap: 5px;
   }
-  
+}
+
+/* Tablets (576px - 992px) */
+@media screen and (min-width: 576px) and (max-width: 991px) {
+  .agenda-container {
+    padding: 15px;
+  }
+  .agenda-title {
+    font-size: 22px;
+  }
+
+  .calendar-grid {
+    grid-auto-rows: minmax(120px, auto);
+  } /* Era 100px */
+  .calendar-day {
+    min-height: 120px;
+    padding: 5px;
+  } /* Era 100px */
+  .name {
+    /* CAMBIO: Aplicar wrapping aquí también si es necesario */
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .day-number {
+    font-size: 12px;
+  }
+  .appointment-preview {
+    font-size: 11px;
+  }
+
+  /* Vistas semanal/diaria un poco más grandes */
+  .time-column,
+  .hour-column {
+    width: 55px;
+  }
+  .day-column,
+  .day-column-body {
+    min-width: 75px;
+  }
+  .time-slot,
+  .hour-slot {
+    height: 55px;
+    font-size: 11px;
+  }
+  .day-column-body,
+  .appointments-column {
+    background-size: 100% 55px;
+  }
+  .appointment-card {
+    font-size: 11px;
+  }
+}
+
+/* Laptops y pantallas medianas (992px - 1400px) */
+@media screen and (min-width: 992px) and (max-width: 1399px) {
+  .agenda-title {
+    font-size: 26px;
+  }
+  .calendar-grid {
+    grid-auto-rows: minmax(140px, auto);
+  } /* Era 130px */
+  .calendar-day {
+    min-height: 140px;
+    padding: 8px;
+  } /* Era 130px */
+  .name {
+    /* CAMBIO: Mantener wrapping o volver a nowrap según preferencia */
+    white-space: normal; /* Opcional: cambiar a nowrap si prefieres ellipsis aquí */
+    overflow: visible; /* Opcional: cambiar a hidden si usas nowrap */
+    text-overflow: clip; /* Opcional: cambiar a ellipsis si usas nowrap */
+  }
+  .day-number {
+    font-size: 14px;
+  }
+  .appointment-preview {
+    font-size: 12px;
+  }
+
+  /* Vistas semanal/diaria tamaño normal */
+  .time-column,
   .hour-column {
     width: 60px;
-    flex-shrink: 0;
-    border-right: 1px solid #eee;
   }
-  
+  .day-column,
+  .day-column-body {
+    min-width: 80px;
+  }
+  .time-slot,
   .hour-slot {
     height: 60px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 5px;
-    color: #999;
-    font-size: 0.8rem;
+    font-size: 12px;
   }
-  
+  .day-column-body,
   .appointments-column {
-    flex: 1;
-    position: relative;
-  }
-  
-  .appointment-container {
-    position: absolute;
-    width: 100%;
-  }
-  
-  .day-view-card {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100%;
-  }
-  
-  .appointment-details {
-    font-size: 0.85rem;
-    margin-top: 5px;
-    color: #555;
-  }
-  
-  /* Modales */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
-  }
-  
-  .modal.active {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .modal-content {
-    background-color: #fff;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-    background-color: #f9f9f9;
-  }
-  
-  .modal-header h3 {
-    margin: 0;
-    color: #333;
-  }
-  
-  .close-btn {
-    background-color: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #999;
-    transition: all 0.2s ease;
-  }
-  
-  .close-btn:hover {
-    color: #333;
-  }
-  
-  .modal-body {
-    padding: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-  
-  .form-row {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .half {
-    flex: 1;
-  }
-  
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    box-sizing: border-box;
-  }
-  
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .cancel-btn,
-  .save-btn {
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .cancel-btn {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    color: #333;
-  }
-  
-  .save-btn {
-    background-color: #7d746b;
-    border: none;
-    color: white;
-  }
-  
-  .save-btn:hover {
-    background-color: #6a635c;
-  }
-  
-  .save-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  
-  .patient-selection {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 15px;
-    background-color: #fafafa;
-  }
-  
-  .selection-tabs {
-    display: flex;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .tab-btn {
-    padding: 10px 15px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
-    flex: 1;
-  }
-  
-  .tab-btn.active {
-    border-bottom-color: #7d746b;
-    color: #7d746b;
-    font-weight: 500;
-  }
-  
-  .patient-results {
-    max-height: 150px;
-    overflow-y: auto;
-    border: 1px solid #eee;
-    margin-top: 10px;
-    border-radius: 4px;
-  }
-  
-  .patient-result {
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .patient-result:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .selected-patient {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #f0f7ff;
-    border-radius: 4px;
-    border: 1px solid #d0e8ff;
-  }
-  
-  .patient-info {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .document {
-    color: #666;
-    font-size: 0.9rem;
-  }
-  
-  .remove-btn {
-    background-color: transparent;
-    border: none;
-    color: #ff4d4f;
-    cursor: pointer;
-    font-size: 1.2rem;
-  }
-  /* Agrega esto a tu archivo CSS */
-.patient-selection-options {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .search-option {
-    position: relative;
-  }
-  
-  .patient-results {
-    position: absolute;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    z-index: 10;
-  }
-  
-  .patient-result {
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-  
-  .patient-result:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .dropdown-option {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .dropdown-option select {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  .selected-patient {
-    margin-top: 1rem;
-    padding: 10px;
-    background-color: #f0f8ff;
-    border: 1px solid #c0d8f0;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .patient-info {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .patient-name {
-    font-weight: bold;
-  }
-  
-  .patient-document {
-    font-size: 0.9rem;
-    color: #666;
-  }
-  
-  .remove-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #999;
-  }
-  
-  .remove-btn:hover {
-    color: #ff3333;
-  }
-  /* Detalles de la cita */
-  .appointment-detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .appointment-date {
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-  
-  .appointment-time {
-    font-size: 1.1rem;
-    color: #666;
-  }
-  
-  .appointment-status-badge {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-  
-  .status-scheduled {
-    background-color: #e6f7ff;
-    color: #1890ff;
-  }
-  
-  .status-completed {
-    background-color: #f6ffed;
-    color: #52c41a;
-  }
-  
-  .status-cancelled {
-    background-color: #fff1f0;
-    color: #ff4d4f;
-  }
-  
-  .detail-section {
-    margin-bottom: 20px;
-  }
-  
-  .detail-section h4 {
-    color: #333;
-    margin: 0 0 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .detail-section p {
-    margin: 5px 0;
-  }
-  
-  .appointment-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-  }
-  
-  .action-btn {
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.2s ease;
-  }
-  
-  .action-btn.edit {
-    background-color: #e6f7ff;
-    color: #1890ff;
-    border: 1px solid #91d5ff;
-  }
-  
-  .action-btn.edit:hover {
-    background-color: #d4edff;
-  }
-  
-  .action-btn.complete {
-    background-color: #f6ffed;
-    color: #52c41a;
-    border: 1px solid #b7eb8f;
-  }
-  
-  .action-btn.complete:hover {
-    background-color: #ecffe3;
-  }
-  
-  .action-btn.cancel {
-    background-color: #fff7e6;
-    color: #fa8c16;
-    border: 1px solid #ffe58f;
-  }
-  
-  .action-btn.cancel:hover {
-    background-color: #fff0d6;
-  }
-  
-  .action-btn.delete {
-    background-color: #fff1f0;
-    color: #ff4d4f;
-    border: 1px solid #ffa39e;
-  }
-  
-  .action-btn.delete:hover {
-    background-color: #ffe6e5;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .agenda-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
-    }
-  
-    .agenda-controls {
-      flex-direction: column;
-      width: 100%;
-      gap: 15px;
-    }
-  
-    .date-navigation {
-      width: 100%;
-      justify-content: space-between;
-    }
-  
-    .view-controls {
-      width: 100%;
-    }
-  
-    .view-btn {
-      flex: 1;
-      text-align: center;
-    }
-  
-    .add-appointment-btn {
-      width: 100%;
-      justify-content: center;
-    }
-  
-    .filters-container {
-      flex-direction: column;
-    }
-  
-    .search-container {
-      width: 100%;
-    }
-  
-    .filter-options {
-      width: 100%;
-      justify-content: space-between;
-    }
-  
-    .filter-group {
-      flex: 1;
-    }
-  
-    .filter-group select {
-      width: 100%;
-    }
-  
-    .calendar-weekdays,
-    .calendar-grid {
-      font-size: 0.9rem;
-    }
-  
-    .calendar-day {
-      min-height: 80px;
-      padding: 5px;
-    }
-  
-    .appointment-preview {
-      padding: 3px 5px;
-      font-size: 0.75rem;
-    }
-  
-    .form-row {
-      flex-direction: column;
-      gap: 15px;
-    }
-  
-    .modal-content {
-      width: 95%;
-    }
-  }
+    background-size: 100% 60px;
+  }
+  .appointment-card {
+    font-size: 12px;
+  }
+}
+
+/* Pantallas Grandes (1400px+) */
+@media screen and (min-width: 1400px) {
+  .agenda-container {
+    /* CAMBIO: No establecer max-width ni margin aquí. */
+    padding: 15px; /* Más padding en pantallas grandes */
+  }
+  .agenda-title {
+    font-size: 24px;
+  }
+  .calendar-grid {
+    grid-auto-rows: minmax(130px, auto);
+  } /* Era 150px */
+  .calendar-day {
+    min-height: 130px; padding: 8px;
+  } /* Era 150px */
+  .name {
+    /* CAMBIO: Mantener wrapping o volver a nowrap según preferencia */
+    white-space: normal; /* Opcional: cambiar a nowrap si prefieres ellipsis aquí */
+    overflow: visible; /* Opcional: cambiar a hidden si usas nowrap */
+    text-overflow: clip; /* Opcional: cambiar a ellipsis si usas nowrap */
+  }
+  .day-number {
+    font-size: 15px;
+  }
+  .calendar-day.today .day-number {
+    width: 28px;
+    height: 28px;
+  }
+  .appointment-preview {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+  .time {
+    font-size: 11px;
+  }
+  .patient-type-indicator {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+  .status-icon {
+    font-size: 14px;
+    width: 16px;
+    height: 16px;
+  }
+  .more-appointments {
+    font-size: 11px;
+    padding: 3px 5px;
+  }
+
+  /* Vistas semanal/diaria espaciosas */
+  .day-column,
+  .day-column-body {
+    min-width: 100px;
+  }
+}
+
+/* Ajuste final para evitar que el calendario se meta debajo de una posible navbar fija
+   SOLO si NO controlas el layout padre. Si controlas el layout padre, es mejor
+   ajustar el padding/margin del contenedor principal de la página. */
+/* @media screen and (min-width: 992px) {
+  .agenda-container {
+     /* Considera si realmente necesitas esto o si el layout padre lo maneja */
+/* position: relative; /* Podría ser necesario si la navbar es fija */
+/* margin-top: 60px; /* Ajusta según la altura de tu navbar */
+/* }
+}*/
+/* Ajustes para la visualización correcta de citas */
+
+/* Mostrar nombre completo del paciente en todas las citas */
+.appointment-card-daily {
+  font-weight: 600;
+  font-size: 12px;
+  white-space: normal !important; /* Forzar que el texto se envuelva */
+  overflow: visible !important; /* Mostrar todo el contenido */
+  width: 100%;
+  margin: 2px 0;
+  color: #333;
+  line-height: 1.2; /* Mejorar legibilidad */
+  display: block !important; /* Asegurar que se muestra */
+}
+
+.appointment-card-daily.unregistered {
+  min-height: 35px !important; /* Altura mínima para que se vea la cita */
+  max-height: none !important; /* Sin límite de altura superior */
+  height: auto !important; /* Altura automática basada en contenido */
+  overflow: visible !important; /* Mostrar todo el contenido */
+}
+
+/* Asegurar altura correcta en vista diaria */
+.appointment-card-daily {
+  /* Otras propiedades se mantienen igual */
+  height: auto !important; /* Usar altura automática para contenido */
+  min-height: 35px; /* Altura mínima para citas cortas */
+}
+
+/* Asegurar que el texto es visible también en hover */
+.appointment-card:hover .appointment-patient,
+.appointment-card-daily:hover .appointment-patient {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: initial !important;
+}
+
+/* Asegurar que el texto no se corta en citas no registradas */
+.appointment-card-daily {
+  display: block !important;
+  visibility: visible !important;
+  white-space: normal !important;
+  overflow: visible !important;
+}
