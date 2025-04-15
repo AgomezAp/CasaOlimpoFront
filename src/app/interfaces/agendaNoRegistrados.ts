@@ -7,4 +7,5 @@ export interface AgendaNoRegistrados {
   telefono: string;
   estado: 'Confirmada' | 'Cancelada' | 'Pendiente';
   correo: string;
+  duracion : number;
 }

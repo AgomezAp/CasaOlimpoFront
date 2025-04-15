@@ -20,28 +20,6 @@ export class AgendaService {
       // 'Authorization': `Bearer ${this.authService.getToken()}`
     });
   }
-  private normalizeDateFormat(dateInput: string | Date): string {
-    // Asegura que las fechas siempre tengan el mismo formato YYYY-MM-DD
-    if (!dateInput) return '';
-    
-    let dateObj: Date;
-    if (typeof dateInput === 'string') {
-      // Si ya es string, eliminamos la parte de tiempo si existe
-      dateInput = dateInput.split('T')[0];
-      
-      // Crear objeto Date con mediodía para evitar problemas de zona horaria
-      const [year, month, day] = dateInput.split('-').map(Number);
-      dateObj = new Date(year, month - 1, day, 12, 0, 0);
-    } else {
-      dateObj = new Date(dateInput);
-      // Establecer a mediodía para evitar problemas de zona horaria
-      dateObj.setHours(12, 0, 0, 0);
-    }
-    
-    return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
-  }
-  // ====== MÉTODOS PARA CITAS DE PERSONAS REGISTRADAS ======
-
   /**
    * Obtiene todas las citas de personas registradas
    */
@@ -100,7 +78,8 @@ export class AgendaService {
       status: cita.estado,
       isRegistered: true,
       phone: cita.paciente?.telefono || cita.telefono,
-      email: cita.paciente?.correo
+      email: cita.paciente?.correo,
+      duration: cita.duracion || 60
     };
   }
 
@@ -178,15 +157,16 @@ export class AgendaService {
           
           // Transformar cada cita al formato común usado en el componente
           return citasNoRegistradas.map((cita:any) => ({
-            id: cita.ANRid, // El ID para citas no registradas es ANRid
+            id: cita.ANRid,
             patientName: `${cita.nombre} ${cita.apellidos}`,
             date: this.formatDateString(cita.fecha_cita),
             time: cita.hora_cita,
             type: 'consulta',
-            duration: 60, // Duración predeterminada
+            // CAMBIAR ESTO:
+            duration: cita.duracion || 60, // Usar la duración del backend o valor predeterminado
             status: this.mapBackendToFrontendStatus(cita.estado || 'Pendiente'),
             notes: '',
-            isRegistered: false, // IMPORTANTE: Marcar explícitamente como no registrado
+            isRegistered: false,
             phone: cita.telefono || ''
           }));
         }),
@@ -215,11 +195,11 @@ export class AgendaService {
   }
   private mapBackendToFrontendStatus(status: string): string {
     const mapping: {[key: string]: string} = {
-      'Pendiente': 'scheduled',
-      'Confirmada': 'completed',
-      'Cancelada': 'cancelled'
+      'Programada': 'Programada',
+      'Confirmada': 'Confirmada',
+      'Cancelada': 'Cancelada'
     };
-    return mapping[status] || 'scheduled';
+    return mapping[status] || 'Programada';
   }
   /**
    * Crear una cita para persona no registrada
@@ -283,8 +263,19 @@ export class AgendaService {
       this.getUnregisteredAppointments()
     ]).pipe(
       map(([registeredAppointments, unregisteredAppointments]) => {
+        // Marcar explícitamente cada tipo de cita
+        const markedRegistered = registeredAppointments.map(cita => ({
+          ...cita, 
+          isRegistered: true
+        }));
+        
+        const markedUnregistered = unregisteredAppointments.map(cita => ({
+          ...cita, 
+          isRegistered: false
+        }));
+        
         // Combinar ambos arrays
-        return [...registeredAppointments, ...unregisteredAppointments];
+        return [...markedRegistered, ...markedUnregistered];
       }),
       catchError(error => {
         console.error('Error al obtener citas combinadas', error);
@@ -301,7 +292,8 @@ export class AgendaService {
         fecha_cita: appointmentData.date,
         hora_cita: appointmentData.time,
         descripcion: appointmentData.notes || '',
-        estado: this.mapEstadoToBackend(appointmentData.status) || 'Pendiente',
+        estado: this.mapEstadoToBackend(appointmentData.status) || 'Progamada',
+        duracion: appointmentData.duration || 60
       };
       
       console.log('Enviando datos de cita registrada:', registeredData);
@@ -314,7 +306,9 @@ export class AgendaService {
         fecha_cita: appointmentData.date,
         hora_cita: appointmentData.time,
         telefono: appointmentData.telefono || '', // Antes estaba usando unregisteredPhone
-        estado: 'Pendiente'
+        estado: 'Programada',
+        duracion: appointmentData.duration || 60,
+        descripcion: appointmentData.notes || '',
       };
       
       console.log('Enviando datos de cita no registrada:', unregisteredData);
@@ -323,11 +317,11 @@ export class AgendaService {
   }
   private mapEstadoToBackend(status: string): 'Pendiente' | 'Confirmada' | 'Cancelada' {
     const mapping: {[key: string]: 'Pendiente' | 'Confirmada' | 'Cancelada'} = {
-      'scheduled': 'Pendiente',
-      'completed': 'Confirmada',
-      'cancelled': 'Cancelada'
+      'Programada': 'Pendiente',
+      'Confirmada': 'Confirmada',
+      'Cancelada': 'Cancelada'
     };
-    return mapping[status] || 'Pendiente';
+    return mapping[status] || 'Programada';
   }
   /**
    * Actualiza una cita dependiendo si es de paciente registrado o no
@@ -373,5 +367,30 @@ export class AgendaService {
       // Transformar el error para consumo de la UI
       return of(result as T);
     };
+  }
+
+  getCitasByPaciente(numeroDocumento: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get(`${this.apiUrl}api/agenda/${numeroDocumento}/citas`, { headers });
+  }
+  getHorasOcupadas(fecha: string): Observable<string[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    
+    return this.http.get<any>(`${this.apiUrl}api/agenda/horas-ocupadas/${fecha}`, { headers })
+      .pipe(
+        map(response => response?.data || []),
+        catchError(error => {
+          console.error('Error al obtener horas ocupadas:', error);
+          return of([]);
+        })
+      );
   }
 }

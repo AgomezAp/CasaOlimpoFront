@@ -5,10 +5,11 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { NotificacionComponent } from './components/notificaciones/notificacion/notificacion.component';
+import { CitaInminenteNotificationComponent } from './components/cita-inminente-notification/cita-inminente-notification.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,NavBarComponent,CommonModule,NotificacionComponent],
+  imports: [RouterOutlet,NavBarComponent,CommonModule,NotificacionComponent,CitaInminenteNotificationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

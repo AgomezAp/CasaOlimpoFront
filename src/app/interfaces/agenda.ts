@@ -6,6 +6,8 @@ export interface Agenda {
   estado: 'Confirmada' | 'Cancelada' | 'Pendiente';
   numero_documento: string;
   descripcion: string;
+  duracion : number;
+
 } 
 
 export interface CalendarDay {

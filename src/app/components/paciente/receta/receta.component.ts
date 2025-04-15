@@ -3,8 +3,8 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Receta } from '../../../interfaces/receta';
 import { ActivatedRoute } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { RecetaService } from '../../../services/receta.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-receta',
@@ -27,7 +27,7 @@ export class RecetaComponent implements OnInit, OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private recetaService: RecetaService,
-    private toastr: ToastrService
+    private notificacionService: NotificacionService,
   ) {
     this.recetaForm = this.formBuilder.group({
       medicamentos: ['', Validators.required],
@@ -64,7 +64,7 @@ export class RecetaComponent implements OnInit, OnChanges {
         console.error('Error al cargar recetas:', error);
         this.error = 'No se pudieron cargar las recetas. Por favor, intente nuevamente.';
         this.loading = false;
-        this.toastr.error('Error al cargar recetas', 'Error');
+        this.notificacionService.error('Error al cargar recetas');
       }
     });
   }
@@ -107,12 +107,12 @@ export class RecetaComponent implements OnInit, OnChanges {
         this.submitting = false;
         this.mostrarFormularioReceta = false;
         this.recetaForm.reset();
-        this.toastr.success('Receta guardada exitosamente', 'Éxito');
+        this.notificacionService.success('Receta guardada exitosamente');
       },
       error: (error) => {
         console.error('Error al guardar receta:', error);
         this.submitting = false;
-        this.toastr.error('No se pudo guardar la receta', 'Error');
+        this.notificacionService.error('No se pudo guardar la receta');
       }
     });
   }
@@ -136,24 +136,24 @@ export class RecetaComponent implements OnInit, OnChanges {
         if (index !== -1) {
           this.recetas[index] = response.data;
         }
-        this.toastr.success('Receta marcada como completada', 'Éxito');
+        this.notificacionService.success('Receta marcada como completada');
       },
       error: (error) => {
         console.error('Error al completar receta:', error);
-        this.toastr.error('No se pudo completar la receta', 'Error');
+        this.notificacionService.error('No se pudo completar la receta');
       }
     });
   }
 
   descargarPDF(receta: Receta): void {
-    this.toastr.info('Preparando PDF...', 'Información');
+    this.notificacionService.info('Preparando PDF...');
     
     // Implementación cuando exista el endpoint
     // this.recetaService.descargarPDF(receta.RecetaId!).subscribe({...});
     
     // Mientras tanto, mostrar mensaje
     setTimeout(() => {
-      this.toastr.warning('Función en desarrollo', 'Descarga de PDF');
+      this.notificacionService.warning('Función en desarrollo');
     }, 1500);
   }
 

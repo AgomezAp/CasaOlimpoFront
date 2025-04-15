@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PacienteService } from '../../../services/paciente.service';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Paciente } from '../../../interfaces/paciente';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-paciente-dashboard',
@@ -32,7 +32,7 @@ export class PacienteDashboardComponent implements OnInit {
   constructor(
     private pacienteService: PacienteService,
     private router: Router,
-    private toastr: ToastrService
+    private notificacionService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -56,9 +56,9 @@ export class PacienteDashboardComponent implements OnInit {
             // Mostrar información del doctor si está disponible
             if (response.doctorInfo) {
               console.log(`Cargados ${this.pacientes.length} pacientes del Dr. ${response.doctorInfo.nombre}`);
-              this.toastr.success(`${response.doctorInfo.totalPacientes} pacientes encontrados`);
+              this.notificacionService.success(`${response.doctorInfo.totalPacientes} pacientes encontrados`);
             } else {
-              this.toastr.success(`${this.pacientes.length} pacientes encontrados`);
+              this.notificacionService.success(`${this.pacientes.length} pacientes encontrados`);
             }
           } 
           // Si se mantiene la estructura original del API
@@ -66,20 +66,20 @@ export class PacienteDashboardComponent implements OnInit {
             this.pacientesTodos = response.data.pacientes;
             this.pacientes = [...this.pacientesTodos];
             console.log(`Cargados ${this.pacientes.length} pacientes del Dr. ${response.data.doctor}`);
-            this.toastr.success(`${response.data.total_pacientes} pacientes encontrados`);
+            this.notificacionService.success(`${response.data.total_pacientes} pacientes encontrados`);
           } 
           // Si no hay pacientes bajo ninguna estructura
           else {
             this.pacientesTodos = [];
             this.pacientes = [];
             console.warn('No se encontraron pacientes en la respuesta:', response.data);
-            this.toastr.warning('No se encontraron pacientes para este doctor');
+            this.notificacionService.warning('No se encontraron pacientes para este doctor');
           }
           this.actualizarPaginacion();
         } else {
           this.pacientesTodos = [];
           this.pacientes = [];
-          this.toastr.warning('No se encontraron datos para este doctor');
+          this.notificacionService.warning('No se encontraron datos para este doctor');
         }
         this.loading = false;
       },
@@ -87,7 +87,7 @@ export class PacienteDashboardComponent implements OnInit {
         console.error('Error cargando pacientes:', error);
         this.error = 'Ocurrió un error al cargar los pacientes. Por favor, intente nuevamente.';
         this.loading = false;
-        this.toastr.error('Error al cargar pacientes');
+        this.notificacionService.error('Error al cargar pacientes');
       }
     });
   }
@@ -113,11 +113,11 @@ export class PacienteDashboardComponent implements OnInit {
           // Si no es ninguno de los formatos esperados
           else {
             this.pacientes = [];
-            this.toastr.warning('Formato de datos incorrecto');
+            this.notificacionService.warning('Formato de datos incorrecto');
           }
         } else {
           this.pacientes = [];
-          this.toastr.warning('No se recibieron datos de pacientes');
+          this.notificacionService.warning('No se recibieron datos de pacientes');
         }
         
         this.pacientesTodos = [...this.pacientes];
@@ -126,7 +126,7 @@ export class PacienteDashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar todos los pacientes:', error);
-        this.toastr.error('Error al cargar todos los pacientes');
+        this.notificacionService.error('Error al cargar todos los pacientes');
         this.loading = false;
       }
     });

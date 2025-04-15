@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModu
 import { PacienteService } from '../../../services/paciente.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-agregar-paciente',
@@ -32,7 +32,7 @@ export class AgregarPacienteComponent implements OnInit {
     private formBuilder: FormBuilder,
     private pacienteService: PacienteService,
     private router: Router,
-    private toastr: ToastrService
+    private notificacionService: NotificacionService
   ) {
     const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
@@ -112,7 +112,7 @@ export class AgregarPacienteComponent implements OnInit {
       if (controles['fecha_nacimiento'].errors['required']) {
         camposFaltantes.push('Fecha de nacimiento');
       } else if (controles['fecha_nacimiento'].errors['fechaFutura']) {
-        this.toastr.error('La fecha de nacimiento no puede ser posterior a la fecha actual', 'Error de validación');
+        this.notificacionService.error('La fecha de nacimiento no puede ser posterior a la fecha actual');
         return;
       }
     }
@@ -125,7 +125,7 @@ export class AgregarPacienteComponent implements OnInit {
     if (controles['celular'].invalid) camposFaltantes.push('Celular');
     
     if (camposFaltantes.length > 0) {
-      this.toastr.warning(`Faltan campos obligatorios: ${camposFaltantes.join(', ')}`, 'Formulario incompleto');
+      this.notificacionService.warning(`Faltan campos obligatorios: ${camposFaltantes.join(', ')}`);
       
       // Marcar todos los campos con errores
       Object.keys(this.f).forEach(key => {
@@ -175,9 +175,9 @@ export class AgregarPacienteComponent implements OnInit {
       
       // Mostrar mensaje de error detallado
       if (error.error && error.error.message) {
-        this.toastr.error(error.error.message, 'Error al crear paciente');
+        this.notificacionService.error('Error al crear paciente');
       } else {
-        this.toastr.error('No se pudo crear el paciente. Por favor, revise los datos e intente nuevamente.', 'Error');
+        this.notificacionService.error('No se pudo crear el paciente. Por favor, revise los datos e intente nuevamente.');
       }
     }
   });
@@ -203,7 +203,7 @@ export class AgregarPacienteComponent implements OnInit {
       error: (error) => {
         console.error('Error al subir la foto:', error);
         // Mantener el mensaje de advertencia
-        this.toastr.warning('El paciente se creó correctamente, pero hubo un problema al guardar la foto', 'Advertencia');
+        this.notificacionService.warning('El paciente se creó correctamente, pero hubo un problema al guardar la foto');
         this.finalizarProceso(false);
       }
     });
@@ -215,9 +215,9 @@ export class AgregarPacienteComponent implements OnInit {
     
     if (this.pacienteCreado) {
       if (fotoSubida) {
-        this.toastr.success('Paciente creado exitosamente con foto', 'Éxito');
+        this.notificacionService.success('Paciente creado exitosamente con foto');
       } else {
-        this.toastr.success('Paciente creado exitosamente', 'Éxito');
+        this.notificacionService.success('Paciente creado exitosamente');
       }
       
       // Navegar al dashboard de pacientes
@@ -265,14 +265,14 @@ export class AgregarPacienteComponent implements OnInit {
       
       // Validar tipo de archivo
       if (!file.type.match(/image\/(jpeg|jpg|png|gif)/)) {
-        this.toastr.error('El archivo debe ser una imagen (JPEG, PNG o GIF)', 'Error');
+        this.notificacionService.error('El archivo debe ser una imagen (JPEG, PNG o GIF)');
         input.value = '';
         return;
       }
       
       // Validar tamaño (máximo 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        this.toastr.error('La imagen no debe superar los 5MB', 'Error');
+        this.notificacionService.error('La imagen no debe superar los 5MB');
         input.value = '';
         return;
       }

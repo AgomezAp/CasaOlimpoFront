@@ -11,6 +11,7 @@ import { PacienteService } from '../../../services/paciente.service';
 import { CommonModule } from '@angular/common';
 import { NotificacionService } from '../../../services/notificacion.service';
 import { NotificacionComponent } from '../../notificaciones/notificacion/notificacion.component';
+import { AppointmentReminderService } from '../../../services/appointment-reminder.service';
 
 @Component({
   selector: 'app-agenda-dashboard',
@@ -19,7 +20,15 @@ import { NotificacionComponent } from '../../notificaciones/notificacion/notific
   styleUrl: './agenda-dashboard.component.css',
 })
 export class AgendaDashboardComponent implements OnInit {
-  // Variables para la vista de calendario
+  loadingAction: {
+    confirm: boolean;
+    cancel: boolean;
+    delete: boolean;
+  } = {
+    confirm: false,
+    cancel: false,
+    delete: false,
+  };
   viewMode: 'month' | 'week' | 'day' = 'month';
   currentDate: Date = new Date();
   currentYear: number = this.currentDate.getFullYear();
@@ -38,7 +47,7 @@ export class AgendaDashboardComponent implements OnInit {
 
   // Variables para hora
   hours: string[] = [];
-
+  private readonly MAX_VISIBLE_APPOINTMENTS = 4; 
   // Modal nueva cita
   showNewAppointmentModal: boolean = false;
   appointmentForm: FormGroup;
@@ -55,11 +64,16 @@ export class AgendaDashboardComponent implements OnInit {
   appointments: any[] = [];
   filteredAppointments: any[] = [];
 
+  // Variables para editar citas
+  editForm!: FormGroup;
+  showEditModal: boolean = false;
+  appointmentBeingEdited: any = null;
   constructor(
     private fb: FormBuilder,
     private agendaService: AgendaService,
     private pacienteService: PacienteService,
-    private notificacionService: NotificacionService
+    private notificacionService: NotificacionService,
+    private appointmentReminderService: AppointmentReminderService
   ) {
     this.appointmentForm = this.fb.group({
       patientSearch: [''],
@@ -89,7 +103,6 @@ export class AgendaDashboardComponent implements OnInit {
     for (let i = startHour; i <= endHour; i++) {
       this.hours.push(i.toString().padStart(2, '0') + ':00');
     }
-    
   }
   loadAllPatients(): void {
     this.pacienteService.obtenerPacientes().subscribe(
@@ -259,142 +272,130 @@ export class AgendaDashboardComponent implements OnInit {
   isSameDay(date1: Date, date2: Date): boolean {
     try {
       // Verificar que ambas fechas son objetos Date válidos
-      if (!(date1 instanceof Date) || !(date2 instanceof Date) || 
-          isNaN(date1.getTime()) || isNaN(date2.getTime())) {
+      if (
+        !(date1 instanceof Date) ||
+        !(date2 instanceof Date) ||
+        isNaN(date1.getTime()) ||
+        isNaN(date2.getTime())
+      ) {
         return false;
       }
-      
-      return date1.getFullYear() === date2.getFullYear() &&
-             date1.getMonth() === date2.getMonth() &&
-             date1.getDate() === date2.getDate();
+
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+      );
     } catch (e) {
       console.error('Error en isSameDay:', e);
       return false;
     }
   }
- calculateAppointmentTop(appointment: any): number {
-  try {
-    // Obtener tiempo de la cita
-    const timeStr = appointment.time || appointment.hora;
-    if (!timeStr) return 0;
-    
-    // Extraer horas y minutos
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    
-    // La primera hora mostrada en la vista (ajusta esto según tu diseño)
-    const firstHour = 7; // Si tu día comienza a las 7:00 AM
-    
-    // Calcular minutos desde la hora de inicio
-    const minutesFromStart = (hours - firstHour) * 60 + parseInt(minutes || '0');
-    
-    
-    return minutesFromStart;
-  } catch (e) {
-    console.error('Error calculando posición de cita:', e, appointment);
-    return 0;
+  calculateAppointmentTop(appointment: any): number {
+    try {
+      // Obtener tiempo de la cita
+      const timeStr = appointment.time || appointment.hora;
+      if (!timeStr) return 0;
+
+      // Extraer horas y minutos
+      const [hours, minutes] = timeStr.split(':').map(Number);
+
+      // La primera hora mostrada en la vista (ajusta esto según tu diseño)
+      const firstHour = 7; // Si tu día comienza a las 7:00 AM
+
+      // Calcular minutos desde la hora de inicio
+      const minutesFromStart =
+        (hours - firstHour) * 60 + parseInt(minutes || '0');
+
+      return minutesFromStart;
+    } catch (e) {
+      console.error('Error calculando posición de cita:', e, appointment);
+      return 0;
+    }
   }
-}
   loadHours(): void {
     this.hours = [];
     // Ajusta estos valores según tu horario de trabajo (por ejemplo, 7:00 a 19:00)
     const startHour = 7;
     const endHour = 19;
-    
+
     for (let i = startHour; i <= endHour; i++) {
       this.hours.push(`${i.toString().padStart(2, '0')}:00`);
     }
-    
-    console.log("Horas cargadas:", this.hours);
+
+    console.log('Horas cargadas:', this.hours);
   }
   calculateAppointmentHeight(appointment: any): number {
-    // Obtener duración en minutos (1 minuto = 1 píxel de altura)
-    let duration = 60; // Valor predeterminado: 1 hora = 60px
-    
-    try {
-      // Intentar obtener la duración del appointment
-      if (appointment.duration) {
-        duration = typeof appointment.duration === 'number' 
-          ? appointment.duration 
-          : parseInt(appointment.duration, 10);
-      } else if (appointment.duracion) {
-        duration = typeof appointment.duracion === 'number' 
-          ? appointment.duracion 
-          : parseInt(appointment.duracion, 10);
-      } else if (appointment.minutos) {
-        duration = typeof appointment.minutos === 'number'
-          ? appointment.minutos
-          : parseInt(appointment.minutos, 10);
-      }
-      
-      // Validar que sea un número válido
-      if (isNaN(duration) || duration <= 0) {
-        duration = 60; // Si no es válido, usar 60 min por defecto
-      }
-      
-      console.log(`Altura calculada para cita: ${duration}px`);
-      
-      return duration; // 1 minuto = 1 píxel
-    } catch (e) {
-      console.error('Error al calcular altura de cita:', e);
-      return 60; // Valor por defecto si hay error
+    // Obtener duración usando el método dedicado que ya maneja todos los casos
+    const duration = this.getDurationInMinutes(appointment);
+
+    // Opcionalmente aplicar un factor de escala para mejor visualización
+    const scaleFactor = 1;
+    return duration * scaleFactor;
+  }
+  getDurationInMinutes(appointment: any): number {
+    if (!appointment) return 60; // Valor predeterminado
+
+    if (!appointment) return 60;
+
+    // Usar el campo duracion directamente del objeto
+    if (appointment.duracion !== undefined && appointment.duracion !== null) {
+      return appointment.duracion;
     }
+
+    // Fallbacks para compatibilidad con citas antiguas
+    if (appointment.duration) return parseInt(appointment.duration);
+
+    // Valor predeterminado
+    return 60;
   }
   formatAppointmentTime(appointment: any): string {
     const timeStr = appointment.time || appointment.hora;
     if (!timeStr) return '';
-    
-    // Obtener la duración con el mismo manejo de diferentes formatos
-    let duration = 60; // Valor predeterminado
-    
-    if (appointment.duration) {
-      duration = typeof appointment.duration === 'number' 
-        ? appointment.duration 
-        : parseInt(appointment.duration, 10);
-    } else if (appointment.duracion) {
-      duration = typeof appointment.duracion === 'number' 
-        ? appointment.duracion 
-        : parseInt(appointment.duracion, 10);
+
+    // Usar el método común para obtener duración
+    const duration = this.getDurationInMinutes(appointment);
+
+    try {
+      // Convertir la hora de inicio a minutos desde medianoche
+      const [startHours, startMinutes] = timeStr.split(':').map(Number);
+
+      // Total minutos desde medianoche
+      const startTotalMinutes = startHours * 60 + startMinutes;
+      const endTotalMinutes = startTotalMinutes + duration;
+
+      // Calcular hora y minutos de fin
+      const endHours = Math.floor(endTotalMinutes / 60);
+      const endMinutes = endTotalMinutes % 60;
+
+      // Formatear como "HH:MM - HH:MM"
+      return `${timeStr} - ${endHours.toString().padStart(2, '0')}:${endMinutes
+        .toString()
+        .padStart(2, '0')}`;
+    } catch (e) {
+      console.error('Error en formatAppointmentTime:', e);
+      return timeStr;
     }
-    
-    // Validar duración
-    if (isNaN(duration) || duration <= 0) {
-      duration = 30;
-    }
-    
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    
-    // Calcular hora de fin
-    let endHour = hours;
-    let endMinutes = minutes + duration;
-    
-    // Ajustar si los minutos superan 60
-    if (endMinutes >= 60) {
-      endHour += Math.floor(endMinutes / 60);
-      endMinutes = endMinutes % 60;
-    }
-    
-    // Formatear como "HH:MM - HH:MM"
-    return `${timeStr} - ${endHour.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
   }
   loadWeekView(): void {
     const today = new Date();
-    
+
     // Si weekDays no está definido en la clase, inicialízalo
     this.weekDays = [];
-    
+
     // Generar los días de la semana
     for (let i = 0; i < 7; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() - today.getDay() + i); // Domingo a Sábado
-      
+
       this.weekDays.push({
         date: date,
         dayName: this.getDayName(date),
         dayNumber: date.getDate(),
-        isToday: this.isSameDay(date, today)
+        isToday: this.isSameDay(date, today),
       });
     }
-    
+
     // Log para depuración
     console.log('Días de la semana:', this.weekDays);
     console.log('Citas disponibles:', this.appointments.length);
@@ -405,49 +406,49 @@ export class AgendaDashboardComponent implements OnInit {
   }
   formatDetailDate(dateStr: string): string {
     if (!dateStr) return 'Fecha no disponible';
-    
+
     try {
       const date = new Date(dateStr);
       if (isNaN(date.getTime())) return 'Fecha inválida';
-      
-      return date.toLocaleDateString('es-ES', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+
+      return date.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       });
     } catch (e) {
       console.error('Error al formatear fecha:', e);
       return 'Error en formato de fecha';
     }
   }
-  
+
   loadWeekDays(): void {
     try {
       const today = new Date();
       const currentDay = today.getDay(); // 0 (domingo) a 6 (sábado)
       const startOfWeek = new Date(today);
       startOfWeek.setDate(today.getDate() - currentDay); // Retrocede al domingo más reciente
-  
+
       this.weekDays = [];
-  
+
       for (let i = 0; i < 7; i++) {
         const date = new Date(startOfWeek);
         date.setDate(startOfWeek.getDate() + i);
-  
+
         const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][i];
-  
+
         this.weekDays.push({
           dayName: dayName,
           dayNumber: date.getDate(),
           month: date.getMonth(),
           year: date.getFullYear(),
           isToday: this.isToday(date),
-          date: date // Asegurando que date es un objeto Date válido
+          date: date, // Asegurando que date es un objeto Date válido
         });
       }
-      
-      console.log("WeekDays cargados correctamente:", this.weekDays);
+
+      console.log('WeekDays cargados correctamente:', this.weekDays);
     } catch (e) {
       console.error('Error al cargar días de la semana:', e);
     }
@@ -466,20 +467,36 @@ export class AgendaDashboardComponent implements OnInit {
       date.getFullYear() === today.getFullYear()
     );
   }
-
+  private inspeccionarDatosCrudos(data: any[]): void {
+    console.log('======= DATOS CRUDOS DE CITAS =======');
+    data.forEach((cita) => {
+      // Verificar EXACTAMENTE cómo se llama la propiedad de duración
+      const props = Object.keys(cita);
+      console.log(
+        `Cita ID: ${cita.id || cita.Aid}, propiedades: ${props.join(', ')}`
+      );
+      console.log('Valor de duracion:', cita['duracion']); // Con comillas para acceder exactamente a esa propiedad
+      console.log('---------------------');
+    });
+  }
   getAppointmentsForDay(day: any): any[] {
     if (!this.filteredAppointments) return [];
-    
+
     // Asegurar que tenemos un objeto Date válido para comparar
     let dayDate: Date;
-    
+
     try {
       // Si day es un objeto con una propiedad date
       if (day && day.date instanceof Date) {
         dayDate = day.date;
       }
       // Si day es un objeto con propiedades de fecha separadas
-      else if (day && typeof day.year === 'number' && typeof day.month === 'number' && typeof day.dayNumber === 'number') {
+      else if (
+        day &&
+        typeof day.year === 'number' &&
+        typeof day.month === 'number' &&
+        typeof day.dayNumber === 'number'
+      ) {
         dayDate = new Date(day.year, day.month, day.dayNumber);
       }
       // Si day es directamente una fecha
@@ -491,18 +508,18 @@ export class AgendaDashboardComponent implements OnInit {
         console.warn('Formato de día no reconocido:', day);
         return [];
       }
-      
+
       // Verificar que la fecha es válida
       if (isNaN(dayDate.getTime())) {
         console.warn('Fecha inválida:', day);
         return [];
       }
-      
+
       return this.filteredAppointments
         .filter((appointment) => {
           try {
             let appointmentDate;
-  
+
             // SOLUCIÓN: Manejar múltiples formatos de fecha
             if (typeof appointment.date === 'string') {
               // Si incluye T, es formato ISO completo
@@ -510,25 +527,33 @@ export class AgendaDashboardComponent implements OnInit {
                 appointmentDate = new Date(appointment.date);
               } else {
                 // Si es 'YYYY-MM-DD'
-                const [year, month, day] = appointment.date.split('-').map(Number);
+                const [year, month, day] = appointment.date
+                  .split('-')
+                  .map(Number);
                 if (year && month && day) {
                   appointmentDate = new Date(year, month - 1, day);
                 } else {
                   appointmentDate = new Date(appointment.date);
                 }
               }
-            } else if (appointment.fecha && typeof appointment.fecha === 'string') {
+            } else if (
+              appointment.fecha &&
+              typeof appointment.fecha === 'string'
+            ) {
               appointmentDate = new Date(appointment.fecha);
             } else {
               appointmentDate = new Date(appointment.date || appointment.fecha);
             }
-  
+
             // Verificar que la fecha sea válida
             if (isNaN(appointmentDate.getTime())) {
-              console.warn('Fecha de cita inválida:', appointment.date || appointment.fecha);
+              console.warn(
+                'Fecha de cita inválida:',
+                appointment.date || appointment.fecha
+              );
               return false;
             }
-  
+
             // Solo comparar año, mes y día
             return (
               dayDate.getFullYear() === appointmentDate.getFullYear() &&
@@ -536,12 +561,19 @@ export class AgendaDashboardComponent implements OnInit {
               dayDate.getDate() === appointmentDate.getDate()
             );
           } catch (e) {
-            console.error('Error al procesar fecha de cita:', appointment.date || appointment.fecha, e);
+            console.error(
+              'Error al procesar fecha de cita:',
+              appointment.date || appointment.fecha,
+              e
+            );
             return false;
           }
         })
         .sort((a, b) => {
-          return this.timeToMinutes(a.time || a.hora) - this.timeToMinutes(b.time || b.hora);
+          return (
+            this.timeToMinutes(a.time || a.hora) -
+            this.timeToMinutes(b.time || b.hora)
+          );
         });
     } catch (e) {
       console.error('Error al procesar día:', day, e);
@@ -611,24 +643,42 @@ export class AgendaDashboardComponent implements OnInit {
   }
 
   getAppointmentStyle(appointment: any): any {
-    const startTime = this.timeToMinutes(appointment.time);
-    const topPosition = ((startTime - 8 * 60) / 60) * 60; // 8am es la hora de inicio, 60px por hora
-    const height = appointment.duration ? parseInt(appointment.duration) : 60;
+    const startTime = this.timeToMinutes(appointment.time || appointment.hora);
+    const topPosition = ((startTime - 7 * 60) / 60) * 60; // 7am es la hora de inicio
+
+    // OBTENER LA DURACIÓN USANDO EL MÉTODO DEDICADO
+    const duration = this.getDurationInMinutes(appointment);
+
+    // ESCALA: 1 minuto = 1px, pero podemos ajustar con un factor
+    const scaleFactor = 1; // Ajustar este valor para cambiar la escala visual
+    const height = duration * scaleFactor;
+
+    console.log(
+      `Cita "${
+        appointment.patientName || 'Sin nombre'
+      }" - Duración: ${duration}min -> Altura: ${height}px`
+    );
 
     return {
       top: `${topPosition}px`,
       height: `${height}px`,
+      minHeight: '30px', // Para que las citas muy cortas sean al menos visibles
     };
   }
-
+  // También reemplazar este método
   getDayViewAppointmentStyle(appointment: any): any {
-    const startTime = this.timeToMinutes(appointment.time);
-    const topPosition = ((startTime - 8 * 60) / 60) * 60; // 8am es la hora de inicio, 60px por hora
-    const height = appointment.duration ? parseInt(appointment.duration) : 60;
+    const startTime = this.timeToMinutes(appointment.time || appointment.hora);
+    const topPosition = ((startTime - 7 * 60) / 60) * 60; // 7am es la hora de inicio
+
+    // Usar el mismo método para consistencia
+    const duration = this.getDurationInMinutes(appointment);
+    const scaleFactor = 1;
+    const height = duration * scaleFactor;
 
     return {
       top: `${topPosition}px`,
       height: `${height}px`,
+      minHeight: '30px',
       left: '60px', // Para dejar espacio para la columna de horas
       right: '0',
     };
@@ -636,9 +686,9 @@ export class AgendaDashboardComponent implements OnInit {
 
   timeToMinutes(time: string): number {
     if (!time) return 0;
-    
+
     try {
-      const [hours, minutes] = time.split(':').map(num => parseInt(num, 10));
+      const [hours, minutes] = time.split(':').map((num) => parseInt(num, 10));
       return (isNaN(hours) ? 0 : hours) * 60 + (isNaN(minutes) ? 0 : minutes);
     } catch (e) {
       console.error('Error convirtiendo tiempo a minutos:', time, e);
@@ -647,20 +697,20 @@ export class AgendaDashboardComponent implements OnInit {
   }
   getAppointmentStatusClass(status: string): string {
     // Unificar la lógica a términos en inglés
-    if (status === 'completed' || status?.toLowerCase() === 'confirmada')
+    if (status === 'confirmada' || status?.toLowerCase() === 'confirmada')
       return 'status-completed';
-    if (status === 'cancelled' || status?.toLowerCase() === 'cancelada')
+    if (status === 'cancelada' || status?.toLowerCase() === 'cancelada')
       return 'status-cancelled';
     return 'status-scheduled';
   }
 
   getStatusText(status: string): string {
     // Asegúrate de que traduzca correctamente desde ambos idiomas
-    if (status === 'scheduled' || status?.toLowerCase() === 'pendiente')
+    if (status === 'pendiente' || status?.toLowerCase() === 'Pendiente')
       return 'Programada';
-    if (status === 'completed' || status?.toLowerCase() === 'confirmada')
+    if (status === 'confirmada' || status?.toLowerCase() === 'confirmada')
       return 'Confirmada';
-    if (status === 'cancelled' || status?.toLowerCase() === 'cancelada')
+    if (status === 'cancelada' || status?.toLowerCase() === 'cancelada')
       return 'Cancelada';
     return 'Programada'; // Default
   }
@@ -698,7 +748,7 @@ export class AgendaDashboardComponent implements OnInit {
   // Filtrado de citas
   filterAppointments(): void {
     let filtered = this.appointments;
-  
+
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -708,33 +758,44 @@ export class AgendaDashboardComponent implements OnInit {
             appointment.patientId.toLowerCase().includes(searchLower))
       );
     }
-  
+
     if (this.statusFilter !== 'all') {
       filtered = filtered.filter((appointment) => {
         // Obtener el estado normalizado del appointment
-        const appointmentStatus = (appointment.status || appointment.estado || '').toLowerCase();
-        
+        const appointmentStatus = (
+          appointment.status ||
+          appointment.estado ||
+          ''
+        ).toLowerCase();
+
         // Comparar según el filtro seleccionado
         switch (this.statusFilter) {
           case 'completed':
-            return appointmentStatus === 'completed' || 
-                   appointmentStatus === 'confirmada' ||
-                   appointmentStatus === 'Confirmada';
+            return (
+              appointmentStatus === 'completed' ||
+              appointmentStatus === 'confirmada' ||
+              appointmentStatus === 'Confirmada'
+            );
           case 'cancelled':
-            return appointmentStatus === 'cancelled' || 
-                   appointmentStatus === 'cancelada' ||
-                   appointmentStatus === 'Cancelada';
-          case 'scheduled':
-            return appointmentStatus === 'scheduled' || 
-                   appointmentStatus === 'pendiente' || 
-                   appointmentStatus === 'Pendiente' ||
-                   (!appointmentStatus || appointmentStatus === ''); // Por defecto si no tiene estado
+            return (
+              appointmentStatus === 'cancelled' ||
+              appointmentStatus === 'cancelada' ||
+              appointmentStatus === 'Cancelada'
+            );
+          case 'Pendiente':
+            return (
+              appointmentStatus === 'Programada' ||
+              appointmentStatus === 'Programada' ||
+              appointmentStatus === 'Programada' ||
+              !appointmentStatus ||
+              appointmentStatus === ''
+            ); // Por defecto si no tiene estado
           default:
             return appointment.status === this.statusFilter;
         }
       });
     }
-  
+
     if (this.typeFilter !== 'all') {
       if (this.typeFilter === 'registered') {
         filtered = filtered.filter((appointment) => appointment.isRegistered);
@@ -742,7 +803,7 @@ export class AgendaDashboardComponent implements OnInit {
         filtered = filtered.filter((appointment) => !appointment.isRegistered);
       }
     }
-  
+
     this.filteredAppointments = filtered;
     this.loadCalendarDays();
     if (this.viewMode === 'week') {
@@ -862,16 +923,54 @@ export class AgendaDashboardComponent implements OnInit {
       // Normalizar el estado
       if (normalized.estado && !normalized.status) {
         if (normalized.estado.toLowerCase() === 'confirmada')
-          normalized.status = 'completed';
+          normalized.status = 'confirmada';
         else if (normalized.estado.toLowerCase() === 'cancelada')
-          normalized.status = 'cancelled';
-        else normalized.status = 'scheduled';
+          normalized.status = 'cancelada';
+        else normalized.status = 'Programada';
       }
 
-      // Normalizar duración
-      if (!normalized.duration) {
-        normalized.duration = normalized.duracion || normalized.minutos || '30';
+      // IMPORTANTE: Normalizar duración como número
+      let duration = null;
+
+      // Intentar obtener duración de diferentes propiedades
+      if (normalized.duracion !== undefined) {
+        duration = normalized.duracion;
+        console.log(
+          `Usando duracion del backend para cita ${
+            appointment.id || appointment.Aid
+          }: ${duration}`
+        );
+      } else if (normalized.duration !== undefined) {
+        duration = normalized.duration;
+      } else if (normalized.minutos !== undefined) {
+        duration = normalized.minutos;
       }
+
+      // Convertir a número si es string
+      if (typeof duration === 'string') {
+        const parsedDuration = parseInt(duration.trim(), 10);
+        duration = isNaN(parsedDuration) ? 60 : parsedDuration;
+      }
+
+      // Validación menos estricta - solo verificar si es un número válido
+      if (duration === null || duration === undefined || isNaN(duration)) {
+        console.warn(
+          `Duración ausente en cita ${
+            appointment.id || appointment.Aid
+          }. Estableciendo 60 minutos.`
+        );
+        duration = 60;
+      }
+
+      // Asignar la duración normalizada
+      normalized.duration = duration;
+
+      // Log para verificar
+      console.log(
+        `Cita ID: ${normalized.id || normalized.Aid}, duración normalizada: ${
+          normalized.duration
+        }`
+      );
 
       // Si no hay patientName pero tenemos las partes, construirlo
       if (!normalized.patientName) {
@@ -889,8 +988,6 @@ export class AgendaDashboardComponent implements OnInit {
         }
       }
 
-      // patientName ya existe, asegúrate de que permanece
-
       // Asegurar que isRegistered sea booleano
       if (normalized.isRegistered === undefined) {
         normalized.isRegistered = true;
@@ -904,9 +1001,12 @@ export class AgendaDashboardComponent implements OnInit {
   formatDuration(duration: string | number): string {
     if (!duration) return 'No especificada';
 
-    const mins = Number(duration);
-    if (isNaN(mins)) return duration + ' minutos';
+    // Asegurar que tenemos un número
+    const mins =
+      typeof duration === 'string' ? parseInt(duration, 10) : duration;
+    if (isNaN(mins)) return '60 minutos'; // Valor predeterminado si no es válido
 
+    // Formatear según duración
     if (mins < 60) {
       return mins + ' minutos';
     } else {
@@ -943,11 +1043,14 @@ export class AgendaDashboardComponent implements OnInit {
         correo: localStorage.getItem('correo'),
         fecha_cita: this.appointmentForm.get('date')?.value,
         hora_cita: this.appointmentForm.get('time')?.value,
-        estado: 'Pendiente',
+        estado: 'Programada',
         descripcion: this.appointmentForm.get('notes')?.value || '',
-        duracion: this.appointmentForm.get('duration')?.value || '30',
+        duracion: parseInt(
+          this.appointmentForm.get('duration')?.value || '60',
+          10
+        ),
       };
-
+      console.log('Enviando cita con datos:', JSON.stringify(appointmentData));
       appointmentData.numero_documento = this.selectedPatient.numero_documento;
 
       this.agendaService.createRegisteredAppointment(appointmentData).subscribe(
@@ -997,7 +1100,7 @@ export class AgendaDashboardComponent implements OnInit {
         return;
       }
 
-      // Crear objeto de datos para enviar al backend
+      // Crear objeto de datos para enviar al backend NO REGISTRADOS
       const appointmentData = {
         nombre: nombre,
         apellidos: apellidos,
@@ -1006,6 +1109,8 @@ export class AgendaDashboardComponent implements OnInit {
         hora_cita: this.appointmentForm.get('time')?.value,
         telefono: telefono,
         estado: 'Pendiente',
+        descripcion: this.appointmentForm.get('notes')?.value || '',
+        duracion: parseInt(this.appointmentForm.get('duration')?.value || '60', 10)
       };
 
       console.log(
@@ -1071,55 +1176,69 @@ export class AgendaDashboardComponent implements OnInit {
 
   completeAppointment(appointment: any): void {
     if (confirm('¿Está seguro de marcar esta cita como Confirmada?')) {
-      // Pasar isRegistered como tercer parámetro
+      this.loadingAction.confirm = true;
+
       this.agendaService
         .updateAppointmentStatus(
           appointment.id.toString(),
-          'Confirmada', // Cambiar 'completed' a 'Confirmada' (lo que espera el backend)
-          appointment.isRegistered !== false // Por defecto true, para pacientes registrados
+          'Confirmada',
+          appointment.isRegistered !== false
         )
-        .subscribe(
-          (response: any) => {
+        .subscribe({
+          next: (response: any) => {
+            this.loadingAction.confirm = false;
             this.notificacionService.success(
               `La cita de ${this.getPatientFullName(
                 appointment
-              )} ha sido  correctamente`
+              )} ha sido confirmada correctamente`
             );
             this.loadAppointments();
             this.closeAppointmentDetailsModal();
           },
-          (error: any) => {
+          error: (error: any) => {
+            this.loadingAction.confirm = false;
             console.error('Error al actualizar estado de cita:', error);
             this.notificacionService.error(
-              'Ocurrió un error al actualizar el estado de la cita'
+              'Ocurrió un error al actualizar el estado'
             );
-          }
-        );
+          },
+        });
     }
   }
+  getLoadingMessage(): string {
+    if (this.loadingAction.confirm) {
+      return 'Confirmando cita...';
+    } else if (this.loadingAction.cancel) {
+      return 'Cancelando cita...';
+    } else if (this.loadingAction.delete) {
+      return 'Eliminando cita...';
+    }
+    return 'Procesando...';
+  }
+
   cancelAppointment(appointment: any): void {
     if (confirm('¿Está seguro de cancelar esta cita?')) {
+      this.loadingAction.cancel = true;
+
       this.agendaService
         .updateAppointmentStatus(
           appointment.id.toString(),
-          'Cancelada', // Cambiar 'cancelled' a 'Cancelada'
+          'Cancelada',
           appointment.isRegistered !== false
         )
         .subscribe(
           (response: any) => {
-            console.log('Cita cancelada:', response);
-
-            // Mostrar notificación de éxito con el servicio existente
+            this.loadingAction.cancel = false;
             this.notificacionService.success(
               `La cita de ${this.getPatientFullName(
                 appointment
               )} ha sido cancelada correctamente`
             );
-
             this.loadAppointments();
             this.closeAppointmentDetailsModal();
           },
           (error: any) => {
+            this.loadingAction.cancel = false;
             console.error('Error al cancelar cita:', error);
             this.notificacionService.error(
               'Ocurrió un error al cancelar la cita'
@@ -1135,26 +1254,44 @@ export class AgendaDashboardComponent implements OnInit {
         '¿Está seguro de eliminar esta cita? Esta acción no se puede deshacer.'
       )
     ) {
+      // Guardar la vista actual y otros datos relevantes
+      const currentViewMode = this.viewMode;
+      const currentDate = this.selectedDay ? new Date(this.selectedDay) : null;
+      
+      this.loadingAction.delete = true;
+      
       this.agendaService
         .deleteAppointment(
-          appointment.id.toString(),
+          appointment.id?.toString() || appointment.Aid?.toString() || appointment.ANRid?.toString(),
           appointment.isRegistered !== false
         )
         .subscribe(
           (response: any) => {
-            console.log('Cita eliminada:', response);
-
-            // Notificación de éxito
+            this.loadingAction.delete = false;
             this.notificacionService.success(
               `La cita de ${this.getPatientFullName(
                 appointment
               )} ha sido eliminada correctamente`
             );
-
+            
+            // 1. Recargar todas las citas
             this.loadAppointments();
+            
+            // 2. Actualización específica según la vista activa
+            if (currentViewMode === 'week') {
+              this.loadWeekDays();
+            } else if (currentViewMode === 'day' && currentDate) {
+              this.selectedDay = currentDate;
+              this.loadDayAppointments();
+            }
+            
+            // 3. Eliminar la cita del array local si existe
+            this.removeDeletedAppointmentFromLocalData(appointment);
+            
             this.closeAppointmentDetailsModal();
           },
           (error: any) => {
+            this.loadingAction.delete = false;
             console.error('Error al eliminar cita:', error);
             this.notificacionService.error(
               'Ocurrió un error al eliminar la cita'
@@ -1162,6 +1299,37 @@ export class AgendaDashboardComponent implements OnInit {
           }
         );
     }
+  }
+  private removeDeletedAppointmentFromLocalData(appointment: any): void {
+    const appointmentId = appointment.id || appointment.Aid || appointment.ANRid;
+    
+    // Actualizar calendarDays (vista mensual)
+    this.calendarDays.forEach(day => {
+      if (day.appointments && day.appointments.length > 0) {
+        day.appointments = day.appointments.filter((app:any) => 
+          (app.id !== appointmentId) && 
+          (app.Aid !== appointmentId) && 
+          (app.ANRid !== appointmentId)
+        );
+      }
+    });
+    
+    // Actualizar dayAppointments (vista diaria)
+    if (this.dayAppointments && this.dayAppointments.length > 0) {
+      this.dayAppointments = this.dayAppointments.filter(app => 
+        (app.id !== appointmentId) && 
+        (app.Aid !== appointmentId) && 
+        (app.ANRid !== appointmentId)
+      );
+    }
+    
+    this.detectChangesIfNeeded();
+  }
+  private detectChangesIfNeeded(): void {
+    setTimeout(() => {
+      console.log('Forzando actualización de la vista');
+    }, 0);
+    
   }
   isAppointmentCompleted(appointment: any): boolean {
     if (!appointment) return false;
@@ -1223,16 +1391,19 @@ export class AgendaDashboardComponent implements OnInit {
         // Aplicar normalización de datos para asegurar formato correcto
         this.normalizeAppointments();
 
-        this.filteredAppointments = [...this.appointments];
-        this.loadCalendarDays();
-        if (this.viewMode === 'week') {
-          this.loadWeekDays();
-        } else if (this.viewMode === 'day') {
-          this.loadDayAppointments();
-        }
+        // Error: response no está definido, debes usar appointments
+        this.inspeccionarDatosCrudos(appointments); // Corregido aquí
 
-        // Para depuración
-        console.log('Primera cita normalizada:', this.appointments[0]);
+        this.filteredAppointments = [...this.appointments];
+
+        // IMPORTANTE: Actualizar las notificaciones con las citas obtenidas
+        this.appointmentReminderService.updateWithExistingCitas(appointments);
+        console.log(
+          'Citas procesadas para notificaciones:',
+          appointments.length
+        );
+
+        this.loadCalendarDays();
       },
       (error: any) => {
         console.error('Error al cargar citas:', error);
@@ -1243,14 +1414,14 @@ export class AgendaDashboardComponent implements OnInit {
   // Añade estos métodos a tu clase
   getPatientFullName(appointment: any): string {
     try {
-      if (!appointment) return "Sin paciente";
-      
+      if (!appointment) return 'Sin paciente';
+
       // Caso 1: Si hay un objeto patient con datos
       if (appointment.patient && typeof appointment.patient === 'object') {
         const nombre = appointment.patient.nombre || '';
-        const apellidos = appointment.patient.apellidos ;
+        const apellidos = appointment.patient.apellidos;
         return `${nombre} ${apellidos}`.trim();
-      } 
+      }
       // Caso 2: Si ya existe un patientName completo
       else if (appointment.patientName) {
         return appointment.patientName;
@@ -1260,20 +1431,24 @@ export class AgendaDashboardComponent implements OnInit {
         const nombre = appointment.nombre || '';
         const apellidos = appointment.apellidos || appointment.apellido || '';
         return `${nombre} ${apellidos}`.trim();
-      } 
+      }
       // Caso 4: Si hay firstName y lastName en formato diferente
       else if (appointment.firstName || appointment.lastName) {
-        return `${appointment.firstName || ''} ${appointment.lastName || ''}`.trim();
+        return `${appointment.firstName || ''} ${
+          appointment.lastName || ''
+        }`.trim();
       }
       // Caso 5: Para pacientes con formatos especiales
       else if (appointment.nombre_paciente || appointment.apellidos_paciente) {
-        return `${appointment.nombre_paciente || ''} ${appointment.apellidos_paciente || ''}`.trim();
-      } 
-      
-      return "Paciente sin nombre";
+        return `${appointment.nombre_paciente || ''} ${
+          appointment.apellidos_paciente || ''
+        }`.trim();
+      }
+
+      return 'Paciente sin nombre';
     } catch (e) {
-      console.error("Error al obtener nombre:", e);
-      return "Error al obtener nombre";
+      console.error('Error al obtener nombre:', e);
+      return 'Error al obtener nombre';
     }
   }
   filterAppointmentsByState(state: string): void {
@@ -1281,65 +1456,150 @@ export class AgendaDashboardComponent implements OnInit {
       this.filteredAppointments = [...this.appointments];
       return;
     }
-    
+
     // Normalizar nombres de estado para comparación
     const normalizedState = state.toLowerCase().trim();
-    
-    this.filteredAppointments = this.appointments.filter(appointment => {
+
+    this.filteredAppointments = this.appointments.filter((appointment) => {
       // Extraer el estado con manejo de diferentes formatos
-      const appointmentState = (
-        appointment.estado || 
-        appointment.status || 
-        ''
-      ).toLowerCase().trim();
-      
+      const appointmentState = (appointment.estado || appointment.status || '')
+        .toLowerCase()
+        .trim();
+
       // Manejar posibles variaciones de nombres de estado
-      if (normalizedState === 'programada' || normalizedState === 'scheduled') {
-        return appointmentState === 'programada' || 
-               appointmentState === 'scheduled' || 
-               appointmentState === 'pendiente' || 
-               appointmentState === 'pending';
+      if (normalizedState === 'programada' || normalizedState === 'programada') {
+        return (
+          appointmentState === 'programada' ||
+          appointmentState === 'programada' ||
+          appointmentState === 'programada' ||
+          appointmentState === 'programada'
+        );
+      } else if (
+        normalizedState === 'completada' ||
+        normalizedState === 'completada'
+      ) {
+        return (
+          appointmentState === 'completada' ||
+          appointmentState === 'completada' ||
+          appointmentState === 'finalizada' ||
+          appointmentState === 'finalizada'
+        );
+      } else if (
+        normalizedState === 'cancelada' ||
+        normalizedState === 'cancelada'
+      ) {
+        return (
+          appointmentState === 'cancelada' || appointmentState === 'cancelada'
+        );
       }
-      else if (normalizedState === 'completada' || normalizedState === 'completed') {
-        return appointmentState === 'completada' || 
-               appointmentState === 'completed' || 
-               appointmentState === 'finalizada' || 
-               appointmentState === 'finished';
-      }
-      else if (normalizedState === 'cancelada' || normalizedState === 'cancelled') {
-        return appointmentState === 'cancelada' || 
-               appointmentState === 'cancelled';
-      }
-      
+
       // Comparación directa como fallback
       return appointmentState === normalizedState;
     });
-    
+
     // Log para depuración
-    console.log(`Filtrado por estado: ${state}. Citas encontradas: ${this.filteredAppointments.length}`);
-    
+    console.log(
+      `Filtrado por estado: ${state}. Citas encontradas: ${this.filteredAppointments.length}`
+    );
+
     // Actualizar vista
     this.refreshView();
   }
+
+  openEditModal(appointment: any): void {
+    this.appointmentBeingEdited = { ...appointment };
+    
+    // Crear formulario con los datos de la cita
+    this.editForm = this.fb.group({
+      date: [appointment.date || this.formatDateForInput(new Date()), Validators.required],
+      time: [appointment.time || '', Validators.required],
+      duration: [appointment.duration || 60, Validators.required],
+      notes: [appointment.descripcion || appointment.notes || ''],
+      status: [appointment.status || 'programada']
+    });
+    
+    // Si es paciente no registrado, añadir campos adicionales
+    if (!appointment.isRegistered) {
+      this.editForm.addControl('nombre', this.fb.control(appointment.patientName?.split(' ')[0] || '', Validators.required));
+      this.editForm.addControl('apellidos', this.fb.control(appointment.patientName?.split(' ').slice(1).join(' ') || '', Validators.required));
+      this.editForm.addControl('telefono', this.fb.control(appointment.phone || ''));
+    }
+    
+    this.showEditModal = true;
+  }
+  saveEditedAppointment(): void {
+    if (this.editForm.invalid) {
+      this.notificacionService.warning('Por favor complete todos los campos requeridos');
+      return;
+    }
+    
+    const appointmentId = this.appointmentBeingEdited.id;
+    const isRegistered = this.appointmentBeingEdited.isRegistered;
+    
+    // Preparar datos para actualización
+    const updateData: any = {
+      fecha_cita: this.editForm.get('date')?.value,
+      hora_cita: this.editForm.get('time')?.value,
+      descripcion: this.editForm.get('notes')?.value,
+      estado: this.mapStatusToBackend(this.editForm.get('status')?.value),
+      duracion: parseInt(this.editForm.get('duration')?.value || '60', 10),
+    };
+    
+    // Si es paciente no registrado, añadir datos de contacto
+    if (!isRegistered) {
+      updateData.nombre = this.editForm.get('nombre')?.value;
+      updateData.apellidos = this.editForm.get('apellidos')?.value;
+      updateData.telefono = this.editForm.get('telefono')?.value;
+      updateData.descripcion = this.editForm.get('notes')?.value || '';
+    }
+    
+    console.log(`Actualizando cita ${appointmentId} con datos:`, updateData);
+    
+    // Llamar al servicio para actualizar
+    this.agendaService.updateAppointment(appointmentId.toString(), updateData, isRegistered).subscribe({
+      next: (response) => {
+        console.log('Respuesta de actualización:', response);
+        this.notificacionService.success('Cita actualizada correctamente');
+        this.showEditModal = false;
+        this.loadAppointments(); // Recargar citas
+      },
+      error: (error) => {
+        console.error('Error al actualizar cita:', error);
+        this.notificacionService.error('Error al actualizar la cita');
+      }
+    });
+  }
+  
+  // Método auxiliar para mapeo de estado
+  mapStatusToBackend(status: string): string {
+    const mapping: {[key: string]: string} = {
+      'Programada': 'Programada',
+      'Confirmada': 'Confirmada',
+      'Cancelada': 'Cancelada'
+    };
+    return mapping[status] || 'Programada';
+  }
+
+
   refreshView(): void {
     // Actualizar la vista actual según el modo seleccionado
     this.loadCalendarDays();
-    
+
     if (this.viewMode === 'week') {
       this.loadWeekDays();
     } else if (this.viewMode === 'day') {
       this.loadDayAppointments();
     }
-    
+
     // Opcional: Forzar actualización de la vista
     // Si estás usando ChangeDetectorRef puedes descomentar la siguiente línea
     // this.cdr.detectChanges();
   }
   getDuration(appointment: any): string {
     if (!appointment) return '60'; // Valor predeterminado
-    
+
     let duration: any = appointment.duration || appointment.duracion || 30;
-    
+
     // Convertir a número si es string
     if (typeof duration === 'string') {
       duration = parseInt(duration, 10);
@@ -1347,7 +1607,7 @@ export class AgendaDashboardComponent implements OnInit {
         duration = 60;
       }
     }
-    
+
     return duration.toString();
   }
   isCitaConfirmada(appointment: any): boolean {
@@ -1373,4 +1633,8 @@ export class AgendaDashboardComponent implements OnInit {
       appointment.estado?.toLowerCase() === 'cancelled'
     );
   }
+  closeDetailsModal(): void {
+  this.showAppointmentDetailsModal = false;
+  this.selectedAppointment = null;
+}
 }

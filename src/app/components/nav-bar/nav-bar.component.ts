@@ -1,14 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AppointmentReminderService } from '../../services/appointment-reminder.service';
+import { AppointmentNotificationsComponent } from '../appointment-notifications/appointment-notifications.component';
 
 @Component({
   selector: 'app-nav-bar',
-  imports: [RouterModule],
+  imports: [RouterModule,CommonModule,AppointmentNotificationsComponent],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  constructor(private router: Router) { }
+  citasHoy$: Observable<number>;
+  constructor(private router: Router, private reminderService: AppointmentReminderService) { 
+    this.citasHoy$ = this.reminderService.citasHoy$;
+  }
   menuItems = [
     { path: '/agenda-dashboard', label: 'Agenda', icon: 'calendar' },
     { path: '/paciente-dashboard', label: 'Pacientes', icon: 'people' },

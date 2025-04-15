@@ -134,3 +134,27 @@
       display: none;
     }
   }
+  /* Badge estilo Apple para el icono de calendario */
+
+.icon-container {
+  position: relative;
+  display: inline-flex;
+}
+
+.badge-notification {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #FF3B30;  /* Rojo estilo Apple */
+  color: white;
+  border-radius: 20px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px white;  /* Borde blanco para que destaque */
+}

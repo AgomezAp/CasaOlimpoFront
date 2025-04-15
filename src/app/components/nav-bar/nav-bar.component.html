@@ -1,53 +1,83 @@
 <div class="sidebar">
-    <!-- Logo o título -->
-    <div class="sidebar-header">
-      <h2 class="app-title">Casa Olimpo</h2>
-    </div>
-    
-    <!-- Menú de navegación -->
-    <nav class="sidebar-nav">
-      <ul>
-        <li>
-          <a routerLink="/agenda-dashboard" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">
-            <img src="/Calendar.png" alt="Agenda" class="nav-icon">
-            <span>Agenda</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/paciente-dashboard" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">
-            <img src="/Pacientes.png" alt="Paciente" class="nav-icon">
-            <span>Paciente</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/cumpleanos" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">
-            <img src="/Celebration.png" alt="Cumpleaños" class="nav-icon">
-            <span>Cumpleaños</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/descuentos" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">
-            <img src="/Descuento.png" alt="Descuentos" class="nav-icon">
-            <span>Descuentos</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/factura-dashboard" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">
-            <img src="/Facturacion.png" alt="Facturación" class="nav-icon">
-            <span>Facturación</span>
-          </a>
-        </li>
-        <li class="nav-item-logout">
-          <a (click)="logout()">
-            <img src="/LogOut.png" alt="Salir" class="nav-icon">
-            <span>Salir</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-    
-    <!-- Footer con información -->
-    <div class="sidebar-footer">
-      <p>© 2025 Casa Olimpo</p>
-    </div>
+  <!-- Logo o título -->
+  <div class="sidebar-header">
+    <h2 class="app-title">Casa Olimpo</h2>
   </div>
+
+  <!-- Menú de navegación -->
+  <nav class="sidebar-nav">
+    <ul>
+      <!-- Busca el link de agenda y modifícalo exactamente así: -->
+      <li>
+        <a
+          routerLink="/agenda-dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <div class="icon-container">
+            <img src="/Calendar.png" alt="Agenda" class="nav-icon" />
+            <!-- Aquí está el badge -->
+            <ng-container *ngIf="(citasHoy$ | async) as citasHoy">
+              <span class="badge-notification" *ngIf="citasHoy > 0">
+                {{ citasHoy > 99 ? "99+" : citasHoy }}
+              </span>
+            </ng-container>
+          </div>
+          <span>Agenda</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/paciente-dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <img src="/Pacientes.png" alt="Paciente" class="nav-icon" />
+          <span>Paciente</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/cumpleanos"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <img src="/Celebration.png" alt="Cumpleaños" class="nav-icon" />
+          <span>Cumpleaños</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/descuentos"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <img src="/Descuento.png" alt="Descuentos" class="nav-icon" />
+          <span>Descuentos</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/factura-dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <img src="/Facturacion.png" alt="Facturación" class="nav-icon" />
+          <span>Facturación</span>
+        </a>
+      </li>
+      <li class="nav-item-logout">
+        <a (click)="logout()">
+          <img src="/LogOut.png" alt="Salir" class="nav-icon" />
+          <span>Salir</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Footer con información -->
+  <div class="sidebar-footer">
+    <p>© 2025 Casa Olimpo</p>
+  </div>
+</div>
+<app-appointment-notifications></app-appointment-notifications>

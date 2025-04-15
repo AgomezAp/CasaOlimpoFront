@@ -1,0 +1,36 @@
+<div class="citas-popup" *ngIf="mostrar">
+  <div class="citas-popup-content">
+    <div class="popup-header">
+      <h3>Recordatorio de Citas</h3>
+      <button class="close-btn" (click)="cerrarPopup()">&times;</button>
+    </div>
+    <div class="popup-body">
+      <div class="citas-hoy" *ngIf="citasHoy > 0">
+        <h4>Citas para hoy: <span class="badge">{{ citasHoy }}</span></h4>
+      </div>
+      <div class="citas-proximas" *ngIf="citasProximas > 0">
+        <h4>Próximas citas esta semana: <span class="badge">{{ citasProximas }}</span></h4>
+      </div>
+      <div class="no-citas" *ngIf="citasHoy === 0 && citasProximas === 0">
+        <p>No tiene citas programadas para hoy ni esta semana.</p>
+      </div>
+      
+      <div class="citas-list" *ngIf="citasLista.length > 0">
+        <h4>Detalle de Citas:</h4>
+        <ul>
+          <li *ngFor="let cita of citasLista | slice:0:5">
+            <strong>{{ formatFecha(cita) }}</strong> - {{ cita.hora_cita || cita.time }}
+            <br>
+            <span class="paciente">{{ obtenerNombrePaciente(cita) }}</span>
+          </li>
+        </ul>
+        <p *ngIf="citasLista.length > 5" class="mas-citas">
+          ... y {{ citasLista.length - 5 }} más.
+        </p>
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn-ver-agenda" (click)="irAAgenda()">Ver Agenda Completa</button>
+    </div>
+  </div>
+</div>
