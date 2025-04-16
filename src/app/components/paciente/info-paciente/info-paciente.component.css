@@ -33,10 +33,10 @@ app-paciente-nav {
 
 .profile-panel {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 290px; /* Reducido de lo que tenía anteriormente */
+  width: 250px; /* Reducido de lo que tenía anteriormente */
   min-width: 200px;
   border-radius: 20px;
-  height: 350px;
+  height: 380px;
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -54,9 +54,9 @@ app-paciente-nav {
 .profile-photo {
   width: 140px;
   height: 140px;
-  border-radius: 60%;
+  border-radius: 50%;
   overflow: hidden;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
@@ -114,7 +114,7 @@ app-paciente-nav {
 
 .profile-details {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 0px;
 }
 
 .patient-name {
@@ -257,14 +257,25 @@ textarea {
 
 .action-buttons {
   position: absolute;
-  bottom: 40px;
+  bottom: 30px;
   display: flex;
   gap: 15px;
   width: 80%;
   justify-content: center;
 }
-
-.btn-primary, .btn-save, .btn-cancel {
+.btn-primary{
+  padding: 12px 25px;
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0px;
+}
+ .btn-save, .btn-cancel {
   padding: 12px 25px;
   border-radius: 30px;
   border: none;

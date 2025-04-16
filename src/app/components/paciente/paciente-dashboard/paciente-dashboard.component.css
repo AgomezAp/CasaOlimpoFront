@@ -214,103 +214,77 @@
 }
 
 /* Controles de paginación */
+/* Paginación */
 .pagination-controls {
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-/* Botones de anterior/siguiente */
-.pagination-btn {
-  padding: 9px 16px;
-  background-color: #f8f9fa;
-  border: 1px solid #dce0e5;
-  border-radius: 6px;
-  color: #4a5568;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
   align-items: center;
-  gap: 8px;
+  margin-top: 20px;
+  gap: 10px;
 }
 
-.pagination-btn:hover:not(:disabled) {
-  background-color: #e9ecef;
-  border-color: #cbd3df;
-  color: #2d3748;
+.pagination-btn {
+  background-color: #7d746b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.pagination-btn:disabled {
+.pagination-btn:hover:not([disabled]) {
+  background-color: #64594e;
+}
+
+.pagination-btn[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.pagination-arrow {
-  font-size: 16px;
-  line-height: 1;
+.pagination-pages {
+  display: flex;
+  gap: 5px;
 }
 
-/* Botones de página numerados */
 .pagination-page-btn {
-  min-width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #7d746b;
+  background-color: white;
+  color: #7d746b;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
-  background-color: #f8f9fa;
-  border: 1px solid #dce0e5;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s;
 }
 
 .pagination-page-btn:hover {
-  background-color: #e9ecef;
-  border-color: #cbd3df;
+  background-color: rgba(125, 116, 107, 0.1);
 }
 
 .pagination-page-btn.active {
   background-color: #7d746b;
-  color: #ffffff;
-  border-color: #7d746b;
-  font-weight: 600;
+  color: white;
+  font-weight: bold;
 }
 
-/* Puntos suspensivos */
-.pagination-ellipsis {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  height: 36px;
-  font-size: 14px;
-  color: #4a5568;
-}
-
-/* Información de paginación */
 .pagination-info {
+  color: #666;
   font-size: 14px;
-  color: #718096;
-  margin-bottom: 8px;
+  margin-left: 10px;
 }
-
 /* Estilos para dispositivos móviles */
 @media (max-width: 768px) {
   .pagination-controls {
     gap: 5px;
   }
-  
   .pagination-btn {
-    padding: 8px 12px;
-    font-size: 13px;
+    width: 36px; 
+    height: 36px;
+    font-size: 16px;
   }
   
   .pagination-page-btn {
@@ -330,8 +304,9 @@
   }
   
   .pagination-btn {
-    padding: 6px 10px;
-    font-size: 12px;
+    width: 34px; 
+    height: 34px;
+    font-size: 14px;
   }
   
   .pagination-page-btn {

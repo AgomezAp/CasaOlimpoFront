@@ -17,4 +17,5 @@ export interface Receta {
        rol?: string;
      };
      consulta?: any;
+     fecha_creacion?: string | Date;
    }

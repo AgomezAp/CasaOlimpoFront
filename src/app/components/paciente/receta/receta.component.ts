@@ -5,7 +5,8 @@ import { Receta } from '../../../interfaces/receta';
 import { ActivatedRoute } from '@angular/router';
 import { RecetaService } from '../../../services/receta.service';
 import { NotificacionService } from '../../../services/notificacion.service';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-receta',
   standalone: true,
@@ -146,15 +147,83 @@ export class RecetaComponent implements OnInit, OnChanges {
   }
 
   descargarPDF(receta: Receta): void {
-    this.notificacionService.info('Preparando PDF...');
+    this.notificacionService.info('Generando PDF...');
     
-    // Implementación cuando exista el endpoint
-    // this.recetaService.descargarPDF(receta.RecetaId!).subscribe({...});
-    
-    // Mientras tanto, mostrar mensaje
-    setTimeout(() => {
-      this.notificacionService.warning('Función en desarrollo');
-    }, 1500);
+    try {
+      // Crear un nuevo documento PDF
+      const doc = new jsPDF();
+      
+      // Configuración de la página
+      doc.setFontSize(20);
+      doc.setTextColor(40, 40, 40);
+      doc.text('RECETA MÉDICA', 105, 20, { align: 'center' });
+      
+      // Logo o encabezado (opcional)
+      // doc.addImage("logo.png", "PNG", 10, 10, 50, 20);
+      
+      doc.setFontSize(12);
+      doc.setTextColor(80, 80, 80);
+      
+      // Datos del paciente
+      doc.text('DATOS DEL PACIENTE', 15, 40);
+      doc.setFontSize(10);
+      doc.text(`ID: ${this.pacienteId}`, 15, 48);
+      // Si tienes más datos del paciente, agrégalos aquí
+      
+      // Datos del médico
+      doc.setFontSize(12);
+      doc.text('MÉDICO TRATANTE', 15, 65);
+      doc.setFontSize(10);
+      doc.text(`${this.getNombreDoctor(receta)}`, 15, 73);
+      
+      // Fecha de emisión
+      doc.text(`Fecha: ${this.formatFecha(receta.fecha_creacion || new Date())}`, 15, 83);
+      
+      // Diagnóstico
+      doc.setFontSize(12);
+      doc.text('DIAGNÓSTICO', 15, 100);
+      doc.setFontSize(10);
+      doc.text(`${receta.diagnostico || 'No especificado'}`, 15, 108);
+      
+      // Medicamentos
+      doc.setFontSize(12);
+      doc.text('MEDICAMENTOS E INDICACIONES', 15, 125);
+      doc.setFontSize(10);
+      
+      // Usar autoTable para mostrar los medicamentos de manera ordenada
+      autoTable(doc, {
+        startY: 130,
+        head: [['Medicamentos', 'Instrucciones', 'Duración']],
+        body: [
+          [
+            receta.medicamentos || 'No especificado', 
+            receta.instrucciones || 'No especificado', 
+            receta.duracion_tratamiento || 'No especificado'
+          ]
+        ],
+      });
+      
+      // Observaciones
+      let finalY = (doc as any).lastAutoTable.finalY + 10;
+      doc.setFontSize(12);
+      doc.text('OBSERVACIONES', 15, finalY);
+      doc.setFontSize(10);
+      doc.text(`${receta.observaciones || 'Sin observaciones adicionales'}`, 15, finalY + 8);
+      
+      // Pie de página - firma del médico
+      doc.setFontSize(10);
+      doc.text('_______________________________', 130, 250);
+      doc.text('Firma del médico', 140, 258);
+      
+      // Guardar el PDF
+      const nombreArchivo = `Receta_${this.pacienteId}_${new Date().getTime()}.pdf`;
+      doc.save(nombreArchivo);
+      
+      this.notificacionService.success('PDF generado exitosamente');
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      this.notificacionService.error('No se pudo generar el PDF');
+    }
   }
 
   formatFecha(fecha: string | Date): string {
@@ -169,8 +238,9 @@ export class RecetaComponent implements OnInit, OnChanges {
   
   getNombreDoctor(receta: Receta): string {
     if (receta.doctor) {
-      return `${receta.doctor.nombre} ${receta.doctor.apellido}`;
+      return `${receta.doctor.nombre}`;
     }
     return 'Médico no especificado';
   }
+  
 }
