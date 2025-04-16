@@ -118,7 +118,10 @@
                 </div>
                 <div class="data-field">
                   <label>Sexo</label>
-                  <select formControlName="sexo" [disabled]="!editMode">
+                  <ng-container *ngIf="!editMode">
+                    <input type="text" [value]="pacienteForm.get('sexo')?.value" readonly class="fake-select">
+                  </ng-container>
+                  <select *ngIf="editMode" formControlName="sexo">
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                     <option value="Otro">Otro</option>
@@ -137,14 +140,12 @@
               <div class="data-row">
                 <div class="data-field">
                   <label>Tipo de documento</label>
-                  <select
-                    formControlName="tipo_documento"
-                    [disabled]="!editMode"
-                  >
+                  <ng-container *ngIf="!editMode">
+                    <input type="text" [value]="pacienteForm.get('tipo_documento')?.value" readonly class="fake-select">
+                  </ng-container>
+                  <select *ngIf="editMode" formControlName="tipo_documento">
                     <option value="Cedula">Cédula</option>
-                    <option value="Tarjeta de Identidad">
-                      Tarjeta de Identidad
-                    </option>
+                    <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
                     <option value="Pasaporte">Pasaporte</option>
                     <option value="Registro Civil">Registro Civil</option>
                   </select>

@@ -25,6 +25,10 @@ export class RecetaComponent implements OnInit, OnChanges {
   submitting: boolean = false;
   mostrarFormularioReceta: boolean = false;
   
+  mostrarModalCompletar: boolean = false;
+  recetaACompletar: Receta | null = null;
+  motivoCompletado: string = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private recetaService: RecetaService,

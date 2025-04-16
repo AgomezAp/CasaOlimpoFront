@@ -343,6 +343,14 @@ app-receta table {
   max-width: 300px; 
   
 }
+select[disabled] {
+  appearance: none;
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  pointer-events: none; /* Esta propiedad es clave para bloquear interacciones */
+  opacity: 1; /* Para que no se vea gris como normalmente se ven los elementos disabled */
+}
 .details-panel th, 
 .details-panel td,
 app-historia-clinica th,
