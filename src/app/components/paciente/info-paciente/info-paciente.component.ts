@@ -8,13 +8,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PacienteService } from '../../../services/paciente.service';
 import { PacienteNavComponent } from '../paciente-nav/paciente-nav.component';
 import { CarpetaComponent } from '../carpeta/carpeta.component';
 import { DashboardCitasComponent } from '../citas/dashboard-citas/dashboard-citas.component';
 import { RecetaComponent } from '../receta/receta.component';
 import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
+import { RedfamiliarService } from '../../../services/redfamiliar.service';
 
 @Component({
   selector: 'app-info-paciente',
@@ -28,6 +29,7 @@ import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.c
     DashboardCitasComponent,
     RecetaComponent,
     HistoriaClinicaComponent,
+    RouterModule 
   ],
   templateUrl: './info-paciente.component.html',
   styleUrl: './info-paciente.component.css',
@@ -45,12 +47,15 @@ export class InfoPacienteComponent implements OnInit {
   pacienteForm: FormGroup;
   cargandoFoto: boolean = false;
   cargandoDoctor: boolean = false;
+  esMenorDeEdad: boolean = false;
+  tieneMiembrosRedFamiliar: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private pacienteService: PacienteService,
     private formBuilder: FormBuilder,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private redFamiliarService: RedfamiliarService 
   ) {
     this.pacienteForm = this.formBuilder.group({
       nombre: ['', Validators.required],
@@ -90,6 +95,7 @@ export class InfoPacienteComponent implements OnInit {
         this.paciente = response.data;
         this.actualizarFormulario();
         this.cargarFotoPaciente();
+        this.calcularEdadYEstado();
         this.loading = false;
       },
       error: (error) => {
@@ -251,7 +257,39 @@ export class InfoPacienteComponent implements OnInit {
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
   }
-  
+  calcularEdadYEstado(): void {
+    if (this.paciente?.fecha_nacimiento) {
+      const fechaNacimiento = new Date(this.paciente.fecha_nacimiento);
+      const hoy = new Date();
+      
+      let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+      const m = hoy.getMonth() - fechaNacimiento.getMonth();
+      
+      if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+      }
+      
+      // Determinar si es menor de edad
+      this.esMenorDeEdad = edad < 18;
+      
+      // Si es menor, verificamos si tiene miembros en la red familiar
+      if (this.esMenorDeEdad && this.pacienteId) {
+        this.verificarMiembrosRedFamiliar();
+      }
+    }
+  }
+  verificarMiembrosRedFamiliar(): void {
+    this.redFamiliarService.verificarSiTieneMiembros(this.pacienteId).subscribe({
+      next: (tieneMiembros) => {
+        this.tieneMiembrosRedFamiliar = tieneMiembros;
+        console.log(`Paciente ${this.pacienteId} tiene miembros en red familiar: ${tieneMiembros}`);
+      },
+      error: (error) => {
+        console.error('Error al verificar red familiar:', error);
+        this.tieneMiembrosRedFamiliar = false; // Por precaución, asumimos que no tiene
+      }
+    });
+  }
   // Método para manejar la selección del archivo
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

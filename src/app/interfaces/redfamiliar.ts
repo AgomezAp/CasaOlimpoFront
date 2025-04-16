@@ -6,4 +6,5 @@ export interface RedFamiliar {
      telefono: string;
      numero_documento : string;
      numero_documento_familiar: string;
+     es_responsable: boolean;
 }

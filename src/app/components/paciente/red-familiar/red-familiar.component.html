@@ -1,0 +1,373 @@
+<div class="red-familiar-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Red Familiar</h2>
+      <button class="btn-add" (click)="abrirModalNuevo()">
+        <i class="fas fa-plus"></i> Agregar Familiar
+      </button>
+    </div>
+
+    <div class="card-body">
+      <!-- Mensaje cuando no hay familiares registrados -->
+      <div class="patient-name-header" *ngIf="paciente">
+        <h3>
+          Paciente: <span>{{ paciente.nombre }} {{ paciente.apellidos }}</span>
+        </h3>
+      </div>
+
+      <div
+        class="empty-state"
+        *ngIf="!cargando && (!miembros || miembros.length === 0)"
+      >
+        <i class="fas fa-users-slash empty-icon"></i>
+        <p>Este paciente no tiene miembros en su red familiar registrados</p>
+        <button class="btn-primary" (click)="abrirModalNuevo()">
+          Agregar Familiar
+        </button>
+      </div>
+
+      <!-- Tabla de red familiar -->
+      <div class="table-container" *ngIf="miembros && miembros.length > 0">
+        <table class="familiar-table">
+          <thead>
+            <tr>
+              <th>Nombre Completo</th>
+              <th>Documento</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let miembro of miembros; let i = index"
+              [ngClass]="{ 'alt-row': i % 2 !== 0 }"
+            >
+              <td>{{ miembro.nombre }} {{ miembro.apellido }}</td>
+              <td>{{ miembro.numero_documento }}</td>
+              <td>{{ miembro.telefono }}</td>
+              <td>{{ miembro.correo }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{ responsable: miembro.es_responsable }"
+                >
+                  {{ miembro.es_responsable ? "Responsable" : "Familiar" }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="action-buttons">
+                  <button
+                    class="action-icon edit"
+                    title="Editar"
+                    (click)="abrirModalEdicion(miembro)"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+
+                  <button
+                    class="action-icon delete"
+                    title="Eliminar"
+                    (click)="confirmarEliminacion(miembro)"
+                    [disabled]="miembro.es_responsable && esPacienteMenor"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+
+                  <button
+                    *ngIf="!miembro.es_responsable"
+                    class="action-icon set-responsable"
+                    title="Establecer como responsable"
+                    (click)="confirmarEstablecerResponsable(miembro)"
+                  >
+                    <i class="fas fa-user-shield"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Indicador de carga -->
+      <div class="loading-overlay" *ngIf="cargando">
+        <div class="spinner"></div>
+        <p>Cargando información...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para agregar/editar miembro -->
+  <div
+    class="modal-overlay"
+    [class.active]="mostrarModal"
+    (click)="cerrarModal()"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ modoEdicion ? "Editar Familiar" : "Nuevo Familiar" }}</h3>
+        <button class="btn-close" (click)="cerrarModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="miembroForm" (ngSubmit)="guardarMiembro()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre <span class="required">*</span></label>
+              <input
+                type="text"
+                formControlName="nombre"
+                id="nombre"
+                class="form-control"
+                placeholder="Nombre"
+              />
+              <div
+                *ngIf="f['nombre'].touched && f['nombre'].errors"
+                class="error-message"
+              >
+                <span *ngIf="f['nombre'].errors?.['required']"
+                  >El nombre es obligatorio</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="apellido"
+                >Apellido <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="apellido"
+                id="apellido"
+                class="form-control"
+                placeholder="Apellido"
+              />
+              <div
+                *ngIf="f['apellido'].touched && f['apellido'].errors"
+                class="error-message"
+              >
+                <span *ngIf="f['apellido'].errors?.['required']"
+                  >El apellido es obligatorio</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="numero_documento"
+                >Documento de Identidad <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="numero_documento"
+                id="numero_documento"
+                class="form-control"
+                placeholder="Número de documento"
+              />
+              <div
+                *ngIf="
+                  f['numero_documento'].touched && f['numero_documento'].errors
+                "
+                class="error-message"
+              >
+                <span *ngIf="f['numero_documento'].errors?.['required']"
+                  >El documento es obligatorio</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="telefono"
+                >Teléfono <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                formControlName="telefono"
+                id="telefono"
+                class="form-control"
+                placeholder="Teléfono de contacto"
+              />
+              <div
+                *ngIf="f['telefono'].touched && f['telefono'].errors"
+                class="error-message"
+              >
+                <span *ngIf="f['telefono'].errors?.['required']"
+                  >El teléfono es obligatorio</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label for="correo"
+                >Correo Electrónico <span class="required">*</span></label
+              >
+              <input
+                type="email"
+                formControlName="correo"
+                id="correo"
+                class="form-control"
+                placeholder="correo@ejemplo.com"
+              />
+              <div
+                *ngIf="f['correo'].touched && f['correo'].errors"
+                class="error-message"
+              >
+                <span *ngIf="f['correo'].errors?.['required']"
+                  >El correo es obligatorio</span
+                >
+                <span *ngIf="f['correo'].errors?.['email']"
+                  >Ingrese un correo válido</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="form-row"
+            *ngIf="!miembroId && esPacienteMenor && !hayResponsable"
+          >
+            <div class="form-group checkbox-group">
+              <input
+                type="checkbox"
+                formControlName="es_responsable"
+                id="es_responsable"
+                class="form-checkbox"
+                [checked]="true"
+                [disabled]="true"
+              />
+              <label for="es_responsable"
+                >Responsable Legal (Requerido para paciente menor de
+                edad)</label
+              >
+            </div>
+          </div>
+          <div
+            class="form-row"
+            *ngIf="!miembroId && !(esPacienteMenor && !hayResponsable)"
+          >
+            <div class="form-group checkbox-group">
+              <input
+                type="checkbox"
+                formControlName="es_responsable"
+                id="es_responsable"
+                class="form-checkbox"
+              />
+              <label for="es_responsable"
+                >Establecer como Responsable Legal</label
+              >
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="cerrarModal()">
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-save"
+              [disabled]="miembroForm.invalid || guardando"
+            >
+              <span *ngIf="!guardando">{{
+                modoEdicion ? "Actualizar" : "Guardar"
+              }}</span>
+              <span *ngIf="guardando" class="spinner-small"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para eliminar -->
+  <div
+    class="modal-overlay confirmation-modal"
+    [class.active]="mostrarConfirmacion"
+    (click)="cancelarConfirmacion()"
+  >
+    <div class="modal-content small-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirmar Eliminación</h3>
+        <button class="btn-close" (click)="cancelarConfirmacion()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          ¿Estás seguro que deseas eliminar a
+          <strong
+            >{{ miembroAEliminar?.nombre }}
+            {{ miembroAEliminar?.apellido }}</strong
+          >
+          de la red familiar?
+        </p>
+        <div class="form-actions centered">
+          <button
+            type="button"
+            class="btn-cancel"
+            (click)="cancelarConfirmacion()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn-delete"
+            (click)="eliminarMiembro()"
+            [disabled]="eliminando"
+          >
+            <span *ngIf="!eliminando">Eliminar</span>
+            <span *ngIf="eliminando" class="spinner-small"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para establecer responsable -->
+  <div
+    class="modal-overlay confirmation-modal"
+    [class.active]="mostrarConfirmacionResponsable"
+    (click)="cancelarConfirmacionResponsable()"
+  >
+    <div class="modal-content small-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Establecer Responsable</h3>
+        <button class="btn-close" (click)="cancelarConfirmacionResponsable()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          ¿Estás seguro que deseas establecer a
+          <strong
+            >{{ miembroAResponsable?.nombre }}
+            {{ miembroAResponsable?.apellido }}</strong
+          >
+          como responsable legal?
+        </p>
+        <p class="info-text">
+          Esta acción quitará el estado de responsable a cualquier otro miembro
+          de la red familiar.
+        </p>
+        <div class="form-actions centered">
+          <button
+            type="button"
+            class="btn-cancel"
+            (click)="cancelarConfirmacionResponsable()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn-primary"
+            (click)="establecerResponsable()"
+            [disabled]="cambiandoResponsable"
+          >
+            <span *ngIf="!cambiandoResponsable">Confirmar</span>
+            <span *ngIf="cambiandoResponsable" class="spinner-small"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

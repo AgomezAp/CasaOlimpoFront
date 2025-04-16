@@ -63,11 +63,10 @@ app-paciente-nav {
   justify-content: center;
   cursor: pointer;
 }
-
 .btn-primary .edit-icon-img {
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
+  width: 16px; /* Reducido de 18px */
+  height: 16px; /* Reducido de 18px */
+  margin-right: 6px; /* Reducido de 8px */
   vertical-align: middle;
 }
 
@@ -259,21 +258,73 @@ textarea {
   position: absolute;
   bottom: 30px;
   display: flex;
-  gap: 15px;
-  width: 80%;
-  justify-content: center;
+  flex-direction: column; /* Cambiado a columna para mejor alineación */
+  gap: 10px; /* Reducido de 15px */
+  width: 70%; /* Reducido de 80% */
+  align-items: center; /* Centrar horizontalmente */
 }
-.btn-primary{
-  padding: 12px 25px;
-  border-radius: 30px;
+/* En info-paciente.component.css */
+.red-familiar-btn {
+  margin-top: 8px; /* Reducido de 10px */
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Reducido de 8px */
+  padding: 8px 14px; /* Reducido de 10px 16px */
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  color: #4b5563;
+  border-radius: 20px; /* Cambiado para que coincida con el otro botón */
+  text-decoration: none;
+  position: relative;
+  transition: all 0.2s ease;
+  font-size: 14px; /* Añadido para hacer consistente con el botón primario */
+}
+
+.red-familiar-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.red-familiar-importante {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+  animation: pulse 1.5s infinite;
+}
+
+.red-familiar-importante:hover {
+  background-color: #fee2e2;
+}
+
+.badge-required {
+  position: absolute;
+  top: -6px; /* Ajustado para mejor posición */
+  right: -6px; /* Ajustado para mejor posición */
+  background-color: #dc2626;
+  color: white;
+  font-size: 9px; /* Reducido de 10px */
+  padding: 1px 5px; /* Reducido de 2px 6px */
+  border-radius: 8px; /* Reducido de 10px */
+  font-weight: bold;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.btn-primary {
+  padding: 8px 16px; /* Reducido de 12px 25px */
+  border-radius: 20px; /* Reducido de 30px */
   border: none;
-  font-size: 16px;
+  font-size: 14px; /* Reducido de 16px */
   cursor: pointer;
   transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0px;
+  margin-bottom: -10px;
+  background-color: #7d746b;
+  color: white;
 }
  .btn-save, .btn-cancel {
   padding: 12px 25px;
@@ -304,7 +355,7 @@ textarea {
 
 .btn-primary:hover, .btn-save:hover {
   background-color: #64594e;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .btn-cancel:hover {

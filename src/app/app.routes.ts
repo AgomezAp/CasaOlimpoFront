@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { AgregarCitasComponent } from './components/paciente/citas/agregar-citas/agregar-citas.component';
 import { AgregarPacienteComponent } from './components/paciente/agregar-paciente/agregar-paciente.component';
 import { RegistrarComponent } from './components/registrar/registrar.component';
 import { RecetaComponent } from './components/paciente/receta/receta.component';
@@ -15,6 +14,7 @@ import { InfoPacienteComponent } from './components/paciente/info-paciente/info-
 import { HistoriaClinicaComponent } from './components/paciente/historia-clinica/historia-clinica.component';
 import { CrearConsultaComponent } from './components/paciente/crear-consulta/crear-consulta.component';
 import { EditarDatosComponent } from './components/paciente/editar-datos/editar-datos.component';
+import { RedFamiliarComponent } from './components/paciente/red-familiar/red-familiar.component';
 
 export const routes: Routes = [
     {
@@ -29,9 +29,6 @@ export const routes: Routes = [
     },
     {
         path: 'agregar-paciente', component: AgregarPacienteComponent
-    },
-    {
-        path: 'agregar-citas', component: AgregarCitasComponent
     },
     {
         path: 'agenda-dashboard', component: AgendaDashboardComponent
@@ -65,7 +62,11 @@ export const routes: Routes = [
     },
     {
         path:'paciente/:numero_documento/consulta/:consulta_id/editar',component: EditarDatosComponent
-    }
+    },
+    {
+        path: 'paciente/:numero_documento/red-familiar',
+        component: RedFamiliarComponent
+      }
     
 
 ];

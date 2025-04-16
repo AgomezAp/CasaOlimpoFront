@@ -144,14 +144,22 @@
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    border: none; 
   }
   
   .recetas-table th, 
   .recetas-table td {
     padding: 10px 15px;
-    border-bottom: 1px solid var(--border-color);
+    border: none; /* Elimina todos los bordes */
+    border-bottom: 2px solid #000000;/* Añade SOLO borde inferior de 2px */
   }
-  
+  .recetas-table tr {
+    border: none; 
+  }
+  .recetas-table thead {
+    border-top: 2px solid var(--border-color);
+  }
+
   .recetas-table th {
     background-color: var(--background-light);
     color: var(--primary-dark);
@@ -159,7 +167,10 @@
     text-transform: uppercase;
     font-size: 12px;
   }
-  
+  .recetas-table thead th {
+    border-top: 2px solid #000000; /* Borde superior negro */
+    border-bottom: 2px solid #000000; /* Borde inferior negro */
+  }
   /* Filas alternantes con los colores solicitados */
   .recetas-table tbody tr:nth-child(odd) {
     background-color: rgba(138, 136, 134, 0.2); /* #8a8886 con 20% de opacidad */

@@ -49,6 +49,14 @@
         >
         <img src="/Edit.png" class="edit-icon-img" alt="Editar" /> Editar información
         </button>
+        <a 
+        [routerLink]="['/paciente', pacienteId, 'red-familiar']" 
+        class="btn red-familiar-btn"
+        [class.red-familiar-importante]="esMenorDeEdad && !tieneMiembrosRedFamiliar"
+      >
+        <i class="fas fa-users"></i> Red Familiar
+        <span *ngIf="esMenorDeEdad && !tieneMiembrosRedFamiliar" class="badge-required">Requerido</span>
+      </a>
       </div>
 
       <div class="action-buttons" *ngIf="editMode">
