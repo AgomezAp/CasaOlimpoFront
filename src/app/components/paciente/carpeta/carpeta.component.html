@@ -38,6 +38,7 @@
   
           <!-- Formulario de carga condicional -->
           <div *ngIf="mostrarFormularioSubida" class="upload-mini-form">
+            <!-- Primera sección: Seleccionar archivo (sin cambios) -->
             <div class="form-group">
               <label for="fileInputGallery">Seleccionar imagen:</label>
               <div class="file-input-wrapper">
@@ -57,20 +58,25 @@
               </span>
             </div>
             
-            <div class="form-group">
-              <label for="descripcionInputGallery">Descripción:</label>
-              <input 
-                type="text" 
-                id="descripcionInputGallery" 
-                placeholder="Describa la imagen..." 
-                [(ngModel)]="descripcionImagen"
-                class="form-control"
-              >
+            <!-- Nueva estructura para alinear input y botón -->
+            <div class="input-button-row">
+              <div class="form-group description-group">
+                <label for="descripcionInputGallery">Descripción:</label>
+                <input 
+                  type="text" 
+                  id="descripcionInputGallery" 
+                  placeholder="Describa la imagen..." 
+                  [(ngModel)]="descripcionImagen"
+                  class="form-control"
+                >
+              </div>
+              
+              <div class="button-container">
+                <button class="btn btn-upload" (click)="subirImagen()" [disabled]="!archivoSeleccionado">
+                  <i class="upload-icon"></i> Subir
+                </button>
+              </div>
             </div>
-            
-            <button class="btn btn-upload" (click)="subirImagen()" [disabled]="!archivoSeleccionado">
-              <i class="upload-icon"></i> Subir
-            </button>
           </div>
   
           <!-- Mensaje cuando no hay imágenes -->

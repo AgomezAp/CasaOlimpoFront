@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NotificacionService } from '../../../services/notificacion.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-red-familiar',
   imports: [CommonModule, ReactiveFormsModule],
@@ -44,7 +44,8 @@ export class RedFamiliarComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private redFamiliarService: RedfamiliarService,
     private notificacionService: NotificacionService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.miembroForm = this.fb.group({
       nombre: ['', [Validators.required]],
@@ -55,7 +56,9 @@ export class RedFamiliarComponent implements OnInit, OnChanges {
       es_responsable: [false]
     });
   }
-
+  volver(): void {
+    this.location.back();
+  }
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['numero_documento']) {

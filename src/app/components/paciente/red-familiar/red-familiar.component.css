@@ -16,21 +16,18 @@
 }
 
 .card-header {
-  padding: 16px 20px;
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .card-header h2 {
   margin: 0;
-  color: #1e293b;
-  font-size: 24px;
+  flex-grow: 1;
+  text-align: center;
 }
-
 .card-header p {
   margin: 0;
   margin-left: auto;
@@ -40,26 +37,72 @@
 .card-body {
   padding: 20px;
 }
-
-.btn-add {
-  background-color: #7d746b;
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-weight: 600;
+.btn-back {
   display: flex;
   align-items: center;
   gap: 8px;
+  background-color: #8a7865; /* Color marrón que combina con el esquema */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+.btn-back:hover {
+  background-color: #736355;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.btn-back:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.btn-back .btn-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Hace el icono blanco */
+}
+.btn-back i {
+  margin-right: 8px;
+}
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #7d746b;
+  color: white;
+  border: none;
+  border-radius: 6px; /* Cambiado de 20px a 6px para consistencia */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 
 .btn-add:hover {
   background-color: #64594e;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
-
+.btn-add:active {
+  transform: translateY(0);
+}
+.btn-add .btn-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Hace el icono blanco */
+}
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -71,7 +114,11 @@
   border-radius: 12px;
   border: 2px dashed #d1d5db;
 }
-
+.btn-back span {
+  line-height: 1;
+  position: relative;
+  top: 1px; /* Pequeño ajuste para alineación vertical perfecta */
+}
 .empty-icon {
   font-size: 60px;
   color: #9ca3af;
@@ -102,14 +149,19 @@
 }
 
 .btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background-color: #7d746b;
-  color: #fff;
+  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px 20px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .btn-primary:hover {

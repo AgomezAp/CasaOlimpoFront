@@ -13,7 +13,10 @@
           alt="Foto del paciente"
           class="patient-photo"
         />
-        <div *ngIf="!cargandoFoto && !pacientePhotoUrl" class="profile-placeholder">
+        <div
+          *ngIf="!cargandoFoto && !pacientePhotoUrl"
+          class="profile-placeholder"
+        >
           <span class="profile-initials">{{ getInitials() }}</span>
           <div class="photo-upload-icon">
             <i class="fas fa-camera"></i>
@@ -22,13 +25,13 @@
       </div>
 
       <!-- Input file oculto para la selección de archivos -->
-      <input 
-        type="file" 
+      <input
+        type="file"
         #fileInput
         style="display: none"
         accept="image/*"
         (change)="onFileSelected($event)"
-      >
+      />
 
       <div class="profile-details">
         <h2 class="patient-name">
@@ -36,7 +39,9 @@
         </h2>
         <p class="patient-id">C.C. {{ paciente?.numero_documento }}</p>
         <p class="doctor-info">
-          <ng-container *ngIf="!cargandoDoctor">Dr. {{ nombreDoctor }}</ng-container>
+          <ng-container *ngIf="!cargandoDoctor"
+            >Dr. {{ nombreDoctor }}</ng-container
+          >
           <ng-container *ngIf="cargandoDoctor">Cargando...</ng-container>
         </p>
       </div>
@@ -47,16 +52,24 @@
           class="btn btn-primary"
           (click)="enableEditMode()"
         >
-        <img src="/Edit.png" class="edit-icon-img" alt="Editar" /> Editar información
+          <img src="/Edit.png" class="edit-icon-img" alt="Editar" /> Editar
+          información
         </button>
-        <a 
-        [routerLink]="['/paciente', pacienteId, 'red-familiar']" 
-        class="btn red-familiar-btn"
-        [class.red-familiar-importante]="esMenorDeEdad && !tieneMiembrosRedFamiliar"
-      >
-        <i class="fas fa-users"></i> Red Familiar
-        <span *ngIf="esMenorDeEdad && !tieneMiembrosRedFamiliar" class="badge-required">Requerido</span>
-      </a>
+        <a
+          *ngIf="activeTab === 'info'"
+          [routerLink]="['/paciente', pacienteId, 'red-familiar']"
+          class="btn red-familiar-btn"
+          [class.red-familiar-importante]="
+            esMenorDeEdad && !tieneMiembrosRedFamiliar
+          "
+        >
+          <i class="fas fa-users"></i> Red Familiar
+          <span
+            *ngIf="esMenorDeEdad && !tieneMiembrosRedFamiliar"
+            class="badge-required"
+            >Requerido</span
+          >
+        </a>
       </div>
 
       <div class="action-buttons" *ngIf="editMode">
@@ -127,7 +140,12 @@
                 <div class="data-field">
                   <label>Sexo</label>
                   <ng-container *ngIf="!editMode">
-                    <input type="text" [value]="pacienteForm.get('sexo')?.value" readonly class="fake-select">
+                    <input
+                      type="text"
+                      [value]="pacienteForm.get('sexo')?.value"
+                      readonly
+                      class="fake-select"
+                    />
                   </ng-container>
                   <select *ngIf="editMode" formControlName="sexo">
                     <option value="Masculino">Masculino</option>
@@ -149,11 +167,18 @@
                 <div class="data-field">
                   <label>Tipo de documento</label>
                   <ng-container *ngIf="!editMode">
-                    <input type="text" [value]="pacienteForm.get('tipo_documento')?.value" readonly class="fake-select">
+                    <input
+                      type="text"
+                      [value]="pacienteForm.get('tipo_documento')?.value"
+                      readonly
+                      class="fake-select"
+                    />
                   </ng-container>
                   <select *ngIf="editMode" formControlName="tipo_documento">
                     <option value="Cedula">Cédula</option>
-                    <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
+                    <option value="Tarjeta de Identidad">
+                      Tarjeta de Identidad
+                    </option>
                     <option value="Pasaporte">Pasaporte</option>
                     <option value="Registro Civil">Registro Civil</option>
                   </select>
@@ -186,7 +211,7 @@
 
           <!-- Datos de Contacto -->
           <div class="data-section">
-            <h3 class="section-title">De Contacto</h3>
+            <h3 class="section-title">Información de contacto</h3>
             <div class="section-divider"></div>
 
             <div class="data-grid">
@@ -250,36 +275,37 @@
           </div>
 
           <!-- Información Médica -->
-          <div class="data-section">
-            <h3 class="section-title">Información Médica</h3>
-            <div class="section-divider"></div>
-
-            <div class="data-grid">
-              <div class="data-row">
-                <div class="data-field">
-                  <label>Alergias</label>
-                  <textarea
-                    formControlName="alergias"
-                    [readonly]="!editMode"
-                  ></textarea>
-                </div>
-                <div class="data-field">
-                  <label>Antecedentes</label>
-                  <textarea
-                    formControlName="antecedentes"
-                    [readonly]="!editMode"
-                  ></textarea>
-                </div>
+          <h3 class="section-title">Información Médica</h3>
+          <div class="section-divider"></div>
+          <div class="data-grid">
+            
+            <div class="data-row">
+              <div class="data-field medical-field">
+                <label>Alergias</label>
+                <textarea
+                  formControlName="alergias"
+                  [readonly]="!editMode"
+                  class="medical-textarea"
+                ></textarea>
               </div>
-
-              <div class="data-row alt-bg">
-                <div class="data-field full-width">
-                  <label>Antecedentes<br />familiares</label>
-                  <textarea
-                    formControlName="antecedentes_familiares"
-                    [readonly]="!editMode"
-                  ></textarea>
-                </div>
+              <div class="data-field medical-field">
+                <label>Antecedentes</label>
+                <textarea
+                  formControlName="antecedentes"
+                  [readonly]="!editMode"
+                  class="medical-textarea"
+                ></textarea>
+              </div>
+            </div>
+          
+            <div class="data-row alt-bg">
+              <div class="data-field full-width medical-field">
+                <label>Antecedentes<br />familiares</label>
+                <textarea
+                  formControlName="antecedentes_familiares"
+                  [readonly]="!editMode"
+                  class="medical-textarea"
+                ></textarea>
               </div>
             </div>
           </div>

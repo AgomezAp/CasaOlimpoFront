@@ -15,6 +15,9 @@ import { HistoriaClinicaComponent } from './components/paciente/historia-clinica
 import { CrearConsultaComponent } from './components/paciente/crear-consulta/crear-consulta.component';
 import { EditarDatosComponent } from './components/paciente/editar-datos/editar-datos.component';
 import { RedFamiliarComponent } from './components/paciente/red-familiar/red-familiar.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { GestionUsuariosComponent } from './components/admin/gestion-usuarios/gestion-usuarios.component';
+import { TransferenciaPacientesComponent } from './components/admin/transferencia-pacientes/transferencia-pacientes.component';
 
 export const routes: Routes = [
     {
@@ -66,6 +69,15 @@ export const routes: Routes = [
     {
         path: 'paciente/:numero_documento/red-familiar',
         component: RedFamiliarComponent
+    },
+    {
+        path: 'admin',
+        component: DashboardComponent,
+        children: [
+          { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+          { path: 'usuarios', component: GestionUsuariosComponent },
+          { path: 'transferencia', component: TransferenciaPacientesComponent }
+        ]
       }
     
 

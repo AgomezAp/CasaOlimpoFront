@@ -2,8 +2,8 @@
 .main-content {
     display: flex;
     width: 100%;
-    padding: 40px 20px 20px 20px;
-    background-color: #f7f7f7;
+    padding: 10px;
+    background-color: rgba(195, 181, 170, 0.6);
     min-height: 100vh;
     overflow-y: auto; /* Habilitar scroll vertical */
     overflow-x: hidden; /* Deshabilitar scroll horizontal */
@@ -12,14 +12,13 @@
   
   /* Contenedor principal con menos ancho máximo y centrado */
   .consulta-container {
-    display: flex;
-    gap: 20px; /* Reducir espacio entre paneles */
-    width: 100%;
-    max-width: 1200px; /* Reducir ancho máximo para mejor alineación */
-    margin: 0 auto;
-    padding-left: 0; /* Eliminar padding izquierdo */
-    padding-right: 500px; /* Eliminar padding derecho */
-    padding-bottom: 40px;
+    max-width: 95%; /* Antes probablemente estaba en 1200px o similar */
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  gap: 25px;
+  padding-right: 326px;
+  background-color: transparent; 
   }
   
   /* Panel izquierdo - Información del paciente */

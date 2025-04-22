@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environments';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, throwError } from 'rxjs';
 import { Paciente } from '../interfaces/paciente';
 interface ApiResponse<T> {
   data: T[];
@@ -120,5 +120,87 @@ actualizarFotoPaciente(numeroDocumento: string, file: File): Observable<any> {
       })
     );
   }
+  transferirPaciente(numeroDocumento: string, doctorOrigenId: string, doctorDestinoId: string, comentario?: string): Observable<any> {
+    if (!numeroDocumento || !doctorOrigenId || !doctorDestinoId) {
+      console.error('Faltan datos obligatorios para la transferencia');
+      return throwError(() => new Error('Datos de transferencia incompletos'));
+    }
+    
+    const datos = {
+      doctorOrigenId,
+      doctorDestinoId,
+      comentario
+    };
+    
+    console.log(`Transfiriendo paciente ${numeroDocumento} del doctor ${doctorOrigenId} al doctor ${doctorDestinoId}`);
+    
+    return this.http.post<any>(`${this.appUrl}api/paciente/${numeroDocumento}/transferir`, datos)
+      .pipe(
+        catchError(error => {
+          console.error(`Error al transferir paciente ${numeroDocumento}:`, error);
+          return throwError(() => error);
+        })
+      );
+  }
   
+  /**
+   * Transfiere múltiples pacientes en una operación por lotes
+   */
+  transferirPacientesEnLote(datos: {
+    doctorOrigenId: string;
+    doctorDestinoId: string;
+    pacientesIds: string[];
+    comentario?: string;
+  }): Observable<any> {
+    if (!datos.pacientesIds || !Array.isArray(datos.pacientesIds) || datos.pacientesIds.length === 0) {
+      return throwError(() => new Error('Lista de pacientes no válida o vacía'));
+    }
+    
+    console.log(`Iniciando transferencia por lotes de ${datos.pacientesIds.length} pacientes`);
+    
+    // Crear un array de observables para cada paciente
+    const transferencias = datos.pacientesIds.map(numeroDocumento => 
+      this.transferirPaciente(
+        numeroDocumento, 
+        datos.doctorOrigenId, 
+        datos.doctorDestinoId, 
+        datos.comentario
+      )
+    );
+    
+    // Ejecutar todas las transferencias en paralelo
+    return forkJoin(transferencias).pipe(
+      map(resultados => {
+        return {
+          message: `Se transfirieron ${resultados.length} pacientes correctamente`,
+          data: resultados
+        };
+      }),
+      catchError(error => {
+        console.error('Error en transferencia por lotes:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  obtenerPacientesPorDoctorId(doctorId: string): Observable<any> {
+    if (!doctorId) {
+      console.error('No se proporcionó ID de doctor');
+      return throwError(() => new Error('No hay ID de doctor disponible'));
+    }
+    
+    return this.http.get<any>(`${this.appUrl}api/doctor/${doctorId}/pacientes`)
+      .pipe(
+        map(response => {
+          // Si la respuesta tiene la estructura anidada, convertirla a un formato más simple
+          if (response && response.data && response.data.pacientes) {
+            return { data: response.data.pacientes };
+          }
+          return response;
+        }),
+        catchError(error => {
+          console.error(`Error al obtener pacientes del doctor ${doctorId}:`, error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

@@ -13,6 +13,7 @@ import { AppointmentNotificationsComponent } from '../appointment-notifications/
 })
 export class NavBarComponent {
   citasHoy$: Observable<number>;
+  esAdmin: boolean = false;
   constructor(private router: Router, private reminderService: AppointmentReminderService) { 
     this.citasHoy$ = this.reminderService.citasHoy$;
   }
@@ -22,6 +23,7 @@ export class NavBarComponent {
     { path: '/cumpleaños', label: 'Cumpleaños', icon: 'cake' },
     { path: '/descuentos', label: 'Descuentos', icon: 'discount' },
     { path: '/factura-dashboard', label: 'Facturación', icon: 'receipt' },
+    { path: '/admin', label: 'Administración', icon: 'settings' },
     { path: '/logout', label: 'Salir', icon: 'logout' }
   ];
   logout(): void {

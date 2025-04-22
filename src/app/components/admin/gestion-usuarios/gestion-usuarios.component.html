@@ -1,0 +1,70 @@
+<div class="usuarios-page">
+    <div class="page-header">
+      <h1>Gestión de Usuarios</h1>
+    </div>
+  
+    <div class="form-panel">
+      <form [formGroup]="usuarioForm">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="nombre">Nombre *</label>
+            <input type="text" id="nombre" formControlName="nombre" class="field-input" placeholder="Ingrese nombre">
+            <div class="error-message" *ngIf="usuarioForm.get('nombre')?.touched && usuarioForm.get('nombre')?.errors?.['required']">
+              El nombre es obligatorio
+            </div>
+          </div>
+  
+          <div class="form-field">
+            <label for="correo">Correo Electrónico *</label>
+            <input type="email" id="correo" formControlName="correo" class="field-input" placeholder="ejemplo@casaolimpo.com">
+            <div class="error-message" *ngIf="usuarioForm.get('correo')?.touched && usuarioForm.get('correo')?.errors?.['required']">
+              El correo es obligatorio
+            </div>
+            <div class="error-message" *ngIf="usuarioForm.get('correo')?.touched && usuarioForm.get('correo')?.errors?.['email']">
+              Formato de correo inválido
+            </div>
+          </div>
+  
+          <div class="form-field">
+            <label for="rol">Rol *</label>
+            <select id="rol" formControlName="rol" class="field-input">
+              <option value="Doctor">Doctor</option>
+              <option value="Admin">Administrador</option>
+            </select>
+          </div>
+  
+          <div class="form-field">
+            <label for="contrasena">Contraseña *</label>
+            <input type="password" id="contrasena" formControlName="contrasena" class="field-input" placeholder="Mínimo 6 caracteres">
+            <div class="error-message" *ngIf="usuarioForm.get('contrasena')?.touched && usuarioForm.get('contrasena')?.errors?.['required']">
+              La contraseña es obligatoria
+            </div>
+            <div class="error-message" *ngIf="usuarioForm.get('contrasena')?.touched && usuarioForm.get('contrasena')?.errors?.['minlength']">
+              Mínimo 6 caracteres
+            </div>
+          </div>
+  
+          <div class="form-field">
+            <label for="confirmarContrasena">Confirmar Contraseña *</label>
+            <input type="password" id="confirmarContrasena" formControlName="confirmarContrasena" class="field-input" placeholder="Repita la contraseña">
+            <div class="error-message" *ngIf="usuarioForm.get('confirmarContrasena')?.touched && usuarioForm.get('confirmarContrasena')?.errors?.['required']">
+              Confirme la contraseña
+            </div>
+          </div>
+          <div class="error-message" *ngIf="usuarioForm.errors?.['mismatch'] && usuarioForm.get('confirmarContrasena')?.touched">
+            Las contraseñas no coinciden
+          </div>
+        </div>
+  
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="resetForm()">Cancelar</button>
+          <button type="button" class="btn-primary" [disabled]="usuarioForm.invalid || cargando" (click)="crearUsuario()">
+            <span *ngIf="!cargando">Crear Usuario</span>
+            <span *ngIf="cargando" class="spinner-small"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  
+   
+  </div>

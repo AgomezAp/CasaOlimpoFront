@@ -20,10 +20,10 @@ export class PacienteDashboardComponent implements OnInit {
   loading: boolean = false;
   error: string = '';
   searchTerm: string = '';
-  
+  private primeraVisita: boolean = true;
   // Propiedades para paginación
   paginaActual: number = 1;
-  pacientesPorPagina: number = 5;
+  pacientesPorPagina: number = 7;
   totalPaginas: number = 1;
   
   // Para usar Math en el template
@@ -36,6 +36,7 @@ export class PacienteDashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.primeraVisita = sessionStorage.getItem('dashboardVisitado') !== 'true';
     this.cargarPacientes();
   }
 
@@ -53,34 +54,51 @@ export class PacienteDashboardComponent implements OnInit {
             this.pacientesTodos = response.data;
             this.pacientes = [...this.pacientesTodos];
             
-            // Mostrar información del doctor si está disponible
-            if (response.doctorInfo) {
-              console.log(`Cargados ${this.pacientes.length} pacientes del Dr. ${response.doctorInfo.nombre}`);
-              this.notificacionService.success(`${response.doctorInfo.totalPacientes} pacientes encontrados`);
-            } else {
-              this.notificacionService.success(`${this.pacientes.length} pacientes encontrados`);
+            // Mostrar información del doctor solo en primera visita
+            if (this.primeraVisita) {
+              if (response.doctorInfo) {
+                console.log(`Cargados ${this.pacientes.length} pacientes del Dr. ${response.doctorInfo.nombre}`);
+                this.notificacionService.success(`${response.doctorInfo.totalPacientes} pacientes encontrados`);
+              } else {
+                this.notificacionService.success(`${this.pacientes.length} pacientes encontrados`);
+              }
             }
           } 
           // Si se mantiene la estructura original del API
           else if (response.data.pacientes && Array.isArray(response.data.pacientes)) {
             this.pacientesTodos = response.data.pacientes;
             this.pacientes = [...this.pacientesTodos];
-            console.log(`Cargados ${this.pacientes.length} pacientes del Dr. ${response.data.doctor}`);
-            this.notificacionService.success(`${response.data.total_pacientes} pacientes encontrados`);
+            
+            // Solo mostrar en primera visita
+            if (this.primeraVisita) {
+              console.log(`Cargados ${this.pacientes.length} pacientes del Dr. ${response.data.doctor}`);
+              this.notificacionService.success(`${response.data.total_pacientes} pacientes encontrados`);
+            }
           } 
           // Si no hay pacientes bajo ninguna estructura
           else {
             this.pacientesTodos = [];
             this.pacientes = [];
             console.warn('No se encontraron pacientes en la respuesta:', response.data);
+            
+            // Siempre mostrar advertencia si no hay pacientes
             this.notificacionService.warning('No se encontraron pacientes para este doctor');
           }
           this.actualizarPaginacion();
         } else {
           this.pacientesTodos = [];
           this.pacientes = [];
+          
+          // Siempre mostrar advertencia si no hay datos
           this.notificacionService.warning('No se encontraron datos para este doctor');
         }
+        
+        // Marcar que ya no es primera visita después de procesar los datos
+        this.primeraVisita = false;
+        
+        // Opcionalmente guardar en sessionStorage para mantener entre navegaciones
+        sessionStorage.setItem('dashboardVisitado', 'true');
+        
         this.loading = false;
       },
       error: (error) => {

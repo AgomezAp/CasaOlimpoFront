@@ -1,0 +1,140 @@
+<!-- transferencia-pacientes.component.html -->
+<div class="transferencia-container">
+    <h2>Transferencia de Pacientes</h2>
+    
+    <div class="form-container">
+      <form [formGroup]="transferenciaForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="doctorOrigen">Doctor Origen</label>
+            <select 
+              id="doctorOrigen" 
+              formControlName="doctorOrigen" 
+              class="form-control"
+              [class.is-invalid]="transferenciaForm.get('doctorOrigen')?.touched && transferenciaForm.get('doctorOrigen')?.invalid"
+            >
+              <option value="">Seleccione doctor origen</option>
+              <option *ngFor="let doctor of doctores" [value]="doctor.id">
+                {{ doctor.nombre }} {{ doctor.apellidos }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="transferenciaForm.get('doctorOrigen')?.touched && transferenciaForm.get('doctorOrigen')?.errors?.['required']">
+              Debe seleccionar un doctor origen
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="doctorDestino">Doctor Destino</label>
+            <select 
+              id="doctorDestino" 
+              formControlName="doctorDestino" 
+              class="form-control"
+              [class.is-invalid]="transferenciaForm.get('doctorDestino')?.touched && transferenciaForm.get('doctorDestino')?.invalid"
+            >
+              <option value="">Seleccione doctor destino</option>
+              <option *ngFor="let doctor of doctores" [value]="doctor.id">
+                {{ doctor.nombre }} {{ doctor.apellidos }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="transferenciaForm.get('doctorDestino')?.touched && transferenciaForm.get('doctorDestino')?.errors?.['required']">
+              Debe seleccionar un doctor destino
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Sección de selección de pacientes -->
+    <div class="pacientes-section">
+      <div class="section-header">
+        <h3>Seleccione los pacientes a transferir</h3>
+        
+        <div class="search-box">
+          <input 
+            type="text" 
+            placeholder="Buscar pacientes..." 
+            (input)="filtrarPacientes($event)"
+            [disabled]="!doctorOrigenId || cargandoPacientes"
+          >
+          <i class="search-icon"></i>
+        </div>
+      </div>
+      
+      <div *ngIf="cargandoPacientes" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Cargando pacientes...</p>
+      </div>
+      
+      <div *ngIf="!cargandoPacientes && pacientesFiltrados.length > 0" class="pacientes-list">
+        <div class="select-all">
+          <button 
+            class="btn-select-all" 
+            [class.all-selected]="pacientesSeleccionados.length === pacientesFiltrados.length && pacientesFiltrados.length > 0"
+            (click)="seleccionarTodos()">
+            <i class="fas" [class.fa-check-square]="pacientesSeleccionados.length === pacientesFiltrados.length" 
+               [class.fa-square]="pacientesSeleccionados.length !== pacientesFiltrados.length"></i>
+            {{ pacientesSeleccionados.length === pacientesFiltrados.length ? 'Deseleccionar todos' : 'Seleccionar todos' }}
+          </button>
+        </div>
+        
+        <div class="pacientes-grid">
+          <div 
+            *ngFor="let paciente of pacientesFiltrados" 
+            class="paciente-card" 
+            [class.selected]="estaPacienteSeleccionado(paciente)"
+            (click)="toggleSeleccionPaciente(paciente)"
+          >
+            <div class="paciente-info">
+              <div class="paciente-nombre">{{ paciente.nombre }} {{ paciente.apellidos }}</div>
+              <div class="paciente-documento">{{ paciente.numero_documento }}</div>
+            </div>
+            <div class="selection-indicator">
+              <i *ngIf="estaPacienteSeleccionado(paciente)" class="fas fa-check-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="!cargandoPacientes && pacientesFiltrados.length === 0 && doctorOrigenId" class="empty-state">
+        <i class="fas fa-user-slash"></i>
+        <p>No se encontraron pacientes para este doctor</p>
+      </div>
+      
+      <div *ngIf="!doctorOrigenId && !cargandoPacientes" class="empty-state">
+        <i class="fas fa-hand-pointer"></i>
+        <p>Seleccione un doctor origen para ver sus pacientes</p>
+      </div>
+    </div>
+    
+    <!-- Resumen y botón de transferencia -->
+    <div class="resumen-section" *ngIf="pacientesSeleccionados.length > 0">
+      <div class="resumen-header">
+        <h3>Resumen de transferencia</h3>
+        <div class="pacientes-count">{{ pacientesSeleccionados.length }} pacientes seleccionados</div>
+      </div>
+      
+      <div class="resumen-list">
+        <div *ngFor="let paciente of pacientesSeleccionados" class="resumen-item">
+          {{ paciente.nombre }} {{ paciente.apellidos }} ({{ paciente.numero_documento }})
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button 
+        class="btn-cancel" 
+        (click)="resetForm()"
+        [disabled]="procesandoTransferencia"
+      >
+        Cancelar
+      </button>
+      <button 
+        class="btn-transferir" 
+        (click)="transferirPacientes()"
+        [disabled]="transferenciaForm.invalid || pacientesSeleccionados.length === 0 || procesandoTransferencia"
+      >
+        <span *ngIf="!procesandoTransferencia">Transferir Pacientes</span>
+        <span *ngIf="procesandoTransferencia" class="spinner-small"></span>
+      </button>
+    </div>
+  </div>

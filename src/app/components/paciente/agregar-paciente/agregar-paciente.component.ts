@@ -157,7 +157,7 @@ export class AgregarPacienteComponent implements OnInit {
   // Primer paso: Crear el paciente (operación independiente)
   this.pacienteService.crearPaciente(pacienteData).subscribe({
     next: (response) => {
-      console.log('Paciente creado exitosamente:', response);
+      this.notificacionService.error(response);
       this.pacienteCreado = true;
       this.numeroDocumentoCreado = pacienteData.numero_documento;
       
@@ -175,7 +175,7 @@ export class AgregarPacienteComponent implements OnInit {
       
       // Mostrar mensaje de error detallado
       if (error.error && error.error.message) {
-        this.notificacionService.error('Error al crear paciente');
+        this.notificacionService.error(error.error.message);
       } else {
         this.notificacionService.error('No se pudo crear el paciente. Por favor, revise los datos e intente nuevamente.');
       }

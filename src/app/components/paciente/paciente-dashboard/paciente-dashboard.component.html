@@ -8,7 +8,10 @@
         <input type="text" placeholder="Buscar pacientes..." [(ngModel)]="searchTerm" (input)="filtrarPacientes()">
         <i class="search-icon"></i>
       </div>
-      <button class="btn-new" (click)="nuevoPaciente()">Nuevo Paciente</button>
+      <button class="btn-new" (click)="nuevoPaciente()">
+        <img src="/AgregarPaciente.png" alt="Agregar Paciente" class="btn-icon">
+        Nuevo Paciente
+      </button>
     </div>
     
     <!-- Tabla de pacientes - IMPORTANTE: usa pacientesPaginados aquí -->

@@ -38,7 +38,7 @@
   /* Estilos de la navegación */
   .sidebar-nav {
     flex: 1;
-    padding: 25px 0;
+    padding: 15px 0;
   }
   
   .sidebar-nav ul {
@@ -157,4 +157,24 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 0 2px white;  /* Borde blanco para que destaque */
+}
+/* Estilo específico para el enlace de administración */
+.nav-item.admin-link {
+  margin-left: auto; /* Si quieres que aparezca a la derecha */
+}
+
+.nav-item.admin-link .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #7d746b;
+  font-weight: 500;
+}
+
+.nav-item.admin-link .nav-link i {
+  font-size: 18px;
+}
+
+.nav-item.admin-link .nav-link:hover {
+  color: #64594e;
 }

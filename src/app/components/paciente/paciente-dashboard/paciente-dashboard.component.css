@@ -31,7 +31,7 @@
   }
   
   .content-container {
-    width: 1000px;
+    width: 1010px;
     height: 570px; /* Cambiamos max-height por height fija */
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 40px;
@@ -134,15 +134,12 @@
   
   /* Botones de acción */
   .patients-table .actions {
-    white-space: nowrap;
-    text-align: center;
+    width: 80px; /* Reducido del ancho actual */
+    text-align: left; /* Alineación a la izquierda */
+    padding-left: 40px;
   }
   
-  /* Botones de acción - Reemplaza desde línea 141 aproximadamente */
-.patients-table .actions {
-    white-space: nowrap;
-    text-align: center;
-  }
+
   
   /* Reemplaza las propiedades generales del botón para permitir un botón más ancho */
   .patients-table button {
@@ -160,11 +157,12 @@
     background-color: #7d746b;
     color: white;
     border-radius: 20px;
-    width: auto;
-    min-width: 100px;
-    height: 36px;
-    padding: 0 15px;
-    gap: 8px; /* Espacio entre icono y texto */
+    width: auto; /* Que tome el ancho necesario */
+    padding: 5px 10px; /* Reducir el padding horizontal */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
   }
   
   /* Modificación para el icono */
@@ -275,6 +273,16 @@
   color: #666;
   font-size: 14px;
   margin-left: 10px;
+}
+.btn-new {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre la imagen y el texto */
+}
+
+.btn-icon {
+  width: 16px; /* Ajusta según el tamaño que desees */
+  height: 16px;
 }
 /* Estilos para dispositivos móviles */
 @media (max-width: 768px) {
