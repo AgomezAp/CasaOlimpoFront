@@ -1,0 +1,136 @@
+html, body {
+    height: 1000px;
+    background-color: rgba(195, 181, 170, 0.6);
+}
+.descuentos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0 400px 300px;
+}
+
+.descuentos h2 {
+    text-decoration-line: underline;
+    font-size: 45px;
+    color: #7d746b;
+}
+
+.crear-descuento {
+    width: calc(100% - 300px);
+    max-width: 700px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    margin: 20px auto 20px 300;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.crear-descuento h2 {
+    color: #7d746b;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.crear-descuento form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.crear-descuento .motivo > div,
+.crear-descuento .descuento > div,
+.crear-descuento .fechas > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.crear-descuento .motivo,
+.crear-descuento .descuento,
+.crear-descuento .fechas {
+    display: flex;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+}
+
+.crear-descuento label {
+    flex: 0 0 150px;
+    text-align: right;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #7d746b;
+}
+
+.crear-descuento input {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #e0d7ce;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    width: 350px;
+    height: 50px;
+    background-color: #e0dece;
+    min-width: 200px;
+    max-width: 350px;
+}
+
+.crear-descuento input[type="date"] {
+    padding: 11px 15px;
+}
+
+.crear-descuento input:focus {
+    border-color: #7d746b;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2);
+}
+
+.crear-descuento button {
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.crear-descuento button:hover {
+    background-color: #6b635a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(125, 116, 107, 0.2);
+}
+
+@media (max-width: 768px) {
+    .crear-descuento {
+        width: calc(100% - 90px);
+        margin-left: 90px;
+        padding: 20px 15px;
+        max-width: none;
+    }
+
+    .crear-descuento h2 {
+        font-size: 20px;
+    }
+
+    .crear-descuento .fechas{
+        grid-template-columns: 1fr;
+    }
+
+    .crear-descuento input {
+        padding: 10px 12px;
+    }
+
+    .crear-descuento button {
+        padding: 12px 15px;
+    }
+    
+}

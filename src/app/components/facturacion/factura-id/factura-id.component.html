@@ -1,48 +1,48 @@
-<h1 class="page-title">Facturación</h1>
+<h1 class="page-title">Facturas por Paciente</h1>
 <div class="main-content">
   <div class="content-container">
     
     <!-- Barra de búsqueda -->
     <div class="controls-row">
       <div class="search-box">
-        <input type="text" placeholder="Buscar pacientes..." [(ngModel)]="searchTerm" (input)="filtrarFacturas()">
+        <input type="text" placeholder="Buscar facturas..." [(ngModel)]="searchTerm" (input)="filtrarFacturas()">
         <i class="search-icon"></i>
       </div>
     </div>
     
-    <!-- Tabla de pacientes para facturación -->
+    <!-- Tabla de facturas -->
     <div class="table-container">
       <table class="facturacion-table">
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Documento</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
+            <th>Número de Factura</th>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Descuento</th>
+            <th>Total</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let paciente of pacientesPaginados; let i = index" [ngClass]="{'odd-row': i % 2 !== 0}">
-            <td>{{paciente.nombre}}</td>
-            <td>{{paciente.apellidos}}</td>
-            <td>{{paciente.numero_documento}}</td>
-            <td>{{paciente.email || 'No disponible'}}</td>
-            <td>{{paciente.telefono || paciente.celular || 'No disponible'}}</td>
+          <tr *ngFor="let factura of facturasPaginadas; let i = index" [ngClass]="{'odd-row': i % 2 !== 0}">
+            <td>{{factura.numeroFactura}}</td>
+            <td>{{factura.fecha | date: 'dd/MM/yyyy'}}</td>
+            <td>{{factura.monto | currency}}</td>
+            <td>{{factura.descuento}}%</td>
+            <td>{{factura.total | currency}}</td>
             <td class="actions">
-              <button class="btn-generate" (click)="generarFactura(paciente)">
-                <img src="/Sell.png" alt="Generar Factura" class="btn-icon">
-                <span>Facturar</span>
+              <button class="btn-ver" (click)="verFactura(factura)">
+                <img src="/View.png" alt="Ver Factura" class="btn-icon">
+                <span>Ver</span>
               </button>
-              <button class="btn-ver">
-                <img src="/Pacientes.png" alt="ver" class="btn-icon">
-                <span>Facturas</span>
+              <button class="btn-imprimir" (click)="imprimirFactura(factura)">
+                <img src="/Print.png" alt="Imprimir Factura" class="btn-icon">
+                <span>Imprimir</span>
               </button>
             </td>
           </tr>
-          <tr *ngIf="pacientesPaginados.length === 0 && !loading">
-            <td colspan="6" class="no-data">No hay pacientes registrados</td>
+          <tr *ngIf="facturasPaginadas.length === 0 && !loading">
+            <td colspan="6" class="no-data">No hay facturas registradas</td>
           </tr>
         </tbody>
       </table>

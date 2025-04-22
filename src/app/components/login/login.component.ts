@@ -34,6 +34,7 @@ export class LoginComponent {
 
     const user = { correo: this.correo, contrasena: this.contrasena };
     this.loading = true;
+    this.errorMessage = '';
 
     this.userService.iniciarSesion(user).subscribe({
       next: (response: any) => {
@@ -51,6 +52,7 @@ export class LoginComponent {
       },
       error: (e: HttpErrorResponse) => {
         this.loading = false;
+        this.errorMessage = 'No se pudo iniciar sesión. Verifica tus datos'
         this.errorService.messageError(e);
       },
     });

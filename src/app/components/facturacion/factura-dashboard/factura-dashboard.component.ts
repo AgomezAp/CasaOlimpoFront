@@ -3,6 +3,7 @@ import { PacienteService } from '../../../services/paciente.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FacturacionService } from '../../../services/facturacion.service';
 
 @Component({
   selector: 'app-factura-dashboard',
@@ -26,7 +27,8 @@ export class FacturaDashboardComponent implements OnInit {
 
   constructor(
     private pacienteService: PacienteService,
-    private router: Router
+    private router: Router,
+    private facturaService: FacturacionService
   ) { }
 
   ngOnInit(): void {
@@ -113,11 +115,12 @@ export class FacturaDashboardComponent implements OnInit {
   generarFactura(paciente: any): void {
     // Aquí implementarías la lógica para generar la factura
     console.log('Generando factura para paciente:', paciente);
-    this.router.navigate(['factura-generar', paciente.numero_documento]);
+    this.facturaService.paciente = paciente;
+    this.router.navigate(['/factura-generar'])
   }
 
-  nuevaFactura(): void {
-    this.router.navigate(['/facturacion/nueva']);
+  verFacturas(): void {
+    this.router.navigate(['/facturas']);
   }
 
 }
