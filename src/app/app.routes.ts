@@ -18,6 +18,7 @@ import { RedFamiliarComponent } from './components/paciente/red-familiar/red-fam
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { GestionUsuariosComponent } from './components/admin/gestion-usuarios/gestion-usuarios.component';
 import { TransferenciaPacientesComponent } from './components/admin/transferencia-pacientes/transferencia-pacientes.component';
+import { FacturaIdComponent } from './components/facturacion/factura-id/factura-id.component';
 
 export const routes: Routes = [
     {

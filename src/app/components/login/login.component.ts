@@ -17,6 +17,7 @@ export class LoginComponent {
   correo: string = '';
   contrasena: string = '';
   loading: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private userService: LoginService,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CumpleanosService } from '../../services/cumpleanos.service'
-import { dash } from 'pdfkit';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
