@@ -26,4 +26,8 @@ export class FacturacionService {
    verFactura() {
     return this.http.get(`${this.appUrl}${this.apiUrl}/verFactura`)
    }
+
+   facturaId() {
+    return this.http.get(`${this.appUrl}${this.apiUrl}/facturas`, {})
+   }
 }

@@ -2,9 +2,9 @@
     <h2>Cumpleaños</h2>
     <div class="mensaje">
         <label for="message" >🎉🎁🎉 Escribe el mensaje que quieras compartir con tus clientes: 🎉🎁🎉</label>
-        <textarea id="message" placeholder="Ingresa tu mensaje aquí">{{mensaje}}</textarea>
+        <textarea id="message" placeholder="Ingresa tu mensaje aquí" name="mensaje" [(ngModel)]="mensaje" required></textarea>
         <label for="hora">Escoje la hora que deseas enviar los mensaje</label>
-        <input type="time" name="hora" id="hora" value="{{hora}}">
+        <input type="time" name="hora" id="hora" [(ngModel)]="hora">
         <button (click)="enviarMensaje()">Guardar</button>
     </div>
     <div class="lista-cumple">

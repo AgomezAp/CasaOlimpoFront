@@ -1,0 +1,272 @@
+/* Estilos generales */
+:host {
+    display: block;
+    padding-left: 300px; /* Ajuste para el navbar */
+    padding-top: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+  
+  /* Título de página */
+  .page-title {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  
+  /* Contenedor principal */
+  .main-content {
+    margin-left: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+  }
+  
+  .content-container {
+    width: 1000px;
+    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco con 85% opacidad */
+    border-radius: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    padding: 35px;
+    margin-bottom: 120px; /* Margen inferior amplio */
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Barra de controles superior */
+  .controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-box {
+    position: relative;
+    width: 50%;
+  }
+  
+  .search-box input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7d746b;
+    font-size: 16px;
+  }
+  
+  .btn-new {
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-new:hover {
+    background-color: #64594e;
+  }
+  
+  /* Tabla de facturas */
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    border-radius: 15px;
+  }
+  
+  .facturacion-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  
+  .facturacion-table th {
+    background-color: #7d746b;
+    color: white;
+    text-align: left;
+    padding: 15px 20px;
+    font-weight: 500;
+  }
+  
+  .facturacion-table td {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+  }
+  
+  .facturacion-table tr {
+    background-color: white;
+  }
+  
+  .facturacion-table tr.odd-row {
+    background-color: rgba(238, 238, 238, 0.5);
+  }
+  
+  /* Acciones en tabla */
+  .actions {
+    white-space: nowrap;
+    text-align: center;
+  }
+  
+  .btn-generate,
+  .btn-ver {
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    width: 10px;
+    min-width: 110px;
+    height: 36px;
+    padding: 0 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 5px;
+  }
+  
+  .btn-generate:hover,
+  .btn-ver:hover {
+    background-color: #64594e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+  
+  /* Estado de carga y mensaje de no datos */
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(125, 116, 107, 0.2);
+    border-radius: 50%;
+    border-top-color: #7d746b;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .no-data {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+  }
+  
+  /* Paginación */
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .pagination-btn {
+    background-color: #7d746b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .pagination-btn:hover:not([disabled]) {
+    background-color: #64594e;
+  }
+  
+  .pagination-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .pagination-pages {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .pagination-page-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #7d746b;
+    background-color: white;
+    color: #7d746b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .pagination-page-btn:hover {
+    background-color: rgba(125, 116, 107, 0.1);
+  }
+  
+  .pagination-page-btn.active {
+    background-color: #7d746b;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .pagination-info {
+    color: #666;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .content-container {
+      width: 90%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    :host {
+      padding-left: 90px;
+    }
+    
+    .controls-row {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .search-box {
+      width: 100%;
+    }
+  }

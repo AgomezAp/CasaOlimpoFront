@@ -12,15 +12,16 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './cumpleanos.component.css'
 })
 export class CumpleanosComponent implements OnInit {
-  mensaje: string = "¡Feliz cumpleaños! En Casa Olimpo, celebramos contigo este día especial. Que la luz de tu sonrisa brille aún más fuerte y que cada deseo de tu corazón se haga realidad. ¡Te enviamos un abrazo lleno de energía positiva!";
-  hora: string = "10:00";
+  // mensaje: string = "¡Feliz cumpleaños! En Casa Olimpo, celebramos contigo este día especial. Que la luz de tu sonrisa brille aún más fuerte y que cada deseo de tu corazón se haga realidad. ¡Te enviamos un abrazo lleno de energía positiva!";
+  mensaje: string = (document.getElementById('mensaje') as HTMLInputElement)?.value || '';
+  hora: string = '';
   personas: any[] =[];
 
   constructor(private cumpleService: CumpleanosService, private toastr: ToastrService)  {}
 
   ngOnInit(): void {
+    this.mensajeEstablecido()
     this.obtenerCumpleanos()
-
   }
 
   obtenerCumpleanos(): void {
@@ -52,8 +53,22 @@ export class CumpleanosComponent implements OnInit {
   }
 
   enviarMensaje(): void {
+    const dataActual = (document.getElementById('hora') as HTMLInputElement)?.value || '';
+    console.log(dataActual)
     this.cumpleService.obtenerMensaje({mensaje : this.mensaje, hora: this.hora}).subscribe({
       next: () => {
+        const horaActual = new Date();
+        console.log(horaActual)
+        const [hora, minutos] = this.hora.split(':').map(Number);
+        console.log(hora, minutos)
+        console.log(this.hora)
+        const horaSeleccionada = new Date();
+        horaSeleccionada.setHours(hora, minutos, 0);
+        console.log(horaSeleccionada)
+        if (horaSeleccionada <= horaActual) {
+          this.toastr.error('La hora seleccionada debe ser mayor a la hora actual', 'Error');
+          return;
+        }
         console.log('Datos guardados exitosamente')
         this.toastr.success('Mensaje actualizado correctamente', 'Éxito');
         
@@ -62,6 +77,20 @@ export class CumpleanosComponent implements OnInit {
         console.error('Error al guardar los datos: ', err)
       }
     });
+  }
+
+  mensajeEstablecido(): void {
+    this.cumpleService.mensaje({}).subscribe({
+      next: (data) => {
+        this.mensaje = data.mensaje
+        this.hora = data.hora
+        console.log("LLEGANDO",this.mensaje, this.hora)
+        this.toastr.success('Mensaje Obtenido')
+      },
+      error: (err) => {
+        console.error('Error al obtener')
+      }
+    })
   }
 
 }
