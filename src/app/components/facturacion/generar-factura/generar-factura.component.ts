@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FacturacionService } from '../../../services/facturacion.service';
-import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DescuentoService } from '../../../services/descuento.service';
 import { CommonModule } from '@angular/common';
-
+import { NotificacionService } from '../../../services/notificacion.service';
 @Component({
   selector: 'app-generar-factura',
   imports: [FormsModule, CommonModule],
@@ -22,9 +21,9 @@ export class GenerarFacturaComponent {
 
   constructor(
     private facturacionService: FacturacionService,
-    private toastr: ToastrService,
     private router: Router,
-    private descuentoService: DescuentoService
+    private descuentoService: DescuentoService,
+    private notificacionService: NotificacionService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +46,7 @@ export class GenerarFacturaComponent {
       },
       error: (err) => {
         console.error('Error al cargar', err);
-        this.toastr.error('No se cargaron los descuentos')
+        this.notificacionService.error('No se cargaron los descuentos')
       }
     });
   }
@@ -59,11 +58,11 @@ export class GenerarFacturaComponent {
   crearFactura(): void {
     this.facturacionService.crearFactura().subscribe({
       next: () => {
-        this.toastr.success('Factura creada')
+        this.notificacionService.success('Factura creada')
       },
       error: (err) => {
         console.error('Error al crear', err);
-        this.toastr.error('No se pudo crear')
+        this.notificacionService.error('No se pudo crear')
       }
     })
   }

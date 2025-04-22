@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { DescuentoService } from '../../../services/descuento.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NotificacionService } from '../../../services/notificacion.service';
 @Component({
   selector: 'app-descuento-dashboard',
   imports: [CommonModule, FormsModule],
@@ -15,8 +15,8 @@ export class DescuentoDashboardComponent {
   descuentoSeleccionado: any = null
   constructor(
     private descuentoService: DescuentoService,
-    private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private notificacionService: NotificacionService
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class DescuentoDashboardComponent {
         console.log(this.descuento);
       },
       error: (err) => {
-        this.toastr.error('Error al obtener los descuentos', 'Error')
+        this.notificacionService.error('Error al obtener los descuentos')
         console.error(err)
       }
     })
@@ -53,11 +53,11 @@ export class DescuentoDashboardComponent {
   deleteDescuento(Did: number): void {
     this.descuentoService.deleteDescuento(Did).subscribe({
       next: () => {
-        this.toastr.success('Descuento eliminado correctamente', 'Éxito');
+        this.notificacionService.success('Descuento eliminado correctamente');
         this.getDescuentos();
       },
       error: (err) => {
-        this.toastr.error('Error al eliminar el descuento', 'Error');
+        this.notificacionService.error('Error al eliminar el descuento');
         console.error(err);
       }
     });
@@ -77,12 +77,12 @@ export class DescuentoDashboardComponent {
       console.log(this.descuentoSeleccionado)
       this.descuentoService.updateDescuento(this.descuentoSeleccionado.Did, this.descuentoSeleccionado).subscribe({
         next: () => {
-          this.toastr.success('Descuento actualizado correctamente', 'Éxito');
+          this.notificacionService.success('Descuento actualizado correctamente');
           this.getDescuentos();
           this.cerrarModal();
         },
         error: (err) => {
-          this.toastr.error('Error al actualizar el descuento', 'Error')
+          this.notificacionService.error('Error al actualizar el descuento')
           console.error(err);
         }
       })

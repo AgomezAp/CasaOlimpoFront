@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { NotificacionService } from '../../../services/notificacion.service';
 @Component({
   selector: 'app-crear-descuento',
   imports: [FormsModule],
@@ -15,7 +15,7 @@ export class CrearDescuentoComponent {
   descuento: any = {} 
   constructor(
       private descuentoService: DescuentoService,
-      private toastr: ToastrService,
+      private notificacionService: NotificacionService,
       private router: Router
   ) {}
 
@@ -23,12 +23,12 @@ export class CrearDescuentoComponent {
 
     this.descuentoService.createDescuento(this.descuento).subscribe({
       next: () => {
-      this.toastr.success('Descuento creado exitosamente', 'Éxito');
+      this.notificacionService.success('Descuento creado exitosamente');
       this.router.navigate(['/descuento-dashboard'])
 
       },
       error: (err) => {
-      this.toastr.error('Error al crear el descuento', 'Error');
+      this.notificacionService.error('Error al crear el descuento');
       console.log(this.descuento)
       console.error(err);
       }
