@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CumpleanosService } from '../../services/cumpleanos.service'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-
+import { NotificacionService } from '../../services/notificacion.service'
 @Component({
   selector: 'app-cumpleanos',
   imports: [CommonModule, FormsModule],
@@ -16,7 +15,9 @@ export class CumpleanosComponent implements OnInit {
   hora: string = '';
   personas: any[] =[];
 
-  constructor(private cumpleService: CumpleanosService, private toastr: ToastrService)  {}
+  constructor(
+    private cumpleService: CumpleanosService,
+    private notificacionService: NotificacionService)  {}
 
   ngOnInit(): void {
     this.mensajeEstablecido()
@@ -65,11 +66,11 @@ export class CumpleanosComponent implements OnInit {
         horaSeleccionada.setHours(hora, minutos, 0);
         console.log(horaSeleccionada)
         if (horaSeleccionada <= horaActual) {
-          this.toastr.error('La hora seleccionada debe ser mayor a la hora actual', 'Error');
+          this.notificacionService.error('La hora seleccionada debe ser mayor a la hora actual');
           return;
         }
         console.log('Datos guardados exitosamente')
-        this.toastr.success('Mensaje actualizado correctamente', 'Éxito');
+        this.notificacionService.success('Mensaje actualizado correctamente');
         
       },
       error: (err) => {
@@ -84,7 +85,6 @@ export class CumpleanosComponent implements OnInit {
         this.mensaje = data.mensaje
         this.hora = data.hora
         console.log("LLEGANDO",this.mensaje, this.hora)
-        this.toastr.success('Mensaje Obtenido')
       },
       error: (err) => {
         console.error('Error al obtener')
