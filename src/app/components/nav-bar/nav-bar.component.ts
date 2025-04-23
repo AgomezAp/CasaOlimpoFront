@@ -33,6 +33,6 @@ export class NavBarComponent {
     localStorage.removeItem('nombreCompleto');
     
     // Redireccionar al login
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

@@ -277,7 +277,7 @@ export class AgregarPacienteComponent implements OnInit {
       }
       
       this.photoFile = file;
-      
+       
       // Crear vista previa de la imagen
       const reader = new FileReader();
       reader.onload = () => {

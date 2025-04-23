@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   confirmarContrasena: string = '';
   mensajeError: string = '';
   
+  mensajeCarga: string = '';
   constructor(
     private router: Router,
     private usuarioService: UsuarioService,
@@ -35,7 +36,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.cargarUsuarios();
   }
-
+  mostrarCargando(mensaje: string = 'Cargando...') {
+    this.mensajeCarga = mensaje;
+    this.cargando = true;
+  }
+  
+  ocultarCargando() {
+    this.cargando = false;
+  }
   cargarUsuarios(): void {
     this.cargando = true;
     this.usuarioService.obtenerUsuarios().subscribe({
@@ -150,21 +158,37 @@ export class DashboardComponent implements OnInit {
       return;
     }
     
-    this.cargando = true;
+    // Usar el método específico para mostrar carga con mensaje personalizado
+    this.mostrarCargando('Restableciendo contraseña...');
+    
     this.usuarioService.reestablecerContraseña({
       correo: this.usuarioSeleccionado.correo,
       contrasena: this.nuevaContrasena
     }).subscribe({
       next: () => {
+        // Ocultar indicador de carga
+        this.ocultarCargando();
         this.notificacionService.success('Contraseña restablecida correctamente');
         this.cerrarModal();
-        this.cargando = false;
       },
       error: (error) => {
+        // Ocultar indicador de carga y mostrar error
+        this.ocultarCargando();
         console.error('Error al restablecer contraseña:', error);
-        this.mensajeError = 'No se pudo restablecer la contraseña: ' + 
-          (error.error?.msg || 'Error desconocido');
-        this.cargando = false;
+        
+        // Mensaje de error más amigable
+        let mensajeError = 'No se pudo restablecer la contraseña';
+        
+        if (error.error?.msg) {
+          mensajeError += ': ' + error.error.msg;
+        } else if (error.status === 0) {
+          mensajeError += ': No hay conexión con el servidor';
+        } else if (error.status) {
+          mensajeError += `: Error ${error.status}`;
+        }
+        
+        this.mensajeError = mensajeError;
+        this.notificacionService.error(mensajeError);
       }
     });
   }
@@ -181,21 +205,37 @@ export class DashboardComponent implements OnInit {
     }
   
     if (confirm(`¿Está seguro de eliminar al usuario ${usuario.nombre}?`)) {
-      this.cargando = true;
+      // Usar el método mostrarCargando con mensaje específico
+      this.mostrarCargando('Eliminando usuario...');
       
       // Log para depuración
       console.log('Eliminando usuario con Uid:', usuario.Uid);
       
       this.usuarioService.eliminarUsuario(usuario.Uid).subscribe({
         next: () => {
+          // Ocultar indicador de carga antes de mostrar el mensaje
+          this.ocultarCargando();
           this.notificacionService.success('Usuario eliminado correctamente');
           this.cargarUsuarios(); // Recargar la lista para reflejar el cambio
         },
         error: (error) => {
+          // Ocultar indicador de carga y mostrar error
+          this.ocultarCargando();
           console.error('Error al eliminar usuario:', error);
-          this.notificacionService.error('No se pudo eliminar el usuario: ' + 
-            (error.error?.msg || 'Error desconocido'));
-          this.cargando = false;
+          
+          // Mensaje de error más detallado
+          let mensajeError = 'No se pudo eliminar el usuario';
+          if (error.error?.msg) {
+            mensajeError += ': ' + error.error.msg;
+          } else if (error.status === 0) {
+            mensajeError += ': No hay conexión con el servidor';
+          } else if (error.status) {
+            mensajeError += `: Error ${error.status}`;
+          } else {
+            mensajeError += ': Error desconocido';
+          }
+          
+          this.notificacionService.error(mensajeError);
         }
       });
     }

@@ -173,4 +173,10 @@
     </div>
   </div>
   <router-outlet></router-outlet>
+  <div class="loading-overlay" *ngIf="cargando">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p class="loading-text">{{mensajeCarga || 'Cargando...'}}</p>
+    </div>
+  </div>
 </div>
