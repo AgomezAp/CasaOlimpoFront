@@ -1,5 +1,5 @@
 <div class="descuentos">
-    <h2>Descuentos</h2>
+    <h2 class="page-title">Cumpleaños</h2>
     <div class="lista-descuentos">
         <table>
             <thead>
@@ -33,27 +33,37 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Editar Descuento</h5>
+                <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrarModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <form (ngSubmit)="guardarEdicion()" >
-                    <div class="mb-3">
-                        <label for="motivo" class="form-label">Motivo</label>
-                        <input type="text" id="motivo" [(ngModel)]="descuentoSeleccionado.motivo_descuento" name="motivo" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="porcentaje" class="form-label">Descuento</label>
-                        <input type="text" id="porcentaje" [(ngModel)]="descuentoSeleccionado.porcentaje" name="porcentaje" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
-                        <input type="text" id="fecha_inicio" [(ngModel)]="descuentoSeleccionado.fecha_inicio" name="fecha_inicio" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="fecha_fin" class="form-label">Fecha Fin</label>
-                        <input type="text" id="fecha_fin" [(ngModel)]="descuentoSeleccionado.fecha_fin" name="fecha_fin" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-success">Guardar</button>
-                    <button type="button" class="btn btn-close" (click)="cerrarModal()" >Cancelar</button>
+                <form>
+                  <div class="form-group">
+                    <label for="motivo">Motivo del descuento</label>
+                    <input type="text" id="motivo" class="form-control" [(ngModel)]="descuentoEditando.motivo" name="motivo">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="descuento">Porcentaje de descuento</label>
+                    <input type="number" id="descuento" class="form-control" [(ngModel)]="descuentoEditando.descuento" name="descuento">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="fecha_inicio">Fecha de inicio</label>
+                    <input type="date" id="fecha_inicio" class="form-control" [(ngModel)]="descuentoEditando.fecha_inicio" name="fecha_inicio">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="fecha_fin">Fecha de fin</label>
+                    <input type="date" id="fecha_fin" class="form-control" [(ngModel)]="descuentoEditando.fecha_fin" name="fecha_fin">
+                  </div>
+                  
+                  <!-- Añadir botones de acción -->
+                  <div class="form-actions">
+                    <button type="button" class="btn btn-cancel" (click)="cerrarModal()">Cancelar</button>
+                    <button type="button" class="btn btn-success" (click)="guardarCambios()">Guardar cambios</button>
+                  </div>
                 </form>
             </div>
         </div>

@@ -1,16 +1,18 @@
 /* Estilos generales */
 :host {
-    display: block;
-    padding-left: 300px; /* Ajuste para el navbar */
-    padding-top: 20px;
-    height: 100vh;
-    box-sizing: border-box;
-  }
+  display: block;
+  padding-left: 300px; /* Mantener el ajuste para el navbar */
+  padding-top: 20px;
+  height: auto; /* Cambiado de 100vh a auto para evitar scroll duplicado */
+  min-height: 100vh; /* Asegurar que ocupe al menos toda la altura */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevenir scroll aquí */
+}
   
   /* Título de página */
   .page-title {
     color: rgba(0, 0, 0, 0.7);
-    font-size: 32px;
+    font-size: 42px;
     font-weight: 600;
     text-align: center;
     width: 100%;
@@ -30,16 +32,18 @@
   }
   
   .content-container {
-    width: 1000px;
-    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco con 85% opacidad */
-    border-radius: 40px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    padding: 35px;
-    margin-bottom: 120px; /* Margen inferior amplio */
+    width: 92%; /* Cambiado de calc(100% - 80px) para más flexibilidad */
+    max-width: 1280px;
+    min-width: unset; /* IMPORTANTE: eliminar cualquier min-width */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    padding: 35px 40px;
+    margin: 0 auto 10px;
     position: relative;
     z-index: 1;
+    transition: all 0.3s ease; /* Añadir transición suave */
   }
-  
   /* Barra de controles superior */
   .controls-row {
     display: flex;
@@ -54,25 +58,25 @@
   }
   
   .search-box input {
-    width: 100%;
-    padding: 12px 40px 12px 15px;
+    width: 50%;
+    padding: 12px 15px 12px 40px; /* Cambiado: más padding a la izquierda */
     border-radius: 25px;
     border: 1px solid #ddd;
     font-size: 14px;
   }
-  
   .search-icon {
     position: absolute;
-    right: 15px;
+    left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #7d746b;
-    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%237d746b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+    background-repeat: no-repeat;
   }
-  
   .btn-new {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 25px;
     padding: 12px 20px;
@@ -84,29 +88,29 @@
   .btn-new:hover {
     background-color: #64594e;
   }
-  
+
   /* Tabla de facturas */
   .table-container {
     width: 100%;
     overflow-x: auto;
     margin-bottom: 20px;
     border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   }
   
   .facturacion-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 15px;
-    overflow: hidden;
+    border-collapse: collapse; /* Cambiado de separate para mejor compatibilidad */
+    table-layout: auto; /* CRUCIAL: cambiar de fixed a auto */
+    transition: all 0.3s ease;
   }
-  
   .facturacion-table th {
     background-color: #7d746b;
-    color: white;
+    color: #ffffff; /* Cambiado a blanco puro para mejor contraste */
     text-align: left;
-    padding: 15px 20px;
-    font-weight: 500;
+    padding: 16px 20px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
   }
   
   .facturacion-table td {
@@ -117,10 +121,10 @@
   .facturacion-table tr {
     background-color: white;
   }
-  
   .facturacion-table tr.odd-row {
-    background-color: rgba(238, 238, 238, 0.5);
+    background-color: rgba(138, 136, 134, 0.08); /* Cambiado al color institucional pero más sutil */
   }
+  
   
   /* Acciones en tabla */
   .actions {
@@ -131,7 +135,7 @@
   .btn-generate,
   .btn-ver {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 25px;
     width: 10px;
@@ -197,7 +201,7 @@
   
   .pagination-btn {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
@@ -239,7 +243,7 @@
   
   .pagination-page-btn.active {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     font-weight: bold;
   }
   

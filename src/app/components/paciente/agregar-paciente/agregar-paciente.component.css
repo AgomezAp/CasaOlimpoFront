@@ -9,7 +9,7 @@
   
   .page-title {
     color: rgba(0, 0, 0, 0.7);
-    font-size: 32px;
+    font-size: 42px;
     font-weight: 600;
     text-align: center;
     width: 100%;
@@ -34,6 +34,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: 30px;
     margin-bottom: 100px;
+
   }
   
   /* Estilos del formulario y secciones */
@@ -53,7 +54,7 @@
   }
   
   .section-content {
-    background-color: rgba(138, 136, 134, 0.35); /* Color #8a8886 con 35% opacidad */
+    background-color: rgba(138, 136, 134, 0.2); /* Color #8a8886 con 35% opacidad */
     border-radius: 25px;
     padding: 25px;
   }
@@ -82,7 +83,7 @@
     width: 100%;
     height: 48px;
     padding: 10px 15px;
-    border: none;
+    border: solid 1px;
     border-radius: 20px;
     background-color: white;
     font-size: 16px;

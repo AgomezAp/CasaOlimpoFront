@@ -186,7 +186,7 @@ app-paciente-nav {
 .data-grid {
   display: flex;
   flex-direction: column;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -195,7 +195,7 @@ app-paciente-nav {
 .data-row {
   display: flex;
   margin-bottom: 0;
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid #000000;
   border-right: none !important;
 }
 
@@ -211,7 +211,7 @@ app-paciente-nav {
   flex: 1;
   padding: 15px;
   position: relative;
-  border-right: 4px solid #000000;
+  border-right: 1px solid #000000;
   display: flex;
   align-items: center;
   border-right: none !important;
@@ -401,7 +401,7 @@ app-receta table {
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   margin-bottom: 15px;
   overflow-x: auto;
   min-width: 900px; 
@@ -438,7 +438,7 @@ app-receta td {
   text-align: left;
   word-break: break-word;
   overflow-wrap: break-word;
-  border: 2px solid #000000; 
+  border: 1px solid #000000; 
   max-width: 200px; 
 }
 .table-responsive-container {

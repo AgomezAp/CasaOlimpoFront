@@ -1,19 +1,32 @@
-html, body {
-    height: 1000px;
-    background-color: rgba(195, 181, 170, 0.6);
-}
+:host {
+    display: block;
+    padding-left: 300px;
+    padding-top: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
 .facturacion {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px 0 400px 300px;
 }
-
-.facturacion h2 {
-    text-decoration-line: underline;
-    font-size: 45px;
-    color: #7d746b;
-}
+.section-title {
+    text-align: center;
+    font-size: 24px; /* Hacerlo más grande */
+    color: #000000; /* Mantener la consistencia de color */
+    margin: 25px 0;
+    font-weight: 600;
+    position: relative;
+    width: 100%;
+  }
+.page-title {
+    color: rgba(0, 0, 0, 0.7); 
+    font-size: 42px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin: 0 0 20px 0; 
+  }
 .facturacion-form {
     width: calc(100% - 300px);
     max-width: 900px;
@@ -66,26 +79,43 @@ html, body {
     text-align: right;
     margin-right: 10px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700; /* Cambiar de 600 a 700 para más negrita */
     color: #7d746b;
+    text-transform: uppercase; /* Añadir mayúsculas para destacar */
+    letter-spacing: 0.5px; /* Mejorar legibilidad */
+    font-size: 14px; /* Reducir ligeramente para que las mayúsculas no sean agresivas */
+    position: relative;
+}
+.facturacion-form input:focus + label,
+.facturacion-form select:focus + label {
+    color: #5a5149; /* Oscurecer el color */
 }
 
+/* Opcionalmente, añadir una línea decorativa */
+.facturacion-form label::after {
+    margin-left: 2px;
+    font-weight: bold;
+}
 .facturacion-form input,
 .facturacion-form select {
     padding: 12px 15px;
     font-size: 16px;
-    border: 2px solid #e0d7ce;
+    border: none; 
     border-radius: 8px;
     transition: all 0.3s ease;
     box-sizing: border-box;
     width: 350px;
     height: 50px;
-    background-color: #e0dece;
+    background-color: rgba(138, 136, 134, 0.2);
     flex: 1;
     min-width: 200px;
     max-width: 350px;
 }
-
+.facturacion-form input:focus,
+.facturacion-form select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2); /* Reemplazar border con sombra sutil */
+}
 .facturacion-form input[type="date"] {
     padding: 11px 15px;
 }
@@ -93,7 +123,6 @@ html, body {
 .facturacion-form input:focus {
     border-color: #7d746b;
     outline: none;
-    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2);
 }
 
 .facturacion-form button {
@@ -101,15 +130,15 @@ html, body {
     font-size: 16px;
     font-weight: 600;
     background-color: #7d746b;
-    color: white;
+    color: #fffaec;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
-    margin-top: 10px;
-    width: 100%;
+    margin: 10px auto; /* Cambiado de margin-top a margin con auto para centrar */
+    width: 60%;
+    display: block; /* Asegura que el botón respete los márgenes automáticos */
 }
-
 .facturacion-form button:hover {
     background-color: #6b635a;
     transform: translateY(-2px);

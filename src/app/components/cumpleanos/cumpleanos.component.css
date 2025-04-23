@@ -1,25 +1,25 @@
-/* Estilos generales */
-html, body {
-    height: 1000px;
-    background-color: rgba(195, 181, 170, 0.6);
-}
-
+:host {
+    display: block;
+    padding-left: 300px;
+    padding-top: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+  .page-title {
+    color: rgba(0, 0, 0, 0.7); 
+    font-size: 42px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin: 0 0 20px 0; 
+  }
 .cumple {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra los elementos hijos */
+    align-items: center; 
     gap: 30px;
-    margin: 20px 0 400px 300px; 
 }
 
-.cumple h2 {
-    text-decoration-line: underline;
-    font-size: 25px;
-    color: #7d746b;
-    margin-bottom: auto;
-}
-
-/* Contenedor del mensaje - ahora centrado y con ancho controlado */
 .mensaje,
 .lista-cumple {
     width: calc(100% - 300px);
@@ -54,48 +54,45 @@ html, body {
     padding: 12px 15px;
     font-size: 16px;
     font-family: inherit;
-    border: 2px solid #e0d7ce;
+    border: none; /* Quitar borde */
     border-radius: 8px;
     margin: 15px auto;
     transition: border 0.3s;
     box-sizing: border-box;
     height: 50px;
-    background-color: #e0dece;
+    background-color: rgba(138, 136, 134, 0.2);
     flex: 1;
     min-width: 200px;
 }
 .mensaje textarea {
-    width: 100%; /* Ajuste para considerar el padding */
+    width: 100%;
     min-height: 100px;
     max-height: 300px;
     padding: 15px;
     font-size: 16px;
     font-family: inherit;
-    border: 2px solid #e0d7ce;
+    border: none; /* Quitar borde */
     border-radius: 8px;
     margin: 15px auto;
-    background-color: #e0dece;
+    background-color: rgba(138, 136, 134, 0.2);
     resize: none;
-    transition: border 0.3s, height 0.2s;
-    box-sizing: border-box; /* Evita que el padding afecte el ancho total */
+    box-sizing: border-box;
     overflow-y: hidden;
     line-height: 1.5;
     word-wrap: break-word;
 }
-
-.mensaje textarea:focus
+.mensaje textarea:focus,
 .mensaje input:focus {
-    border-color: #7d746b;
     outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2); /* En lugar de borde, usar sombra sutil */
     min-height: 120px;
 }
-
 .mensaje button {
     padding: 14px 25px;
     font-size: 16px;
     font-weight: 600;
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -125,7 +122,7 @@ html, body {
 
 .table-cumple th {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     text-align: left;
     padding: 15px 20px;
     font-weight: 500;
@@ -141,7 +138,7 @@ html, body {
 }
 
 .table-cumple tr.odd-row {
-    background-color: rgba(238, 238, 238, 0.5);
+    background-color: rgba(138, 136, 134, 0.2);
 }
 
 
