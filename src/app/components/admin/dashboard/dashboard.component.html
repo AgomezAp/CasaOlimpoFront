@@ -48,14 +48,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let usuario of usuariosPaginados">
-          <td>{{ usuario.nombre }} {{ usuario.apellidos }}</td>
-          <td>{{ usuario.correo }}</td>
-          <td>
+          <td data-label="Nombre">{{ usuario.nombre }} {{ usuario.apellidos }}</td>
+          <td data-label="Correo">{{ usuario.correo }}</td>
+          <td data-label="Rol">
             <span class="badge" [ngClass]="getRolClass(usuario.rol)">{{
               usuario.rol
             }}</span>
           </td>
-          <td>
+          <td data-label="Estado">
             <span
               class="status-badge"
               [ngClass]="getStatusClass(usuario.activo)"
@@ -63,7 +63,7 @@
               {{ usuario.activo ? "Activo" : "Inactivo" }}
             </span>
           </td>
-          <td class="actions-column">
+          <td data-label="Acciones" class="actions-column">
             <button
               class="btn-icon"
               (click)="resetPassword(usuario)"

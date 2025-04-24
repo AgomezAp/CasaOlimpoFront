@@ -2,8 +2,9 @@
     display: block;
     padding-left: 300px;
     padding-top: 20px;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
+    overflow-x: hidden;
   }
   .page-title {
     color: rgba(0, 0, 0, 0.7); 
@@ -13,23 +14,57 @@
     width: 100%;
     margin: 0 0 20px 0; 
   }
-.cumple {
+  .cumple {
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    gap: 30px;
-}
-
-.mensaje,
-.lista-cumple {
-    width: calc(100% - 300px);
-    max-width: 700px; /* Ancho máximo controlado */
+    align-items: center;
+    width: calc(100% - 40px);
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative; /* Añadido para estabilizar el posicionamiento */
+  }
+  
+.mensaje button.save-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    background-color: #7d746b;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .mensaje button.save-btn:hover {
+    background-color: #635a52;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(125, 116, 107, 0.4);
+  }
+  
+  /* Estilo para el icono dentro del botón */
+  .mensaje .btn-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    margin-right: 2px; /* Un pequeño ajuste adicional */
+  }
+  .mensaje,
+  .lista-cumple {
+    width: 100%; /* Cambio crítico - estaba causando el problema */
+    max-width: 700px;
     background: #fff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    margin: 20px auto 20px 300;
-}
+    margin: 20px auto; /* Corregido - faltaba unidad */
+    box-sizing: border-box;
+    position: relative; /* Para estabilizar el contenido */
+  }
 
 .mensaje h2,
 .lista-cumple h2 {
@@ -141,30 +176,94 @@
     background-color: rgba(138, 136, 134, 0.2);
 }
 
-
-
-/* Responsive para móvil (768px) */
 @media (max-width: 768px) {
+    :host {
+        padding-left: 0 !important; /* Quitar completamente el padding izquierdo */
+        margin-left: 70px !important; /* Usar margen en lugar de padding */
+        width: calc(100% - 70px) !important; /* Ajustar ancho considerando la barra */
+        padding-top: 5px;
+        position: relative;
+        overflow-x: hidden !important;
+      }
+      
+    /* Ajustar el contenedor principal para usar todo el ancho */
     .cumple {
-        margin-left: 90px;
-        width: calc(100% - 90px);
-        padding: 15px 20px; /* Menos padding en móvil */
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 10px !important;
+      box-sizing: border-box;
     }
     
-    .mensaje, .lista-cumple {
-        max-width: 100%; /* Ocupa todo el ancho disponible en móvil */
-        padding: 15px;
+    /* Título más pequeño */
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 15px;
     }
     
+    /* Ajustar contenedores de mensajes y listas */
+    .mensaje, 
+    .lista-cumple {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 10px 0 !important;
+      padding: 15px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Inputs y textareas */
+    .mensaje textarea,
     .mensaje input {
-        height: 80px;
-        padding: 10px;
-        width: calc(100% - 20px); /* Ajuste para móvil */
+      width: 100% !important;
+      min-height: 80px;
+      padding: 10px !important;
+      margin: 8px 0 !important;
+      font-size: 14px !important;
     }
     
-    .lista-cumple th, .lista-cumple td {
-        padding: 8px 10px;
-        font-size: 14px;
-        max-width: 150px; /* Menor ancho máximo en móvil */
+    /* Tabla más compacta */
+    .table-cumple th, 
+    .table-cumple td {
+      padding: 8px !important;
+      font-size: 13px !important;
     }
-}
+    
+    /* Botón optimizado */
+    .mensaje button,
+    .mensaje button.save-btn {
+      width: 100% !important;
+      padding: 10px 15px !important;
+      margin: 15px 0 5px !important;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  /* Orientación horizontal especial */
+  @media (max-width: 900px) and (orientation: landscape) {
+    :host {
+      padding-left: 0 !important;
+      margin-left: 70px !important;
+      overflow-x: hidden !important;
+    }
+    
+    .mensaje,
+    .lista-cumple {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  }
+  
+  /* Dispositivos extremadamente pequeños */
+  @media (max-width: 360px) {
+    :host {
+      margin-left: 60px !important;
+      width: calc(100% - 60px) !important;
+    }
+    
+    .table-cumple th, 
+    .table-cumple td {
+      padding: 6px !important;
+      font-size: 11px !important;
+    }
+  }

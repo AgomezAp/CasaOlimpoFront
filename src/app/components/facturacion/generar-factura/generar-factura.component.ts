@@ -23,8 +23,8 @@ export class GenerarFacturaComponent {
     private facturacionService: FacturacionService,
     private router: Router,
     private descuentoService: DescuentoService,
-    private notificacionService: NotificacionService
-  ) {}
+    private notificacionService: NotificacionService,
+    ) {}
 
   ngOnInit(): void {
     this.paciente = this.facturacionService.paciente;
@@ -36,7 +36,9 @@ export class GenerarFacturaComponent {
     }
     this.cargarDescuentos()
   }
-
+  goBack(): void {
+    this.router.navigate(['/factura-dashboard']); 
+  }
   cargarDescuentos(): void {
     this.descuentoService.getDescuentos().subscribe({
       next: (data: any) => {

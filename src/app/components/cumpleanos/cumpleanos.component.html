@@ -5,7 +5,8 @@
         <textarea id="message" placeholder="Ingresa tu mensaje aquí" name="mensaje" [(ngModel)]="mensaje" required></textarea>
         <label for="hora">Escoje la hora que deseas enviar los mensaje</label>
         <input type="time" name="hora" id="hora" [(ngModel)]="hora">
-        <button (click)="enviarMensaje()">Guardar</button>
+        <button (click)="enviarMensaje()"> <img src="/Guardar.png" alt="Agregar Paciente" class="btn-icon">
+            Guardar</button>
     </div>
     <div class="lista-cumple">
         <h3>Cumpleañeros de Casa Olimpo</h3>

@@ -1,7 +1,9 @@
 <div class="facturacion">
-    <h2 class="page-title">Cumpleaños</h2>
+    <button class="go-back-btn" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Volver
+    </button>
+    <h2 class="page-title">Datos de facturación</h2>
     <div class="facturacion-form">
-        <h3 class="section-title">Datos de facturación</h3>
         <form>
             <div class="id">
                 <label for="cliente">Nombre Cliente:</label>
@@ -42,7 +44,7 @@
                 <label for="total">Total:</label>
                 <input type="number" id="total" name="total" [value]="total" readonly>
             </div>
-            <button type="submit">Generar Factura</button>
+            <button type="submit"> <img src="/Sell.png" alt="Agregar Paciente" class="btn-icon">Generar factura</button>
         </form>
     </div>
 </div>

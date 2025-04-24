@@ -440,53 +440,122 @@ button:disabled {
 }
 
 /* Estilo responsivo para dispositivos móviles */
-@media (max-width: 768px) {
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .search-box {
-    width: 100%;
-    margin-top: 12px;
-  }
-}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
+  /* Estructura base */
+  :host {
+    padding-left: 70px !important;
+    width: calc(100% - 0px) !important;
+    overflow-x: hidden !important;
   }
   
+  /* Contenedor principal optimizado */
+  .transferencia-container {
+    width: calc(100% - 0px) !important;
+    max-width: none !important;
+    margin: 15px auto !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Título principal más compacto */
+  .transferencia-container h1 {
+    font-size: 22px !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+  }
+  
+  /* Mejorar grupos de formularios */
   .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 15px !important;
+    width: 100% !important;
   }
   
+  /* Etiquetas con más espacio */
+  label {
+    margin-bottom: 8px !important;
+    display: block !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Estilizar los selectores */
+  select.form-control {
+    width: 100% !important;
+    height: 45px !important;
+    font-size: 16px !important;
+    padding: 10px 32px 10px 12px !important;
+  }
+  
+  /* Solucionar el campo de búsqueda */
+  .search-box {
+    position: relative !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+  }
+  
+  .search-box input {
+    width: 100% !important;
+    margin: 0 !important;  /* Eliminar margen negativo */
+    padding: 12px 16px 12px 42px !important;
+    box-sizing: border-box !important;
+    height: 45px !important;
+  }
+  
+  .search-box .search-icon {
+    position: absolute !important;
+    top: 50% !important;
+    left: 15px !important;  /* Posición correcta del icono */
+    transform: translateY(-50%) !important;
+  }
+  
+  /* Estado vacío más compacto */
+  .empty-state {
+    padding: 25px 15px !important;
+    margin: 15px 0 !important;
+    text-align: center !important;
+  }
+  
+  /* Tarjetas de pacientes en vertical */
   .pacientes-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 20px !important;
   }
   
-  .form-actions {
-    flex-direction: column;
+  /* Botones a ancho completo */
+  button {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    padding: 12px !important;
+    height: auto !important;
+    min-height: 48px !important;
+    font-size: 16px !important;
   }
   
-  .btn-save, 
-  .btn-cancel, 
-  .btn-transferir {
-    width: 100%;
-    margin-bottom: 10px;
+  /* Contenedor de botones */
+  .button-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
   }
   
-  .section-title-with-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+  /* Mejoras de accesibilidad */
+  select:focus, input:focus, button:focus {
+    outline: 2px solid #7d746b !important;
+    outline-offset: 1px !important;
   }
-  
-  .search-input {
-    max-width: 100%;
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 360px) {
+  :host {
+    padding-left: 60px !important;
+    width: calc(100% - 60px) !important;
   }
 }
