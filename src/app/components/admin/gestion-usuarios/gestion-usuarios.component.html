@@ -59,8 +59,11 @@
         <div class="form-actions">
           <button type="button" class="btn-secondary" (click)="resetForm()">Cancelar</button>
           <button type="button" class="btn-primary" [disabled]="usuarioForm.invalid || cargando" (click)="crearUsuario()">
-            <span *ngIf="!cargando">Crear Usuario</span>
-            <span *ngIf="cargando" class="spinner-small"></span>
+            <div class="button-content">
+              <img src="/AgregarPaciente.png" alt="Agregar" class="button-icon" *ngIf="!cargando">
+              <span *ngIf="!cargando">Crear Usuario</span>
+              <span *ngIf="cargando" class="spinner-small"></span>
+            </div>
           </button>
         </div>
       </form>

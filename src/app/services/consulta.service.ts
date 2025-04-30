@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../environments/environments';
 import { Consulta } from '../interfaces/consulta';
 import { catchError, map, Observable, of, shareReplay, throwError } from 'rxjs';
-
+import { finalize, timeout } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,21 +14,15 @@ export class ConsultaService {
     this.appUrl = environment.apiUrl;
     this.apiUrl = 'api/paciente';
   }
-  private getSecureHeaders(): HttpHeaders {
-    // Aquí deberías agregar el token de autenticación si lo estás usando
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${this.authService.getToken()}` // Descomentar si usas JWT
-    });
-  }
+ 
 
   crearConsulta(numeroDocumento: string, consulta: Consulta): Observable<any> {
     const url = `${this.appUrl}${this.apiUrl}/${numeroDocumento}/consulta`;
-    return this.http.post(url, consulta, { headers: this.getSecureHeaders() });
+    return this.http.post(url, consulta,);
   }
   obtenerConsultasPorPaciente(numeroDocumento: string): Observable<any> {
     const url = `${this.appUrl}${this.apiUrl}/${numeroDocumento}/consultas`;
-    return this.http.get(url, { headers: this.getSecureHeaders() });
+    return this.http.get(url);
   }
   actualizarConsulta(numeroDocumento: string, Cid: number, consulta: Partial<Consulta>): Observable<any> {
     // Construir la URL para que coincida exactamente con tu backend
@@ -36,7 +30,7 @@ export class ConsultaService {
     
     console.log('Actualizando consulta:', url, consulta);
     
-    return this.http.put(url, consulta, { headers: this.getSecureHeaders() })
+    return this.http.put(url, consulta)
       .pipe(
         map(response => response),
         catchError(error => {
@@ -47,7 +41,7 @@ export class ConsultaService {
   }
   cerrarConsulta(numeroDocumento: string, Cid: number, datosCierre: any): Observable<any> {
     const url = `${this.appUrl}${this.apiUrl}/${numeroDocumento}/consulta/${Cid}/cerrar`;
-    return this.http.patch(url, datosCierre, { headers: this.getSecureHeaders() });
+    return this.http.patch(url, datosCierre);
   }
   estaConsultaAbierta(consulta: Consulta): boolean {
     return consulta.abierto === true;
@@ -117,34 +111,20 @@ obtenerConsultasOptimizadas(numeroDocumento: string): Observable<Consulta[]> {
   );
 }
 obtenerConsentimientoPDF(Cid: number): Observable<Blob> {
-  // Corregir la URL para que coincida con la estructura de tus otros endpoints
   const url = `${this.appUrl}api/consulta/${Cid}/consentimiento`;
-  
-  console.log('Solicitando documento desde:', url);
-  
-  // Solicitar el documento como blob sin verificar el tipo
   return this.http.get(url, {
-    responseType: 'blob'
+    responseType: 'blob' as 'json',
   }).pipe(
     map(response => {
-      // Aceptar cualquier tipo de documento binario
-      console.log('Documento recibido, tipo:', response.type);
-      
-      // Si la respuesta ya es un Blob, devolverla directamente
       if (response instanceof Blob) {
         return response;
       }
-      
-      // Si llegamos aquí, algo inesperado ocurrió
       throw new Error('Formato de respuesta inesperado');
     }),
     catchError(error => {
       if (error.status === 404) {
-        console.error('Documento no encontrado:', error);
         return throwError(() => new Error('Documento no encontrado'));
       }
-      
-      console.error('Error al obtener el documento:', error);
       return throwError(() => error);
     })
   );
@@ -154,7 +134,7 @@ obtenerConsultaPorId(Cid: number): Observable<Consulta> {
   
   console.log('Obteniendo datos de consulta:', url);
   
-  return this.http.get<any>(url, { headers: this.getSecureHeaders() })
+  return this.http.get<any>(url)
     .pipe(
       map(response => {
         if (response && response.data) {

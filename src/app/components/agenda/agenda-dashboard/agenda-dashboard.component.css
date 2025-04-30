@@ -133,15 +133,15 @@ body {
 }
 
 .view-btn.active {
-  background-color: #4299e1;
-  color: white;
+  background-color: #7d746b;
+  color: #e0d7ce;
 }
 
 /* Botón de nueva cita */
 .add-appointment-btn {
   padding: 8px 16px;
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -423,11 +423,11 @@ body {
 }
 .appointment-preview:not(.unregistered) .patient-type-indicator {
   background-color: #3182ce;
-  color: white;
+  color: #e0d7ce;
 }
 .appointment-preview.unregistered .patient-type-indicator {
   background-color: #d69e2e;
-  color: white;
+  color: #e0d7ce;
 }
 
 /* Iconos de estado en preview */
@@ -705,7 +705,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: #555;
-  color: white;
+  color: #e0d7ce;
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 12px;
@@ -991,7 +991,7 @@ body {
   bottom: calc(100% + 5px);
   left: 0;
   background: #333;
-  color: white;
+  color: #e0d7ce;
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 12px;
@@ -1404,8 +1404,8 @@ textarea {
 
 .save-btn {
   padding: 10px 20px;
-  background-color: #3182ce;
-  color: white;
+  background-color: #7d746b;
+  color: #e0d7ce;
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -1457,9 +1457,9 @@ textarea {
   border-radius: 0 6px 6px 0;
 }
 .tab-btn.active {
-  background-color: #3182ce;
-  color: white;
-  border-color: #3182ce;
+  background-color: #7d746b;
+  color: #e0d7ce;
+  border-color: #7d746b;
   z-index: 1; /* Poner tab activa por encima */
 }
 

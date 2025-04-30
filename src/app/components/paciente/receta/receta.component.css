@@ -64,8 +64,8 @@
   }
   
   .btn-primary {
-    background-color: #a39081;
-    color: white;
+    background-color: #7d746b;
+    color: #e0d7ce;
   }
   
   .btn-primary:hover {
@@ -89,7 +89,7 @@
   
   .btn-complete {
     background-color: #4caf50;
-    color: white;
+    color: #e0d7ce;
   }
   
   .btn-complete:hover {
@@ -200,7 +200,7 @@
   /* Estilos para el botón de información */
   .info-button {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 4px;
     padding: 6px 10px;
@@ -312,16 +312,18 @@
     z-index: 1000;
   }
   
-  .modal-content {
-    background-color: #fff;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    animation: modal-fade-in 0.3s ease;
-  }
+ .modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh; /* Altura máxima del modal */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: flex; /* Añadido: usar flexbox */
+  flex-direction: column; /* Añadido: organizar en columna */
+  overflow: hidden;
+  animation: modal-fade-in 0.3s ease;
+}
   
   @keyframes modal-fade-in {
     from { opacity: 0; transform: scale(0.95); }
@@ -335,6 +337,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
   }
   
   .modal-header h3 {
@@ -348,6 +351,7 @@
     padding: 20px;
     max-height: calc(80vh - 120px);
     overflow-y: auto;
+    flex-grow: 1;
   }
   
   .modal-footer {
@@ -357,6 +361,9 @@
     justify-content: flex-end;
     gap: 12px;
     background-color: var(--background-light);
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
   }
   
   /* Estilos para detalles de receta */
@@ -479,6 +486,84 @@
     margin-right: 8px;
   }
   
+  .paginacion-controles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 5px;
+  }
+  
+  .paginas-numeros {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+  }
+  
+  .btn-paginacion {
+    background-color: #7d746b;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #e0d7ce;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    font-weight: normal;
+    box-shadow: none;
+  }
+  
+  .btn-paginacion:hover:not(:disabled) {
+    background-color: #64594e;
+  }
+  
+  .btn-paginacion:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .btn-pagina {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border: 1px solid #7d746b;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    color: #7d746b;
+    box-shadow: none;
+  }
+  .section-divider {
+    height: 4px;
+    background-color: rgba(125, 116, 107, 0.9);
+    margin-bottom: 20px;
+    border-radius: 2px;
+    margin-top: 10px;
+  }
+  .section-title{
+    color: #000000;
+    font-size: 26px;
+    margin: 0;
+    font-weight: 600;
+  }
+  .btn-pagina:hover {
+    background-color: #d9d6d2;
+    transform: none;
+  }
+  
+  .btn-pagina.activa {
+    background-color: #827971;
+    color: #e0d7ce;
+    border: none;
+    box-shadow: none;
+  }
+
   @keyframes spin {
     to { transform: rotate(360deg); }
   }

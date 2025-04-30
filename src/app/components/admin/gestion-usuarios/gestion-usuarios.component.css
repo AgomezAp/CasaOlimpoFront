@@ -1,4 +1,3 @@
-/* Estilos base mejorados */
 .usuarios-page {
   max-width: 1280px;
   margin: 0 auto;
@@ -35,7 +34,6 @@
   border-radius: 2px;
 }
 
-/* Panel de formulario mejorado */
 .form-panel {
   background-color: white;
   border-radius: 10px;
@@ -292,7 +290,7 @@
 
 .btn-primary {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   box-shadow: 0 2px 4px rgba(125, 116, 107, 0.3);
 }
 
@@ -356,6 +354,19 @@
   align-items: center;
   justify-content: center;
   padding: 60px 0;
+}
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; 
+}
+
+.button-icon {
+  width: 18px !important; 
+  height: 18px !important; 
+  object-fit: contain;
+  margin-right: -2px;
 }
 
 .loading-spinner {
@@ -432,23 +443,18 @@
   }
 }
 @media (max-width: 768px) {
-  /* Estructura base */
   :host {
     padding-left: 10px !important;
     width: calc(100% - 0px) !important;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
   }
-
-  /* Contenedor principal más consistente */
   .usuarios-page {
     padding: 0 !important;
     margin: 10px 0 !important;
     background-color: transparent !important;
     max-width: none !important;
   }
-
-  /* Título y encabezado */
   .page-header {
     padding: 15px !important;
     margin-bottom: 15px !important;
@@ -461,14 +467,10 @@
     margin-bottom: 5px !important;
     width: 100% !important;
   }
-
-  /* Corregir la línea debajo del título */
   .page-header h1::after {
-    width: 100% !important; /* Ancho completo */
+    width: 100% !important; 
     bottom: -5px !important;
   }
-
-  /* Paneles con bordes redondeados consistentes */
   .form-panel,
   .data-panel {
     border-radius: 10px !important;
@@ -479,13 +481,11 @@
     box-sizing: border-box !important;
   }
 
-  /* Formulario más ancho */
   .form-grid {
     grid-template-columns: 1fr !important;
     gap: 15px !important;
   }
 
-  /* Campos de entrada más grandes */
   .field-input {
     width: 100% !important;
     padding: 12px 15px !important;
@@ -494,7 +494,6 @@
     box-sizing: border-box !important;
   }
 
-  /* Botones a ancho completo */
   .btn-primary,
   .btn-secondary {
     width: 100% !important;
@@ -509,21 +508,42 @@
   }
   .btn-primary:hover,
   .btn-primary:active {
-    background-color: #6b635a !important; /* Versión un poco más oscura para hover */
+    background-color: #6b635a !important;
   }
   button[type="submit"],
   button.crear-btn,
   .crear-usuario-btn {
     background-color: #7d746b !important;
-    color: white !important;
+    color: #e0d7ce !important;
   }
   .transferir-btn,
   .guardar-btn,
   .confirmar-btn {
     background-color: #7d746b !important;
-    color: white !important;
+    color: #e0d7ce !important;
   }
-  /* Acciones de formulario */
+  .button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .button-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+.btn-primary .spinner-small {
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .button-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
   .form-actions {
     flex-direction: column-reverse !important;
     gap: 10px !important;
@@ -536,7 +556,6 @@
     background-color: #7d746b;
     border-radius: 4px !important;
   }
-  /* Buscador a ancho completo */
   .search-container {
     width: 100% !important;
   }
@@ -548,7 +567,6 @@
     height: 45px !important;
   }
 
-  /* Diseño de tabla como tarjetas para móvil */
   .table-container {
     margin: 0 !important;
     box-shadow: none !important;

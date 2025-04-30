@@ -41,8 +41,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #8a7865; /* Color marrón que combina con el esquema */
-  color: white;
+  background-color: #7d746b; /* Color marrón que combina con el esquema */
+  color: #e0d7ce;
   border: none;
   border-radius: 4px;
   padding: 8px 15px;
@@ -77,7 +77,7 @@
   align-items: center;
   gap: 8px;
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
   border-radius: 6px; /* Cambiado de 20px a 6px para consistencia */
   padding: 8px 16px;
@@ -153,7 +153,7 @@
   align-items: center;
   gap: 8px;
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
   border-radius: 6px;
   padding: 10px 20px;
@@ -407,7 +407,7 @@
 
 .btn-save {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
 }
 
@@ -427,7 +427,7 @@
 
 .btn-delete {
   background-color: #ef4444;
-  color: white;
+  color: #e0d7ce;
   border: none;
 }
 

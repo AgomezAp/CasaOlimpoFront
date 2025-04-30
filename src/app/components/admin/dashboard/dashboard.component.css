@@ -21,12 +21,12 @@
   margin: 0 0 15px 0 !important;
 }
 .page-title {
-  color: rgba(0, 0, 0, 0.7); 
+  color: rgba(0, 0, 0, 0.7);
   font-size: 42px;
   font-weight: 600;
   text-align: center;
   width: 100%;
-  margin: 0 0 20px 0; 
+  margin: 0 0 20px 0;
 }
 .dashboard-header h1 {
   color: #7d746b;
@@ -35,7 +35,6 @@
   margin: 0;
 }
 
-/* Tarjetas de acceso rápido */
 .card-container {
   display: flex;
   gap: 20px;
@@ -111,7 +110,7 @@
 
 .btn-primary {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
   border-radius: 4px;
   padding: 10px 15px;
@@ -165,7 +164,7 @@
 
 .badge-admin {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
 }
 
 .status-badge {
@@ -247,10 +246,9 @@
   background-color: #f8f9fa;
   border-color: #ced4da;
 }
-
 .pagination-page.active {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border-color: #7d746b;
 }
 
@@ -423,7 +421,7 @@
 
 .btn-primary {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
 }
 
 .btn-primary:hover {

@@ -31,7 +31,7 @@
   }
   
   .content-container {
-    width: 1010px;
+    width: 1250px;
     height: 570px; /* Cambiamos max-height por height fija */
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 40px;

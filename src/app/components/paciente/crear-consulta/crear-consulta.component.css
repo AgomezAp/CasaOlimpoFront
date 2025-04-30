@@ -115,7 +115,7 @@
   
   .btn-save {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
   }
   
   .btn-cancel:hover {
@@ -169,7 +169,7 @@
   
   .section-divider {
     height: 3px;
-    background-color: rgba(125, 116, 107, 0.5);
+    background-color: rgba(125, 116, 107, 0.9);
     margin-bottom: 15px;
     border-radius: 2px;
   }
@@ -501,7 +501,7 @@
   
   .btn-preview {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     padding: 8px 15px;
     border-radius: 4px;

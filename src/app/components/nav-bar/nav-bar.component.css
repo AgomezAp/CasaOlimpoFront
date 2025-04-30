@@ -32,7 +32,7 @@
   .logo {
     max-width: 100%;
     height: auto;
-    max-height: 20px; /* Tamaño aumentado ligeramente */
+    max-height: 19px; /* Tamaño aumentado ligeramente */
   }
   
   /* Estilos de la navegación */
@@ -95,7 +95,7 @@
   
   /* Footer */
   .sidebar-footer {
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     font-size: 18px; /* Se mantiene el tamaño actual */
     color: #fffaec;

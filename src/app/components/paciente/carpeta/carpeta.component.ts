@@ -66,11 +66,12 @@ export class CarpetaComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al verificar carpeta:', error);
         if (error.status === 404) {
-          // No hacer nada, mostraremos la interfaz para crear carpeta
+          // No hacer nada, es un caso esperado: mostraremos la interfaz para crear carpeta
           this.error = '';
         } else {
+          // Solo registrar en consola errores no esperados
+          console.error('Error al verificar carpeta:', error);
           this.error = 'Error al verificar la carpeta del paciente.';
         }
         this.loading = false;
