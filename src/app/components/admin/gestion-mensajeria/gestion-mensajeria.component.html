@@ -1,0 +1,17 @@
+<div class="gestion-mensajeria">
+    <h1>Gestión de Mensajería</h1>
+    
+    <div class="botones">
+        <button (click)="verificar()">Verificar</button>
+        <button (click)="eliminar()">Eliminar</button>
+        <button (click)="nuevo()">Nuevo</button>
+    </div>
+    <div *ngIf="mensaje" [ngClass]="estiloMensaje" class="mensaje" >
+        {{mensaje}}
+    </div>
+
+    <div *ngIf="qrCode" class="qr-container">
+        <h3>QR generado</h3>
+        <qrcode [qrdata]="qrCode" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
+</div>
