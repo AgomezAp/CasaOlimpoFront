@@ -26,9 +26,6 @@ export const routes: Routes = [
         component: LoginComponent,
     },
     {
-        path: 'Login', component: LoginComponent
-    },
-    {
         path: 'registrar', component: RegistrarComponent
     },
     {
