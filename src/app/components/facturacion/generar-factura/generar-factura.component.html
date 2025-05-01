@@ -35,14 +35,14 @@
                 <label for="tipo">Tipo de Pago:</label>
                 <select id="tipo" name="tipo" [(ngModel)]="tipoPago" required>
                     <option value="Efectivo">Efectivo</option>
-                    <option value="Debito">Tarjeta Débito</option>
-                    <option value="Credito">Tarjeta Crédito</option>
+                    <option value="Tarjeta Débito">Tarjeta Débito</option>
+                    <option value="Tarjeta Crédito">Tarjeta Crédito</option>
                     <option value="Transferencia">Transferencia</option>
-                </select>
+                </select>  
                 <label for="total">Total:</label>
                 <input type="number" id="total" name="total" [value]="total" readonly>
             </div>
-            <button type="submit">Generar Factura</button>
+            <button type="button" (click)="crearFactura()">Generar Factura</button>
         </form>
     </div>
 </div>

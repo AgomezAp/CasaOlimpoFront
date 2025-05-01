@@ -16,9 +16,9 @@ export class GenerarFacturaComponent {
   precio: number = 0;
   descuento: number = 0;
   total: number = 0;
-  tipoPago: string = '';
+  tipoPago: string = 'Efectivo';
   descuentos: any[] = [];
-
+  factura: any = {} 
   constructor(
     private facturacionService: FacturacionService,
     private router: Router,
@@ -56,15 +56,30 @@ export class GenerarFacturaComponent {
   }
 
   crearFactura(): void {
-    this.facturacionService.crearFactura().subscribe({
-      next: () => {
-        this.notificacionService.success('Factura creada')
+    const facturadata = {
+      numero_documento: this.paciente.numero_documento,
+      tipo_pago: this.tipoPago,
+      total: this.total
+    };
+    console.log(facturadata)
+    this.facturacionService.crearFactura(facturadata).subscribe({
+      next: (response) => {
+        const blob = new Blob([response],{type: 'application/pdf'});
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a')
+        a.href = url;
+        a.download = `factura_${facturadata.numero_documento}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.notificacionService.success('Factura creada exitosamente');
+        console.log('Factura creada:', facturadata);
+        this.router.navigate(['/factura-dashboard']); // Redirige al dashboard después de crear la factura
       },
       error: (err) => {
-        console.error('Error al crear', err);
-        this.notificacionService.error('No se pudo crear')
+        console.error('Error al crear la factura:', err);
+        this.notificacionService.error('No se pudo crear la factura');
       }
-    })
+    });
   }
 
 }
