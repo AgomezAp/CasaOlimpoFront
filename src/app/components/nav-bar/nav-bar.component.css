@@ -178,6 +178,26 @@
 .nav-item.admin-link .nav-link:hover {
   color: #64594e;
 }
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.logo-desktop {
+  max-width: 80%;
+  height: auto;
+  display: block;
+}
+
+.logo-mobile {
+  max-width: 60%;
+  height: auto;
+  display: none;
+}
+
 @media (max-width: 992px) {
   .sidebar {
     width: 60px; /* Ancho reducido en móviles */
@@ -219,6 +239,17 @@
   /* Asegurar que el contenido principal se ajuste */
   :host-context(.app-container) .main-content {
     margin-left: 60px;
+  }
+  .logo-desktop {
+    display: none;
+  }
+  
+  .logo-mobile {
+    display: block;
+  }
+  
+  .sidebar-header {
+    padding: 10px 0;
   }
 }
 
