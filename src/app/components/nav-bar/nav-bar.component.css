@@ -178,3 +178,51 @@
 .nav-item.admin-link .nav-link:hover {
   color: #64594e;
 }
+@media (max-width: 992px) {
+  .sidebar {
+    width: 60px; /* Ancho reducido en móviles */
+  }
+  
+  /* Ocultar texto en los enlaces */
+  .sidebar-nav ul li a span,
+  .sidebar-nav .nav-link span,
+  .sidebar-footer,
+  .app-title {
+    display: none;
+  }
+  
+  /* Centrar los iconos */
+  .sidebar-nav ul li a,
+  .sidebar-nav .nav-link {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  
+  /* Ajustar tamaño de iconos para mejor visibilidad */
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Ajustar posición del badge de notificación */
+  .badge-notification {
+    right: 5px;
+    top: 2px;
+  }
+  
+  /* Centrar header con logo/icono si es necesario */
+  .sidebar-header {
+    justify-content: center;
+    padding: 15px 0;
+  }
+  
+  /* Asegurar que el contenido principal se ajuste */
+  :host-context(.app-container) .main-content {
+    margin-left: 60px;
+  }
+}
+
+/* Mejorar la transición */
+.sidebar, .sidebar * {
+  transition: all 0.3s ease;
+}

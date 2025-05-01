@@ -347,8 +347,8 @@
   </div>
 
   <!-- Modal para Nueva Cita -->
-  <div class="modal" [class.active]="showNewAppointmentModal">
-    <div class="modal-content">
+  <div class="modal" [class.active]="showNewAppointmentModal" (click)="closeNewAppointmentModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Nueva Cita</h3>
         <button class="close-btn" (click)="closeNewAppointmentModal()">
@@ -551,8 +551,8 @@
   </div>
 
   <!-- Modal para Ver Detalles de Cita -->
-  <div class="modal" [class.active]="showAppointmentDetailsModal">
-    <div class="modal-content">
+  <div class="modal" [class.active]="showAppointmentDetailsModal" (click)="closeAppointmentDetailsModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div
         class="modal-header"
         [ngClass]="
@@ -758,8 +758,8 @@
     </div>
   </div>
   <!-- Modal de edición de cita -->
-  <div class="modal" [class.active]="showEditModal">
-    <div class="modal-content">
+  <div class="modal" [class.active]="showEditModal" (click)="showEditModal = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Editar Cita</h3>
         <button class="close-btn" (click)="showEditModal = false">

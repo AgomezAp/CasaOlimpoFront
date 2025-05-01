@@ -76,10 +76,8 @@ export class DescuentoDashboardComponent {
     };
   }
   cerrarModal(): void {
-    console.log('Cerrando modal...');
     this.descuentoSeleccionado = null;
     this.descuentoEditando = {};
-    console.log('Modal cerrado, descuentoSeleccionado:', this.descuentoSeleccionado);
   }
   guardarCambios(): void {
     if (!this.validarFormulario()) return;

@@ -440,3 +440,69 @@
       margin: 15px auto !important;
     }
   }
+  /* Media query principal para tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  :host {
+    padding-left: 70px !important;
+    width: calc(100% - 70px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+  
+  .page-title {
+    font-size: 32px !important;
+    margin-bottom: 15px !important;
+    margin-right: 290px !important;
+  }
+  
+  .descuentos {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .lista-descuentos {
+    width: 90% !important;
+    max-width: 850px !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+  }
+  
+  .crear-btn {
+    width: 200px !important;
+    margin: 15px auto !important;
+  }
+}
+
+/* Ajustes específicos para móviles */
+@media (max-width: 768px) {
+  :host {
+    padding-left: 65px !important;
+  }
+  
+  .page-title {
+    font-size: 28px !important;
+    margin-right: -50px !important;
+  }
+  
+  .lista-descuentos {
+    width: 95% !important;
+    padding: 15px !important;
+    border-radius: 15px !important;
+    margin-left: 22px !important;
+  }
+  
+  /* Remover márgenes incorrectos */
+  .descuentos {
+    margin-left: 0 !important;
+  }
+  
+  .crear-btn {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 80% !important;
+    max-width: 250px !important;
+  }
+}

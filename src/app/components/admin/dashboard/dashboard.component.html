@@ -129,8 +129,8 @@
       de {{ usuarios.length }} usuarios
     </div>
   </div>
-  <div class="modal-overlay" *ngIf="mostrarModal">
-    <div class="modal-container">
+  <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Restablecer Contraseña</h3>
         <button class="close-btn" (click)="cerrarModal()">×</button>

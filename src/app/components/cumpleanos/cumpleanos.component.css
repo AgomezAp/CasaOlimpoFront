@@ -179,7 +179,7 @@
 @media (max-width: 768px) {
     :host {
         padding-left: 0 !important; /* Quitar completamente el padding izquierdo */
-        margin-left: 70px !important; /* Usar margen en lugar de padding */
+        margin-left: 20px !important; /* Usar margen en lugar de padding */
         width: calc(100% - 70px) !important; /* Ajustar ancho considerando la barra */
         padding-top: 5px;
         position: relative;
@@ -239,31 +239,57 @@
     }
   }
   
-  /* Orientación horizontal especial */
-  @media (max-width: 900px) and (orientation: landscape) {
+  @media (max-width: 992px) {
     :host {
-      padding-left: 0 !important;
-      margin-left: 70px !important;
+      padding-left: 70px !important; /* Ajustado para la barra lateral compacta */
+      margin-left: 0 !important; /* Eliminar margen que podría causar problemas */
+      width: calc(100% - 70px) !important; 
+      padding-bottom: 30px !important; /* Espacio adicional inferior */
+      overflow-y: auto !important; /* Permitir scroll vertical */
       overflow-x: hidden !important;
     }
     
-    .mensaje,
-    .lista-cumple {
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-  }
-  
-  /* Dispositivos extremadamente pequeños */
-  @media (max-width: 360px) {
-    :host {
-      margin-left: 60px !important;
-      width: calc(100% - 60px) !important;
+    .page-title {
+      font-size: 32px; /* Título más pequeño */
+      margin-bottom: 15px;
     }
     
-    .table-cumple th, 
-    .table-cumple td {
-      padding: 6px !important;
-      font-size: 11px !important;
+    .cumple {
+      width: 95% !important;
+      max-width: 700px !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+    }
+    
+    .mensaje, 
+    .lista-cumple {
+      width: 100% !important;
+      border-radius: 15px;
+      padding: 20px !important;
+      margin: 15px auto !important;
+    }
+    
+    /* Ajustar para pantallas muy pequeñas */
+    @media (max-width: 768px) {
+      :host {
+        padding-left: 65px !important; /* Barra aún más compacta */
+        margin-left: 0 !important;
+      }
+      
+      .page-title {
+        font-size: 28px;
+      }
+      
+      .mensaje, 
+      .lista-cumple {
+        padding: 15px !important;
+      }
+    }
+    
+    /* Dispositivos extra pequeños */
+    @media (max-width: 360px) {
+      :host {
+        padding-left: 60px !important;
+      }
     }
   }

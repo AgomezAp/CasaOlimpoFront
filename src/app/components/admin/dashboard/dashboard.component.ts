@@ -179,7 +179,6 @@ export class DashboardComponent implements OnInit {
         error: (error) => {
 
           this.ocultarCargando();
-          console.error('Error al restablecer contraseña:', error);
 
           let mensajeError = 'No se pudo restablecer la contraseña';
 

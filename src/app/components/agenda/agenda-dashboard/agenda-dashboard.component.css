@@ -7,7 +7,7 @@
 
 :host {
   display: block; /* Asegura que el componente ocupe espacio */
-  width: 80%; /* Ocupa el ancho disponible en su contenedor padre */
+  width: 84%; /* Ocupa el ancho disponible en su contenedor padre */
   box-sizing: border-box;
   /* overflow-x: hidden; /* CAMBIO: Quitado de aquí, se maneja en contenedores internos si es necesario */
 }
@@ -2254,4 +2254,9 @@ textarea.form-control {
   color: #dc3545;
   font-size: 12px;
   margin-top: 5px;
+}
+@media (max-width: 992px){
+  :host {
+    padding-right: 70px !important; /* Reemplaza los 300px solo en pantallas medianas */
+  }
 }

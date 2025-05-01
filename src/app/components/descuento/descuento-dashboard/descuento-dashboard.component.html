@@ -28,9 +28,9 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" *ngIf="descuentoSeleccionado">
+<div class="modal" tabindex="-1" *ngIf="descuentoSeleccionado" (click)="cerrarModal()">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" (click)="$event.stopPropagation()">
             <div class="modal-header">
                 <h5 class="modal-title">Editar Descuento</h5>
                 <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrarModal()">

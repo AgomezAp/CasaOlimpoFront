@@ -89,8 +89,8 @@
   </div>
 
   <!-- Modal para nueva cita -->
-  <div class="modal-overlay" [class.active]="showNewAppointmentModal">
-    <div class="modal-content">
+  <div class="modal-overlay" [class.active]="showNewAppointmentModal" (click)="closeNewAppointmentModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Nueva Cita</h3>
         <button class="close-btn" (click)="closeNewAppointmentModal()">
