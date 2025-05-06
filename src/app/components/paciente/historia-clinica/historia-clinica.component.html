@@ -1,105 +1,128 @@
 <div class="historia-clinica-container">
-    <div class="section-header">
-      <h2 class="section-title">Historia Clínica</h2>
-      <div class="section-info">
-        <span *ngIf="fechaCreacionHistoria">Fecha creación: {{ fechaCreacionHistoria | date:'dd/MM/yyyy' }}</span>
-      </div>
+  <div class="section-header">
+    <h2 class="section-title">Historia Clínica</h2>
+    <div class="section-info">
+      <span *ngIf="fechaCreacionHistoria">Fecha creación: {{ fechaCreacionHistoria | date:'dd/MM/yyyy' }}</span>
     </div>
-    <div class="section-divider"></div>
-    <div *ngIf="cargando" class="loading-container">
-      <div class="spinner"></div>
-      <p>Cargando historias clínicas...</p>
-    </div>
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
-    <div *ngIf="!cargando && consultas.length === 0 && !error" class="info-message">
-      <p>No hay historias clínicas registradas para este paciente.</p>
-    </div>
-    <div *ngIf="!cargando && consultas.length > 0" class="table-responsive-container">
-      <table class="historia-table">
-        <thead>
-          <tr>
-            <th>Folio</th>
-            <th>Fecha</th>
-            <th>Procedimiento</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let consulta of paginatedConsultas; let i = index" [ngClass]="{'alt-row': i % 2 !== 0}">
-            <td>{{ consulta.Cid }}</td>
-            <td>{{ formatearFecha(consulta.fecha) }}</td>
-            <td>{{ consulta.motivo || 'Sin procedimiento' }}</td>
-            <td>
-              <div class="estado-badge" [ngClass]="consulta.abierto ? 'abierto' : 'cerrado'">
-                {{ consulta.abierto ? 'Abierta' : 'Cerrada' }}
-              </div>
-            </td>
-            <td>
-              <div class="action-icons">
-                <ng-container *ngIf="consulta.abierto">
-                  <div class="action-icon edit" (click)="editarConsulta(consulta)" title="Editar consulta">
-                    <img src="/Editar.png" alt="Editar">
-                  </div>
-                  <div class="action-icon close" 
-                       [class.disabled]="cargandoCierre[consulta.Cid]"
-                       (click)="!cargandoCierre[consulta.Cid] && cerrarConsulta(consulta)" 
-                       title="Cerrar historia">
-                    <div *ngIf="cargandoCierre[consulta.Cid]" class="spinner-small"></div>
-                    <img *ngIf="!cargandoCierre[consulta.Cid]" src="/Cerrar.png" alt="Cerrar">
-                  </div>
-                </ng-container>
-                <div *ngIf="!consulta.abierto" class="action-icon checked" (click)="verDetalles(consulta)" title="Ver detalle">
-                  <img src="/Check.png" alt="Completado">
+  </div>
+  <div class="section-divider"></div>
+  
+  <!-- Spinner de carga -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando historias clínicas...</p>
+  </div>
+  
+  <!-- Mensajes de error/info -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+  
+  <div *ngIf="!cargando && consultas.length === 0 && !error" class="info-message">
+    <p>No hay historias clínicas registradas para este paciente.</p>
+  </div>
+  
+  <!-- Tabla de historias clínicas -->
+  <div *ngIf="!cargando && consultas.length > 0" class="table-responsive-container">
+    <table class="historia-table">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Fecha</th>
+          <th>Procedimiento</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let consulta of paginatedConsultas; let i = index" [ngClass]="{'alt-row': i % 2 !== 0}">
+          <td>{{ consulta.Cid }}</td>
+          <td>{{ formatearFecha(consulta.fecha) }}</td>
+          <td>{{ consulta.motivo || 'Sin procedimiento' }}</td>
+          <td>
+            <div class="estado-badge" [ngClass]="consulta.abierto ? 'abierto' : 'cerrado'">
+              {{ consulta.abierto ? 'Abierta' : 'Cerrada' }}
+            </div>
+          </td>
+          <td>
+            <div class="action-icons">
+              <!-- Acciones para consultas abiertas -->
+              <ng-container *ngIf="consulta.abierto">
+                <div class="action-icon edit" (click)="editarConsulta(consulta)" title="Editar consulta">
+                  <img src="/Editar.png" alt="Editar">
                 </div>
-                <div class="action-icon pdf" 
-                     [class.disabled]="cargandoPDF[consulta.Cid]"
-                     (click)="!cargandoPDF[consulta.Cid] && verConsentimientoPDF(consulta)" 
-                     title="Ver consentimiento">
-                  <div *ngIf="cargandoPDF[consulta.Cid]" class="spinner-small"></div>
-                  <img *ngIf="!cargandoPDF[consulta.Cid]" src="/Pdf.png" alt="Ver PDF">
+                <div class="action-icon close" 
+                     [class.disabled]="cargandoCierre[consulta.Cid]"
+                     (click)="!cargandoCierre[consulta.Cid] && cerrarConsulta(consulta)" 
+                     title="Cerrar historia">
+                  <div *ngIf="cargandoCierre[consulta.Cid]" class="spinner-small"></div>
+                  <img *ngIf="!cargandoCierre[consulta.Cid]" src="/Cerrar.png" alt="Cerrar">
                 </div>
+              </ng-container>
+              
+              <!-- Acciones para consultas cerradas -->
+              <div *ngIf="!consulta.abierto" class="action-icon checked" (click)="verDetalles(consulta)" title="Ver detalle">
+                <img src="/Check.png" alt="Completado">
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="paginacion-controles" *ngIf="totalPages > 1">
-        <button 
-          class="btn-paginacion" 
-          [disabled]="currentPage === 1"
-          (click)="paginaAnterior()">
-          &laquo; Anterior
-        </button>
-        
-        <div class="paginas-numeros">
-          <span *ngFor="let p of [].constructor(totalPages); let i = index">
-            <button 
-              class="btn-pagina" 
-              [class.activa]="currentPage === i+1"
-              (click)="irAPagina(i+1)">
-              {{ i + 1 }}
-            </button>
-          </span>
-        </div>
-        
-        <button 
-          class="btn-paginacion" 
-          [disabled]="currentPage === totalPages"
-          (click)="paginaSiguiente()">
-          Siguiente &raquo;
-        </button>
+              
+              <!-- Botón Ver consulta (el que estaba dando problemas) -->
+              <div *ngIf="!consulta.abierto" class="action-icon view" (click)="verConsulta(consulta)" title="Ver consulta completa">
+                <img src="/View.png" alt="Ver consulta">
+              </div>
+              
+              <!-- Botón de PDF -->
+              <div class="action-icon pdf" 
+                   [class.disabled]="cargandoPDF[consulta.Cid]"
+                   (click)="!cargandoPDF[consulta.Cid] && verConsentimientoPDF(consulta)" 
+                   title="Ver consentimiento">
+                <div *ngIf="cargandoPDF[consulta.Cid]" class="spinner-small"></div>
+                <img *ngIf="!cargandoPDF[consulta.Cid]" src="/Pdf.png" alt="Ver PDF">
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Paginación -->
+    <div class="paginacion-controles" *ngIf="totalPages > 1">
+      <button 
+        class="btn-paginacion" 
+        [disabled]="currentPage === 1"
+        (click)="paginaAnterior()">
+        &laquo; Anterior
+      </button>
+      
+      <div class="paginas-numeros">
+        <span *ngFor="let p of [].constructor(totalPages); let i = index">
+          <button 
+            class="btn-pagina" 
+            [class.activa]="currentPage === i+1"
+            (click)="irAPagina(i+1)">
+            {{ i + 1 }}
+          </button>
+        </span>
       </div>
-    </div>
-    <div class="action-button-container" *ngIf="!tieneConsultaAbierta">
-      <button class="btn-primary" (click)="nuevaConsulta()">
-        <img src="/Add.png" class="add-icon" alt="Añadir">
-        Nueva Historia Clínica
+      
+      <button 
+        class="btn-paginacion" 
+        [disabled]="currentPage === totalPages"
+        (click)="paginaSiguiente()">
+        Siguiente &raquo;
       </button>
     </div>
-    <div *ngIf="tieneConsultaAbierta" class="warning-message">
-      <p><strong>Atención:</strong> Existe una historia clínica abierta. Debe cerrarla antes de crear una nueva.</p>
-    </div>
+  </div>
+  
+  <!-- Botón para crear nueva historia clínica -->
+  <div class="action-button-container" *ngIf="!tieneConsultaAbierta">
+    <button class="btn-primary" (click)="nuevaConsulta()">
+      <img src="/Add.png" class="add-icon" alt="Añadir">
+      Nueva Historia Clínica
+    </button>
+  </div>
+  
+  <!-- Mensaje de advertencia -->
+  <div *ngIf="tieneConsultaAbierta" class="warning-message">
+    <p><strong>Atención:</strong> Existe una historia clínica abierta. Debe cerrarla antes de crear una nueva.</p>
+  </div>
 </div>

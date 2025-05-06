@@ -4,7 +4,7 @@
     width: 100%;
     padding: 10px;
     background-color: rgba(195, 181, 170, 0.6);
-    min-height: 100vh;
+    min-height: 99vh;
     overflow-y: auto; /* Habilitar scroll vertical */
     overflow-x: hidden; /* Deshabilitar scroll horizontal */
     height: auto !important;
@@ -172,6 +172,7 @@
     background-color: rgba(125, 116, 107, 0.9);
     margin-bottom: 15px;
     border-radius: 2px;
+    width: 99%;
   }
   /* Añadir estos estilos para las firmas digitales */
 
@@ -271,8 +272,8 @@
     border-radius: 8px;
     overflow: auto; /* Scroll en la tabla si es necesario */
     margin-bottom: 15px;
-    width: 100%;
-    max-height: 70vh; /* Altura máxima para forzar scroll interno */
+    width: 99%;
+    max-height: 79vh; /* Altura máxima para forzar scroll interno */
 }
   .data-row {
     display: flex;

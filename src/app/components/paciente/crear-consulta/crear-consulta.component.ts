@@ -74,11 +74,9 @@ export class CrearConsultaComponent implements OnInit, AfterViewInit {
       enfermedad_actual: ['', Validators.required],
       objetivos_terapia: ['', Validators.required],
       historia_problema: ['', Validators.required],
-      desarrollo: ['', Validators.required],
-      plan_terapeutico: ['', Validators.required],
       tipo_diagnostico: ['', Validators.required],
-      analisis_diagnostico: ['', Validators.required],
       plan_tratamiento: ['', Validators.required],
+      contraindicaciones: ['', Validators.required], 
       recomendaciones: [''],
       consentimiento_check: [false, Validators.requiredTrue],
     });

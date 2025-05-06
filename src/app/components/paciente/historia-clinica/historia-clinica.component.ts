@@ -359,4 +359,7 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
+  verConsulta(consulta: any): void {
+    this.router.navigate(['/paciente', this.numeroDocumento, 'consulta', consulta.Cid]);
+  }
 }

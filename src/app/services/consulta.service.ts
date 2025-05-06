@@ -149,4 +149,31 @@ obtenerConsultaPorId(Cid: number): Observable<Consulta> {
       })
     );
 }
+obtenerConsultaPaciente(numeroDocumento: string, consultaId: number): Observable<any> {
+  const url = `${this.appUrl}api/paciente/${numeroDocumento}/consulta/${consultaId}`;
+  
+  return this.http.get<any>(url).pipe(
+    map(response => {
+      if (response && response.data) {
+        console.log('Consulta obtenida correctamente:', consultaId);
+        return response.data;
+      }
+      throw new Error('No se encontró la consulta o el formato de respuesta es inválido');
+    }),
+    catchError(error => {
+      let errorMessage = 'Error al obtener la consulta';
+      
+      if (error.status === 404) {
+        errorMessage = 'La consulta solicitada no existe';
+      } else if (error.status === 403) {
+        errorMessage = 'No tienes permiso para acceder a esta consulta';
+      } else if (error.status === 400) {
+        errorMessage = 'ID de consulta inválido';
+      }
+      
+      console.error(`${errorMessage}:`, error);
+      return throwError(() => new Error(errorMessage));
+    })
+  );
+}
 }

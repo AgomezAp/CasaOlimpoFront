@@ -44,7 +44,7 @@
   background-color: #7d746b; /* Color marrón que combina con el esquema */
   color: #e0d7ce;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   padding: 8px 15px;
   font-size: 14px;
   font-weight: 500;
@@ -79,7 +79,7 @@
   background-color: #7d746b;
   color: #e0d7ce;
   border: none;
-  border-radius: 6px; /* Cambiado de 20px a 6px para consistencia */
+  border-radius: 20px; /* Cambiado de 20px a 6px para consistencia */
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
@@ -155,7 +155,7 @@
   background-color: #7d746b;
   color: #e0d7ce;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   padding: 10px 20px;
   font-size: 14px;
   font-weight: 500;

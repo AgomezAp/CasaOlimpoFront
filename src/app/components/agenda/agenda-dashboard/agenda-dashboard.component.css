@@ -9,6 +9,7 @@
   display: block; /* Asegura que el componente ocupe espacio */
   width: 84%; /* Ocupa el ancho disponible en su contenedor padre */
   box-sizing: border-box;
+  min-height: 100vh;
   /* overflow-x: hidden; /* CAMBIO: Quitado de aquí, se maneja en contenedores internos si es necesario */
 }
 

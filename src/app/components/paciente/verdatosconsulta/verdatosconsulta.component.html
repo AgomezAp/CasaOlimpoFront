@@ -1,0 +1,142 @@
+<!-- Overlay de carga -->
+<div class="loading-overlay" *ngIf="!consulta">
+  <div class="spinner-container">
+    <div class="spinner"></div>
+    <p class="loading-text">Cargando datos de la consulta...</p>
+  </div>
+</div>
+
+<!-- Contenido principal -->
+<div class="consulta-detail-container" *ngIf="consulta">
+  <div class="header-section">
+    <h1 class="page-title">Consulta Médica</h1>
+    <div class="meta-info">
+      <div class="meta-item">
+        <span class="meta-label">Fecha:</span>
+        <span class="meta-value">{{
+          consulta.fecha | date : "dd/MM/yyyy"
+        }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Doctor:</span>
+        <span class="meta-value">{{
+          consulta.doctor?.nombre || "No especificado"
+        }}</span>
+      </div>
+    </div>
+    <button class="btn-back" (click)="volver()">← Volver</button>
+  </div>
+
+  <div class="content-card">
+    <!-- Sección: Datos del paciente -->
+    <div class="data-section">
+      <h3 class="section-title">Datos del Paciente</h3>
+      <div class="section-divider"></div>
+
+      <div class="data-grid">
+        <div class="data-row">
+          <div class="data-field-label">Nombre Completo</div>
+          <div class="data-field-value">
+            {{ consulta.paciente?.nombre }} {{ consulta.paciente?.apellidos }}
+          </div>
+        </div>
+        <div class="data-row alt-bg">
+          <div class="data-field-label">Identificación</div>
+          <div class="data-field-value">{{ consulta.numero_documento }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Información de la consulta -->
+    <div class="data-section">
+      <h3 class="section-title">Motivo y Enfermedad Actual</h3>
+      <div class="section-divider"></div>
+
+      <div class="data-grid">
+        <div class="data-row">
+          <div class="data-field-label">Motivo de consulta</div>
+          <div class="data-field-value">{{ consulta.motivo }}</div>
+        </div>
+        <div class="data-row alt-bg">
+          <div class="data-field-label">Enfermedad actual</div>
+          <div class="data-field-value">{{ consulta.enfermedad_actual }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Historia del problema -->
+    <div class="data-section">
+      <h3 class="section-title">Historia y Objetivos</h3>
+      <div class="section-divider"></div>
+
+      <div class="data-grid">
+        <div class="data-row">
+          <div class="data-field-label">Historia del problema</div>
+          <div class="data-field-value">{{ consulta.historia_problema }}</div>
+        </div>
+        <div class="data-row alt-bg">
+          <div class="data-field-label">Objetivos terapéuticos</div>
+          <div class="data-field-value">{{ consulta.objetivos_terapia }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Diagnóstico -->
+    <div class="data-section">
+      <h3 class="section-title">Diagnóstico</h3>
+      <div class="section-divider"></div>
+
+      <div class="data-grid">
+        <div class="data-row">
+          <div class="data-field-label">Tipo de diagnóstico</div>
+          <div class="data-field-value">{{ consulta.tipo_diagnostico }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Plan y tratamiento -->
+    <div class="data-section">
+      <h3 class="section-title">Plan y Tratamiento</h3>
+      <div class="section-divider"></div>
+
+      <div class="data-grid">
+        <div class="data-row">
+          <div class="data-field-label">Plan de tratamiento</div>
+          <div class="data-field-value">{{ consulta.plan_tratamiento }}</div>
+        </div>
+        <div class="data-row alt-bg">
+          <div class="data-field-label">Recomendaciones</div>
+          <div class="data-field-value">
+            {{ consulta.recomendaciones || "No especificadas" }}
+          </div>
+        </div>
+        <div class="data-row">
+          <div class="data-field-label">Contraindicaciones</div>
+          <div class="data-field-value">{{ consulta.contraindicaciones }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Consentimiento -->
+    <div class="data-section">
+      <h3 class="section-title">Consentimiento Informado</h3>
+      <div class="section-divider"></div>
+
+      <div class="data-grid">
+        <div class="data-row">
+          <div class="data-field-label">Estado</div>
+          <div class="data-field-value">
+            <span
+              class="badge"
+              [ngClass]="
+                consulta.consentimiento_check ? 'badge-success' : 'badge-danger'
+              "
+            >
+              {{ consulta.consentimiento_check ? "Firmado" : "No firmado" }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

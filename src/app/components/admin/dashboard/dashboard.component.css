@@ -139,14 +139,27 @@
 }
 
 .data-table th {
-  background-color: #f8f9fa;
-  color: #495057;
-  font-weight: 600;
-  font-size: 14px;
+  background-color: #8a8178; /* Color gris/marrón como en otras tablas */
+  color: #fffaec;
+  text-align: left;
+  padding: 0.5rem 1rem; /* Padding reducido para filas más compactas */
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+/* Filas alternadas */
+.data-table tbody tr:nth-child(odd) {
+  background-color: white;
 }
 
+.data-table tbody tr:nth-child(even) {
+  background-color: rgba(138, 136, 134, 0.1); /* Fondo más sutil */
+}
 .data-table tr:hover {
-  background-color: #f8f9fa;
+  background-color: inherit;
 }
 
 .badge {
