@@ -13,9 +13,10 @@
           class="form-select"
         >
           <option value="">Seleccione un tipo...</option>
-          <option value="general">Consentimiento General</option>
-          <option value="procedimiento">Procedimiento Específico</option>
-          <option value="terapia">Terapia Avanzada</option>
+          <option value="atencion_cliente">Atención al cliente</option>
+          <option value="acido_hialuronico">Ácido Hialurónico</option>
+          <option value="dysport">Dysport</option>
+          <option value="fibrina">Fibrina</option>
         </select>
       </div>
 
@@ -50,115 +51,970 @@
             *ngIf="tipoConsentimientoSeleccionado === 'general'"
             class="consentimiento-body"
           >
-            <p>
-              Yo,
-              <strong>{{ paciente?.nombre }} {{ paciente?.apellidos }}</strong
-              >, mayor de edad, con documento de identidad No.
-              <strong>{{ paciente?.numero_documento }}</strong
-              >, por medio del presente documento dejo constancia que he sido
-              informado(a) adecuadamente sobre mi diagnóstico, alternativas de
-              tratamiento y pronóstico relacionados con mi condición médica
-              actual.
-            </p>
-
-            <p>Entiendo que:</p>
-            <ul>
-              <li>
-                He recibido información clara y comprensible sobre mi condición
-                de salud.
-              </li>
-              <li>
-                Se me han explicado los riesgos y beneficios de los
-                procedimientos recomendados.
-              </li>
-              <li>
-                He tenido la oportunidad de hacer preguntas y estas han sido
-                respondidas satisfactoriamente.
-              </li>
-              <li>
-                Puedo revocar este consentimiento en cualquier momento antes del
-                procedimiento.
-              </li>
-            </ul>
-
-            <p>
-              Por lo tanto, autorizo al Dr. {{ nombreDoctor }} y su equipo
-              médico para realizar los procedimientos diagnósticos y
-              terapéuticos que consideren necesarios para mi tratamiento médico.
-            </p>
           </div>
-
-          <div class="firma-section">
-            <div class="firma-container">
-              <div class="firma-paciente">
-                <p>Firma del paciente:</p>
-                <div
-                  class="firma-canvas-container"
-                  [class.has-firma]="firmaPaciente"
-                >
-                  <canvas
-                    #firmaPacienteCanvas
-                    class="firma-canvas"
-                    width="280"
-                    height="120"
-                  ></canvas>
-                  <div class="firma-placeholders">
-                    <div class="firma-linea"></div>
-                    <p class="firma-nombre">
-                      {{ paciente?.nombre }} {{ paciente?.apellidos }}
-                    </p>
-                  </div>
-                  <div class="firma-controls">
-                    <button
-                      type="button"
-                      class="btn-firma btn-clear"
-                      (click)="limpiarFirma('paciente')"
-                    >
-                      <i class="fas fa-eraser"></i> Borrar
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="firma-doctor">
-                <p>Firma del médico:</p>
-                <div
-                  class="firma-canvas-container"
-                  [class.has-firma]="firmaDoctor"
-                >
-                  <canvas
-                    #firmaDoctorCanvas
-                    class="firma-canvas"
-                    width="280"
-                    height="120"
-                  ></canvas>
-                  <div class="firma-placeholders">
-                    <div class="firma-linea"></div>
-                    <p class="firma-nombre">Dr. {{ nombreDoctor }}</p>
-                  </div>
-                  <div class="firma-controls">
-                    <button
-                      type="button"
-                      class="btn-firma btn-clear"
-                      (click)="limpiarFirma('doctor')"
-                    >
-                      <i class="fas fa-eraser"></i> Borrar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="fecha-firma">
-              Fecha: {{ fechaActual | date : "dd/MM/yyyy" }}
-            </p>
-            <div class="firma-instructions">
+          <div
+            *ngIf="tipoConsentimientoSeleccionado === 'acido_hialuronico'"
+            class="consentimiento-body"
+          >
+            <div class="seccion-fecha">
               <p>
-                <i class="fas fa-info-circle"></i> Firme haciendo clic y
-                arrastrando en las áreas designadas
+                FECHA:
+                <span class="fecha-actual">{{
+                  fechaActual | date : "dd/MM/yyyy"
+                }}</span>
+              </p>
+            </div>
+
+            <div class="seccion-identificacion">
+              <p>
+                Yo:
+                <strong
+                  >{{ paciente?.nombre }} {{ paciente?.apellidos }}</strong
+                >
+                Identificado con cédula de ciudadanía #
+                <strong>{{ paciente?.numero_documento }}</strong>
+                de
+                <span class="firma-field">
+                  <canvas
+                    id="firma-ciudad"
+                    class="firma-canvas-field"
+                    width="200"
+                    height="30"
+                  ></canvas>
+                  <div class="firma-line"></div>
+                </span>
+                luego de habérseme explicado en términos claros y sencillos los
+                alcances y riesgos del mismo, como así también las
+                características y beneficios esperados del tratamiento
+                propuesto, autorizo a <strong>CASA OLIMPO</strong>, y a su
+                equipo, a realizar un procedimiento conocido como
+                <strong>APLICACIÓN DE ÁCIDO HIALURÓNICO</strong>.
+              </p>
+            </div>
+
+            <div class="seccion-objetivo">
+              <h4><strong>OBJETIVO</strong></h4>
+              <p>
+                El Objetivo de la técnica es conseguir un relleno dérmico en el
+                tratamiento de arrugas, cicatrices, deformidades del contorno o
+                aumento de labios.
+              </p>
+            </div>
+
+            <div class="seccion-caracteristicas">
+              <h4><strong>CARACTERÍSTICAS</strong></h4>
+              <p>
+                El tratamiento consiste en inyectar en la piel una sustancia
+                sintética para conseguir el relleno dérmico. La duración del
+                efecto conseguido es variable, de 8 a 10 meses. Se puede repetir
+                el tratamiento o inyectar pequeñas dosis para retoque, siempre
+                que sea necesario con el intervalo a criterio médico. Si tiene
+                algún tipo de enfermedad de la piel, alergias, problemas de
+                circulación, etc. Es necesario, que antes de hacerse el
+                procedimiento lo indique al doctor. Puede ser necesaria la
+                administración de anestesia local o tópica de cuyos riesgos me
+                ha sido informado el facultativo y que consiento.
+              </p>
+            </div>
+
+            <div class="seccion-riesgos">
+              <h4><strong>Riesgos</strong></h4>
+              <p>
+                Se trata de una práctica en la que que se producir heridas y,
+                por lo tanto, se corren riesgos menores como: hinchazón,
+                enrojecimiento, dolor, escozor, algún tipo reacción alérgica que
+                será algo más duradera cuando la aplicación sea en los labios,
+                también pueden parecer hematomas que desaparecen espontáneamente
+                en varios días.
+              </p>
+              <p>
+                Excepcionalmente y en raras ocasiones pueden aparecer reacción
+                tardía o granulomas abscesos necrosis.
+              </p>
+            </div>
+
+            <div class="seccion-advertencias">
+              <p>
+                El médico me ha advertido que el tratamiento de los labios puede
+                reactivar un herpes simple recidivante. Se me ha facilitado esta
+                hoja informativa, habiendo comprendido el significado del
+                procedimiento y los riesgos inherentes al mismo y declaro estar
+                debidamente informado/a, habiendo tenido oportunidad de aclarar
+                mis dudas en entrevista personal con la doctora(a) así mismo, he
+                recibido respuesta a todas mis preguntas, habiendo tomado la
+                decisión de manera libre y voluntaria. Soy consciente que la
+                práctica de la medicina y la cirugía no es una ciencia exacta y
+                reconozco que a pesar que el profesional me ha informando
+                adecuadamente del resultado deseado del procedimiento, no me ha
+                sido garantizada la obtención de los mismo en su totalidad.
+              </p>
+              <p>
+                Me comprometo a cooperar en el cuidado de la evolución del
+                procedimiento realizado cumpliendo fielmente los controles de
+                cuidados que el médico me ha explicado y los que me indique una
+                vez realizado el procedimiento, como así también tener en cuenta
+                las pautas de alarma explicitadas, todo hasta que posea e alta
+                médica: informando de manera inmediata la profesional sobre
+                cualquier complicación o cambio que apareciera en evolución
+                normal de acuerdo a sus explicaciones que el mismo me brindo
+                sobre el particular.
+              </p>
+              <p>
+                Declaro bajo juramento no haber omitido o alterado datos al
+                exponer mis antecedentes clínico quirúrgico, ni sobre anteriores
+                tratamientos u operaciones que me pudieron haber sido realizadas
+                por otros profesionales. Manifiesto ser alérgico a:
+                <span class="firma-field full-width">
+                  <canvas
+                    id="firma-alergias"
+                    class="firma-canvas-field"
+                    width="500"
+                    height="30"
+                  ></canvas>
+                  <div class="firma-line"></div>
+                </span>
+              </p>
+              <p>
+                Así mismo AUTORIZO a que me practiquen grabaciones fotografías
+                en la zona tratada que pueden ser utilizadas con fines
+                científicos, docentes o médicos, quedando a entendido que su uso
+                no constituya una violación a la intimidad o confidencialidad a
+                las que tengo derecho.
+              </p>
+              <p>
+                Se me ha explicado que en cualquier momento antes de llevarse a
+                cabo el procedimiento puedo retractarme del mismo, rechazando su
+                ejecución, para lo cual deberá comunicar dicha retracción.
+              </p>
+              <p>
+                He podido aclarar todas mis dudas acerca de todo lo
+                anteriormente expuesto y he entendido totalmente este
+                <strong>DOCUMENTO DE CONSENTIMIENTO</strong> reafirmándome en
+                todas y cada uno de sus puntos y con la firma del documento
+                consiento que el tratamiento se realice.
+              </p>
+            </div>
+
+            <div class="firmas-adicionales">
+              <p class="firma-row">
+                FIRMA DEL PACIENTE:
+                <span class="firma-field large">
+                  <canvas
+                    id="firma-paciente-adicional"
+                    class="firma-canvas-field"
+                    width="400"
+                    height="60"
+                  ></canvas>
+                  <div class="firma-line"></div>
+                </span>
+              </p>
+
+              <p class="firma-row">
+                DOCUMENTO:
+                <span class="firma-field">
+                  <canvas
+                    id="firma-documento"
+                    class="firma-canvas-field"
+                    width="400"
+                    height="40"
+                  ></canvas>
+                  <div class="firma-line"></div>
+                </span>
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- CONSENTIMIENTO DE ATENCIÓN AL CLIENTE (CORREGIDO) -->
+      <div
+        *ngIf="tipoConsentimientoSeleccionado === 'atencion_cliente'"
+        class="consentimiento-body"
+      >
+        <h3 class="consent-subtitle">
+          <strong>CONSENTIMIENTO INFORMADO PARA ATENCIÓN AL CLIENTE</strong>
+        </h3>
+
+        <p>
+          Por medio de la presente manifiesto de manera clara, consciente, libre
+          y espontánea, autorizo a <strong>CASA OLIMPO</strong> para que, por
+          medio de sus especialistas, me sean realizados los tratamientos y
+          procedimientos que he solicitado, además de los indicados y
+          recomendados procedimientos de cualquier naturaleza enunciados o
+          descritos en el plan de tratamiento contenido en mi ficha técnica de
+          servicios.
+        </p>
+
+        <p>
+          Manifiesto que me han sido explicados los tratamientos y
+          procedimientos a realizarme y la forma como se practicarán, así como
+          su naturaleza, mecanismos de aplicación, de acción, efectos
+          secundarios, contraindicaciones e incapacidades, como de los productos
+          suministrados, aplicados y de los productos indicados para su uso en
+          casa.
+        </p>
+
+        <p>
+          También reconozco, acepto y declaro expresamente que en todo caso y en
+          virtud de la naturaleza del servicio prestado, la obligación de
+          <strong>CASA OLIMPO</strong> de cualquiera de sus especialistas que
+          participen de mi atención en desarrollo de los procedimientos
+          establecidos en este plan de tratamiento, consulta, orientación
+          solicitado por mi u ofrecido a cualquier título será siempre de medios
+          y no de resultados.
+        </p>
+
+        <div class="seccion-nota">
+          <p>
+            <strong
+              >Soy consciente que el valor de la consulta será redimible si el
+              tratamiento lo tomo en un rango de 30 día, después de los 30 días
+              no será válido.</strong
+            >
+          </p>
+          <p>
+            <strong
+              >Nota: Ingresa única y exclusivamente el paciente hacer tratado,
+              con excepción a menores de edad que entran solo con un
+              acompañante.</strong
+            >
+          </p>
+        </div>
+
+        <p>
+          Reconozco que en desarrollo de la atención se puede generar los
+          siguientes documentos:
+        </p>
+        <ul>
+          <li>Historia clínica.</li>
+          <li>Imágenes diagnósticas.</li>
+          <li>
+            Ingreso y salida de datos desde dispositivos médicos y archivos de
+            sonido.
+          </li>
+        </ul>
+
+        <p>
+          Los mismos gozan de reserva legal y deben ser guardados y custodiados
+          por el prestador del servicio de salud, de conformidad con la
+          normatividad vigente especial la Resolución 1995 de 1998. En todo caso
+          declaro que la información suministrada por mí para efectos de la
+          historia es verdadera y entiendo y acepto la responsabilidad civil y
+          penal que me asiste por omisión o manifestación errada sobre mi estado
+          real de salud.
+        </p>
+
+        <!-- SECCIÓN DE FIRMAS (usando la misma estructura que en ácido hialurónico) -->
+        <div class="firmas-adicionales">
+          <p class="firma-row">
+            Firma paciente:
+            <span class="firma-field large">
+              <canvas
+                id="firma-paciente-cliente"
+                class="firma-canvas-field"
+                width="400"
+                height="60"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            Celular:
+            <span class="firma-field">
+              <canvas
+                id="firma-celular"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            CC:
+            <span class="firma-field">
+              <canvas
+                id="firma-cc-cliente"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            Firma del profesional:
+            <span class="firma-field">
+              <canvas
+                id="firma-profesional"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            CC:
+            <span class="firma-field">
+              <canvas
+                id="firma-cc-profesional"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+      </div>
+      <!-- FIN DEL CONSENTIMIENTO DE ATENCIÓN AL CLIENTE -->
+
+      <!-- CONSENTIMIENTO DYSPORT -->
+      <div
+        *ngIf="tipoConsentimientoSeleccionado === 'dysport'"
+        class="consentimiento-body"
+      >
+        <h3 class="consent-subtitle">
+          <strong>CONSENTIMIENTO INFORMADO DYSPORT</strong>
+        </h3>
+
+        <div class="seccion-fecha">
+          <p>
+            FECHA:
+            <span class="firma-field fecha-campo">
+              <canvas
+                id="firma-fecha-dysport"
+                class="firma-canvas-field"
+                width="200"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+
+        <div class="seccion-identificacion">
+          <p>
+            Yo:
+            <span class="firma-field nombre-campo">
+              <canvas
+                id="firma-nombre-dysport"
+                class="firma-canvas-field"
+                width="250"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            identificado con cedula de ciudadanía #
+            <span class="firma-field">
+              <canvas
+                id="firma-cedula-dysport"
+                class="firma-canvas-field"
+                width="200"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            de
+            <span class="firma-field">
+              <canvas
+                id="firma-ciudad-dysport"
+                class="firma-canvas-field"
+                width="200"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            luego de habérseme explicado en términos claros y sencillos los
+            alcances y riesgos del mismo, como así también las características y
+            beneficios esperados del tratamiento propuesto, autorizo a
+            <strong>CASA OLIMPO</strong>, y a su equipo, a realizar un
+            procedimiento conocido como <strong>DYSPORT</strong>
+          </p>
+        </div>
+
+        <p>
+          He sido informado que la inyección de toxina botulínica causa
+          reducción selectiva, temporal y reversible de la contracción de los
+          músculos, mediante una acción en las terminaciones nerviosas
+          periféricas. Este efecto se mantiene durante un periodo de 3 a 12
+          meses.
+        </p>
+
+        <p>
+          Las indicaciones principales son: tratamiento de las arrugas faciales
+          (líneas faciales hiperfuncionales) y de la hiperdrosis( exceso de
+          sudoración) en axilas y manos.
+        </p>
+
+        <p>
+          Este tratamiento está contraindicado en alteraciones de la coagulación
+          o que estén en tratamiento con anticoagulantes, alteraciones de la
+          piel en el sitio de inyección o infección local activa, así como
+          alergias conocidas al producto albumina (huevo). Embarazo y lactancia.
+          enfermedades debilitantes con alteraciones de la cicatrización.
+          Proceso infeccioso locales y/o generales.
+        </p>
+
+        <p>
+          Entiendo que pueden ser necesarias varias sesiones para completar la
+          serie de inyecciones. Sé que los efectos de este tratamiento NO son
+          permanentes.
+        </p>
+
+        <div class="seccion-riesgos">
+          <h4>RIESGOS</h4>
+          <p>
+            La inyección de neuronax es de bajo riesgo, aunque potencialmente
+            pueden aparecer algunas complicaciones como: infección o hematoma
+            secundarios a la punción, cambios en la sensibilidad cutánea,
+            asimetrías, déficit funcional en grupos musculares no infiltrados,
+            por difusión de la toxina (ptosis palpebral, o caída de la ceja
+            etc.) habitualmente estas complicaciones se resuelven
+            espontáneamente en pocos días, pero ocasionalmente pueden requerir
+            tratamiento. También pueden manifestarse cefaleas (dolor de cabeza)
+            y síntomas gripales además de otras complicaciones menos frecuentes,
+            aunque se espera que los resultados sean buenos, no existe garantía
+            definitiva sobre los mismos.
+          </p>
+        </div>
+
+        <p>
+          El procedimiento me ha sido totalmente explicado por el profesional,
+          por lo que entiendo la naturaleza y consecuencias del mismo, y estoy
+          en conocimiento de cada uno de los eventuales riesgos que pudiesen
+          sobrevenir. Se me ha dado la oportunidad de hacer preguntas y todas
+          ellas me han sido contestadas satisfactoriamente. Los siguientes
+          puntos me han sido específicamente aclarados. Las complicaciones o
+          eventos adversos que pueden originarse en este tipo de intervenciones
+          son las propias de todo procedimiento invasivo, aquellas relacionadas
+          con el estado vital del paciente, como así las descritas en la
+          literatura médica de la especialidad, todas las cuales me han sido
+          informadas, enunciándose a continuación las siguientes de manera
+          ejemplificativa.
+        </p>
+
+        <p>
+          Estoy en conocimiento de que durante el curso del procedimiento
+          condiciones especiales pueden requerir acciones extras o diferentes a
+          las originariamente previstas; por lo tanto, autorizo, y requiero que
+          el profesional, y/o quien designe, realicen los procedimientos o
+          intervenciones que sean necesarias y deseables a su juicio
+          profesional, Así también autorizo a que el profesional o quien el
+          designe realice los controles necesarios en el periodo
+          post-procedimiento.
+        </p>
+
+        <p>
+          Me comprometo a cooperar en el cuidado de la evolución del
+          procedimiento realizado cumpliendo fielmente los controles y cuidados
+          que el médico me ha explicado y los que me indique una vez realizado
+          el procedimiento, como así también tener en cuenta las pautas de
+          alarma explicitadas, todo hasta que posea el alta medica; informando
+          de manera inmediata al profesional sobre cualquier complicación o
+          cambio que apareciera en la evolución normal de acuerdo a las
+          explicaciones que el mismo me brindo sobre el particular.
+        </p>
+
+        <p>
+          Declaro bajo juramento no haber omitido o alterado datos al exponer
+          mis antecedentes clínicos quirúrgicos, ni sobre anteriores
+          tratamientos u operaciones que me pudieron haber sido realizadas por
+          otros profesionales. Manifiesto ser alérgico a:
+          <span class="firma-field full-width">
+            <canvas
+              id="firma-alergias-dysport"
+              class="firma-canvas-field"
+              width="600"
+              height="30"
+            ></canvas>
+            <div class="firma-line"></div>
+          </span>
+        </p>
+
+        <p>
+          Así mismo AUTORIZO a que me practiquen grabaciones fotografías en la
+          zona tratada que pueden ser utilizadas con fines científicos, docentes
+          o médicos, quedando entendido que su uso no constituya una violación a
+          la intimidad o confidencialidad a las que tengo derecho.
+        </p>
+
+        <p>
+          Se me ha explicado que en cualquier momento antes de llevarse a cabo
+          el procedimiento puedo retractarme del mismo, rechazando su ejecución,
+          para lo cual deberá comunicar dicha retracción.
+        </p>
+
+        <p>
+          He podido aclarar todas mis dudas acerca de todo lo anteriormente
+          expuesto y he entendido totalmente este
+          <strong>DOCUMENTO DE CONSENTIMIENTO</strong> reafirmándome en todas y
+          cada uno de sus puntos y con la firma del documento consiento que el
+          tratamiento se realice.
+        </p>
+
+        <div class="firmas-adicionales">
+          <p class="firma-row">
+            FIRMA DEL PACIENTE:
+            <span class="firma-field large">
+              <canvas
+                id="firma-paciente-dysport"
+                class="firma-canvas-field"
+                width="400"
+                height="60"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            DOCUMENTO:
+            <span class="firma-field">
+              <canvas
+                id="firma-documento-dysport"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+      </div>
+      <!-- FIN DEL CONSENTIMIENTO DYSPORT -->
+      <!-- CONSENTIMIENTO FIBRINA -->
+      <div
+        *ngIf="tipoConsentimientoSeleccionado === 'fibrina'"
+        class="consentimiento-body"
+      >
+        <h3 class="consent-subtitle">
+          <strong>CONSENTIMIENTO INFORMADO FIBRINA</strong>
+        </h3>
+
+        <div class="seccion-fecha">
+          <p>
+            FECHA:
+            <span class="firma-field fecha-campo">
+              <canvas
+                id="firma-fecha-fibrina"
+                class="firma-canvas-field"
+                width="300"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+
+        <div class="seccion-identificacion">
+          <p>
+            Yo:
+            <span class="firma-field nombre-campo">
+              <canvas
+                id="firma-nombre-fibrina"
+                class="firma-canvas-field"
+                width="350"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            indentificado con cedula de ciudadanía #
+            <span class="firma-field">
+              <canvas
+                id="firma-cedula-fibrina"
+                class="firma-canvas-field"
+                width="300"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            de
+            <span class="firma-field">
+              <canvas
+                id="firma-ciudad-fibrina"
+                class="firma-canvas-field"
+                width="200"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            luego de habérseme explicado en términos claros y sencillos los
+            alcances y riesgos del mismo, como así también las características y
+            beneficios esperados del tratamiento propuesto, autorizo a
+            <strong>CASA OLIMPO</strong>, y a su equipo de trabajo a realizar un
+            procedimiento conocido como
+            <strong>APLICACIÓN DE FIBRINA PLAQUETAS</strong> que se realizará en
+            <strong>CASA OLIMPO</strong>.
+          </p>
+        </div>
+
+        <p>
+          Esta técnica consiste en tomar una muestra de su propia sangre y
+          separar sus componentes por un proceso de centrifugación para aislar y
+          concentrar las plaquetas en una fracción de fibrina.
+        </p>
+
+        <p>
+          En la piel, las plaquetas liberan factores de crecimiento en su
+          relación biológica y en una concentración ligeramente más alta que la
+          concentración normal, para estimular la proliferación celular de
+          fibroblastos y la síntesis de matriz extracelular, que contiene
+          proteínas, tales como colágeno y elastina dando las propiedades
+          elásticas de la piel.
+        </p>
+
+        <p>
+          Los beneficios esperados son la mejora de la elasticidad de la piel
+          con una suavización de las líneas finas y una mejora en el tono de la
+          piel. El PRF también puede permitir relleno de las arrugas más
+          profundas, como los surcos naso labiales o las ojeras, hidratación de
+          labios. Los resultados se notan las primeras semanas después de la
+          primera inyección, pero para obtener los mejores resultado, su médico
+          tendrá que ofrecer un protocolo con varias sesiones.
+        </p>
+
+        <p>
+          El número y el intervalo entre sesiones depende del análisis
+          personalizados de su tipo el\uso de sus propias células y la capacidad
+          de regeneración natural\, por lo que puede ser una variación natural
+          en los resultados entre los individuos. No dude en pedir una
+          estimación más específica a su médico acerca de la cantidad de
+          sesiones requeridas.
+        </p>
+
+        <p>
+          El PRF es un producto directo de su cuerpo, se espera muy pocos
+          efectos secundarios. El PRF se utiliza en numerosos estudios clínicos
+          sobre \a curación de \as heridas quirúrgicas y crónica sin ninguna
+          manifestación de efectos secundarios graves. Todavía se puede producir
+          en algunos casos:
+        </p>
+
+        <p>
+          <strong>-PJ</strong> igual que con todos los productos inyectables, la
+          presencia de hematoma o rojez en los sitios de inyección.
+        </p>
+        <p>
+          -Las sensaciones de calor y la tensión superficial del pie\. Estás
+          sensaciones son transitorias debido al estallido de la estimulación y
+          debe desaparecer en un plazo máximo de 24 a 36 horas después del
+          tratamiento.
+        </p>
+
+        <p>
+          En casos muy raros y en pacientes con potencial alérgico
+          significativa, edema puede ocurrir debido a un proceso mas grande que
+          inflamatoria normal. Informe a su doctor para que puedan prescribir
+          medicamentos apropiados inmediatamente.
+        </p>
+
+        <p>
+          El uso de PRF en el tratamiento de regeneración de la piel es
+          estrictamente contrainidcado en pacientes con cancer cervico-faciales
+          en la ausencia de control de la remision tota.
+        </p>
+
+        <p>
+          El uso de PRF tambien es contra indicado en pacientes con lesiones de
+          la piel pueden ser causados por procesos de proliferacion celular
+          anormal. Su medico le hara un diagnostico preliminar en duda.
+        </p>
+
+        <p>
+          Al igual que con todos los demas tratamientos por inyecciones
+          subcutaneas, esta contraindicado el uso de anticoagulantes de forma
+          concomitante con la inyeccion
+        </p>
+
+        <p>
+          Me comprometo a cooperar en el cuidado de la evolucion del
+          procedimiento realizado cumpliendo fielmente los controles y cuidados
+          que el medico me ha explicado y los que me indique una vez realizado
+          el procedimiento, como así tambien tener en cuenta la pautas de alarma
+          explicitadas, todo hasta que posea el alta medica; informando de
+          manera inmediata al propfesional sobre cualquier complicaciom o cambio
+          que apareciera en la evolucion normal de acuerdo a las explicaciones
+          que el mismo me brindo sobre el particular.
+        </p>
+
+        <p>
+          Declaro bajo juramento no haber omitido o alterado datos al exponer
+          mis antecedentes clinicos quirugicos, ni sobre anteriores tratamientos
+          u operaciones que me pudieron haber siod realizadas por otros
+          profesionales. Manifiesto ser alergico a:
+          <span class="firma-field full-width">
+            <canvas
+              id="firma-alergias-fibrina"
+              class="firma-canvas-field"
+              width="600"
+              height="30"
+            ></canvas>
+            <div class="firma-line"></div>
+          </span>
+        </p>
+
+        <p>
+          Así mismo AUTORIZO a que me practiquen grabaciones fotografías en la
+          zona tratada que puden ser utilizadas con fines científicos, docentes
+          o médicos, quedando entendido que su uso no constituya una violación a
+          la intimidad o confidencialidad a las que tengo derecho
+        </p>
+
+        <p>
+          Me consta que mis datos van a ser tratados de forma automatizada y
+          confidencial.
+        </p>
+
+        <p>
+          Se me ha explicado que en cualquier momento antes de llevarse a cabo
+          el procedimiento puedo retractarme del mismo, rechazando su ejecución,
+          para lo cual deberá comunicar dicha retracción
+        </p>
+
+        <p>
+          He podido aclarar todas mis dudas acerca de todo lo anterior expuesto
+          y he entendido totalmente
+          <strong>ESTE DOCUMENTO DE CONSENTIMIENTO</strong> reafirmándome en
+          todas y cada uno de sus puntos y con la firma del documento consiento
+          que el tratamiento se realice.
+        </p>
+
+        <div class="firmas-adicionales">
+          <p class="firma-row">
+            FIRMA PACIENTE:
+            <span class="firma-field large">
+              <canvas
+                id="firma-paciente-fibrina"
+                class="firma-canvas-field"
+                width="400"
+                height="60"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            DOCUMENTO:
+            <span class="firma-field">
+              <canvas
+                id="firma-documento-fibrina"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+      </div>
+      <!-- FIN DEL CONSENTIMIENTO FIBRINA -->
+      <!-- CONSENTIMIENTO CAUTERIZACIÓN DE LUNARES -->
+      <div
+        *ngIf="tipoConsentimientoSeleccionado === 'cauterizacion'"
+        class="consentimiento-body"
+      >
+        <h3 class="consent-subtitle">
+          <strong>CONSENTIMIENTO INFORMADO CAUTERIZACIÓN DE LUNARES</strong>
+        </h3>
+
+        <div class="seccion-fecha">
+          <p>
+            FECHA:
+            <span class="firma-field fecha-campo">
+              <canvas
+                id="firma-fecha-cauterizacion"
+                class="firma-canvas-field"
+                width="300"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+
+        <div class="seccion-identificacion">
+          <p>
+            Yo:
+            <span class="firma-field nombre-campo">
+              <canvas
+                id="firma-nombre-cauterizacion"
+                class="firma-canvas-field"
+                width="350"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            Identificado con cedula de ciudadanía #
+            <span class="firma-field">
+              <canvas
+                id="firma-cedula-cauterizacion"
+                class="firma-canvas-field"
+                width="300"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            de
+            <span class="firma-field">
+              <canvas
+                id="firma-ciudad-cauterizacion"
+                class="firma-canvas-field"
+                width="200"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            luego de habérseme explicado en términos claros y sencillos los
+            alcances y riesgos del mismo, como así también las características y
+            beneficios esperados del tratamiento propuesto, autorizo a
+            <strong>CASA OLIMPO</strong>, y a su equipo, a realizar un
+            procedimiento conocido como
+            <strong>CAUTERIZACIÓN DE LUNARES</strong>.
+          </p>
+        </div>
+
+        <div class="seccion-objetivo">
+          <h4><strong>OBJETIVO</strong></h4>
+          <p>
+            Se utiliza una técnica ablativa apta para tratar todas las
+            imperfecciones cutáneas en zonas ultrasensibles sin causar sangrado,
+            ni hematomas, ni cicatrices que permite tratar la lesión sin dañar
+            el tejido de alrededor. No produce daño térmico ni quemadura
+            profunda en la dermis a diferencia de otras técnicas y tiene efecto
+            inmediato sobre la zona tratada con resultados permanentes y
+            naturales
+          </p>
+        </div>
+
+        <div class="seccion-caracteristicas">
+          <h4><strong>CARACTERÍSTICAS</strong></h4>
+          <p>
+            Las eliminaciones de lunares se realizan de forma minuciosa, con una
+            pequeña quemadura superficial y controlada. Se forma inmediatamente
+            una costra y el médico no puede nunca ir más allá de la dermis
+            porque la creación de costra impide penetrar las capas más profundas
+            de la dermis, por lo que la seguridad es total.
+          </p>
+        </div>
+
+        <div class="seccion-efectos">
+          <h4><strong>EFECTOS SECUNDARIOS</strong></h4>
+          <ul>
+            <li>Rojez</li>
+            <li>Costra escamosa</li>
+            <li>Dolor</li>
+            <li>Inflamación</li>
+          </ul>
+        </div>
+
+        <div class="seccion-cuidados">
+          <h4><strong>CUIDADOS</strong></h4>
+          <ul>
+            <li>No tener contacto directo con el agua</li>
+            <li>No nadar</li>
+            <li>Evitar la exposición al sol</li>
+            <li>Uso del protector solar</li>
+          </ul>
+        </div>
+
+        <p>
+          Es importante reconocer los signos de alerta ante los cuales deberá
+          comunicarse con su médico especialista, estos incluyen, fiebre,
+          sangrado excesivo, supuración de la herida, dolor severo y mal olor en
+          la herida. Aunque las complicaciones son pocos frecuentes, su médico
+          profesional debe conocer si alguna parte del proceso de recuperación
+          no resulta como se esperaba.
+        </p>
+
+        <p>
+          Soy consciente que la práctica de la medicina y la cirugía no es una
+          ciencia exacta y reconozco que a pesar que el profesional me ha
+          informado adecuadamente del resultado deseado del procedimiento, no me
+          ha sido garantizada la obtención de los mismo en su totalidad.
+        </p>
+
+        <p>
+          Me comprometo a cooperar en el cuidado de la evolución del
+          procedimiento realizado cumpliendo fielmente los controles de cuidados
+          que el médico me ha explicado y los que me indique una vez realizado
+          el procedimiento, como así también tener en cuenta las pautas de
+          alarma explicitadas, todo hasta que posea e alta médica; informando de
+          manera inmediata al profesional sobre cualquier complicación o cambio
+          que apareciera en la evolución normal de acuerdo a sus explicaciones
+          que el mismo me brindo sobre el particular.
+        </p>
+
+        <p>
+          Declaro bajo juramento no haber omitido o alterado datos al exponer
+          mis antecedentes clínico quirúrgicos, ni sobre anteriores tratamientos
+          u operaciones que me pudieron haber sido realizadas por otros
+          profesionales. Manifiesto ser alérgico a:
+          <span class="firma-field full-width">
+            <canvas
+              id="firma-alergias-cauterizacion"
+              class="firma-canvas-field"
+              width="600"
+              height="30"
+            ></canvas>
+            <div class="firma-line"></div>
+          </span>
+        </p>
+
+        <p>
+          Así mismo AUTORIZO a que me practiquen grabaciones fotografías en la
+          zona tratada que pueden ser utilizadas con fines científicos, docentes
+          o médicos, quedando entendido que su uso no constituya una violación a
+          la intimidad o confidencialidad a las que tengo derecho.
+        </p>
+
+        <p>
+          Se me ha explicado que en cualquier momento antes de llevarse a cabo
+          el procedimiento puedo retractarme del mismo, rechazando su ejecución,
+          para lo cual deberá comunicar dicha retracción.
+        </p>
+
+        <p>
+          He podido aclarar todas mis dudas acerca de todo lo anteriormente
+          expuesto y he entendido totalmente
+          <strong>ESTE DOCUMENTO DE CONSENTIMIENTO</strong> reafirmándome en
+          todas y cada uno de sus puntos y con la firma del documento consiento
+          que el tratamiento se realice.
+        </p>
+
+        <div class="firmas-adicionales">
+          <p class="firma-row">
+            FIRMA DEL PACIENTE:
+            <span class="firma-field large">
+              <canvas
+                id="firma-paciente-cauterizacion"
+                class="firma-canvas-field"
+                width="400"
+                height="60"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            DOCUMENTO:
+            <span class="firma-field">
+              <canvas
+                id="firma-documento-cauterizacion"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+      </div>
+      <!-- FIN DEL CONSENTIMIENTO CAUTERIZACIÓN DE LUNARES -->
 
       <div class="consent-actions">
         <div class="consent-checkbox">

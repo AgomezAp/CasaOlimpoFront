@@ -393,10 +393,7 @@ export class CrearConsentimientoComponent {
             this.guardando = false;
             alert('Consentimiento guardado correctamente');
             // Navegar de regreso a la historia clínica
-            this.router.navigate([
-              '/info-paciente',
-              this.pacienteId
-            ]);
+            this.router.navigate(['/info-paciente', this.pacienteId]);
           },
           error: (err) => {
             this.guardando = false;
@@ -419,28 +416,634 @@ export class CrearConsentimientoComponent {
     // Esperar a que Angular actualice el DOM con los nuevos elementos
     setTimeout(() => {
       this.inicializarCanvasFirmas();
-    }, 100);
+
+      // Inicializar firmas adicionales según el tipo de consentimiento
+      if (tipo === 'acido_hialuronico') {
+        const firmasIds = [
+          'firma-ciudad',
+          'firma-alergias',
+          'firma-paciente-adicional',
+          'firma-documento',
+        ];
+        this.inicializarFirmasPorTipo(firmasIds);
+      } else if (tipo === 'atencion_cliente') {
+        const firmasIds = [
+          'firma-paciente-cliente',
+          'firma-celular',
+          'firma-cc-cliente',
+          'firma-profesional',
+          'firma-cc-profesional',
+        ];
+        this.inicializarFirmasPorTipo(firmasIds);
+      } else if (tipo === 'dysport') {
+        const firmasIds = [
+          'firma-fecha-dysport',
+          'firma-nombre-dysport',
+          'firma-cedula-dysport',
+          'firma-ciudad-dysport',
+          'firma-alergias-dysport',
+          'firma-paciente-dysport',
+          'firma-documento-dysport',
+        ];
+        this.inicializarFirmasPorTipo(firmasIds);
+      } else if (tipo === 'fibrina') {
+        const firmasIds = [
+          'firma-fecha-fibrina',
+          'firma-nombre-fibrina',
+          'firma-cedula-fibrina',
+          'firma-ciudad-fibrina',
+          'firma-alergias-fibrina',
+          'firma-paciente-fibrina',
+          'firma-documento-fibrina',
+        ];
+        this.inicializarFirmasPorTipo(firmasIds);
+      } else if (tipo === 'cauterizacion') {
+        const firmasIds = [
+          'firma-fecha-cauterizacion',
+          'firma-nombre-cauterizacion',
+          'firma-cedula-cauterizacion',
+          'firma-ciudad-cauterizacion',
+          'firma-alergias-cauterizacion',
+          'firma-paciente-cauterizacion',
+          'firma-documento-cauterizacion',
+        ];
+        this.inicializarFirmasPorTipo(firmasIds);
+      }
+    }, 500);
+  }
+
+  // Método unificado para inicializar firmas
+  inicializarFirmasPorTipo(firmasIds: string[]): void {
+    console.log('Inicializando firmas:', firmasIds);
+
+    setTimeout(() => {
+      firmasIds.forEach((id) => {
+        const canvas = document.getElementById(id) as HTMLCanvasElement;
+        if (!canvas) {
+          console.warn(`Canvas no encontrado: ${id}`);
+          return;
+        }
+
+        console.log(`Canvas encontrado: ${id}`);
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Configurar contexto
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'black';
+
+        // Eliminar eventos anteriores para evitar duplicados
+        canvas.removeEventListener('mousedown', () => {});
+        canvas.removeEventListener('mousemove', () => {});
+        canvas.removeEventListener('touchstart', () => {});
+        canvas.removeEventListener('touchmove', () => {});
+
+        let firmando = false;
+        let ultimaX = 0;
+        let ultimaY = 0;
+
+        // Evento mousedown
+        canvas.addEventListener('mousedown', function (e) {
+          firmando = true;
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+          ultimaX = (e.clientX - rect.left) * scaleX;
+          ultimaY = (e.clientY - rect.top) * scaleY;
+          console.log('Iniciando firma en:', id);
+        });
+
+        // Evento mousemove
+        canvas.addEventListener('mousemove', function (e) {
+          if (!firmando) return;
+
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          const x = (e.clientX - rect.left) * scaleX;
+          const y = (e.clientY - rect.top) * scaleY;
+
+          ctx.beginPath();
+          ctx.moveTo(ultimaX, ultimaY);
+          ctx.lineTo(x, y);
+          ctx.stroke();
+
+          ultimaX = x;
+          ultimaY = y;
+        });
+
+        // Evento mouseup global
+        window.addEventListener('mouseup', function () {
+          if (firmando) {
+            firmando = false;
+          }
+        });
+
+        // Soporte táctil
+        canvas.addEventListener(
+          'touchstart',
+          function (e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            firmando = true;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            ultimaX = (touch.clientX - rect.left) * scaleX;
+            ultimaY = (touch.clientY - rect.top) * scaleY;
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener(
+          'touchmove',
+          function (e) {
+            e.preventDefault();
+            if (!firmando) return;
+
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const x = (touch.clientX - rect.left) * scaleX;
+            const y = (touch.clientY - rect.top) * scaleY;
+
+            ctx.beginPath();
+            ctx.moveTo(ultimaX, ultimaY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            ultimaX = x;
+            ultimaY = y;
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener('touchend', function () {
+          firmando = false;
+        });
+
+        // Agregar botón para limpiar la firma
+        const padreCanvas = canvas.parentElement;
+        if (padreCanvas) {
+          // Eliminar botones previos si existen
+          const botonesAnteriores =
+            padreCanvas.querySelectorAll('.btn-limpiar-firma');
+          botonesAnteriores.forEach((btn) => btn.remove());
+
+          // Crear nuevo botón
+          const botonLimpiar = document.createElement('button');
+          botonLimpiar.type = 'button';
+          botonLimpiar.className = 'btn-limpiar-firma';
+          botonLimpiar.innerHTML = '<i class="fas fa-eraser"></i>';
+          botonLimpiar.onclick = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            console.log('Firma limpiada:', id);
+          };
+
+          padreCanvas.appendChild(botonLimpiar);
+        }
+      });
+    }, 200);
+  }
+  inicializarFirmasAcidoHialuronico(): void {
+    const firmasIds = [
+      'firma-ciudad',
+      'firma-alergias',
+      'firma-paciente-adicional',
+      'firma-documento',
+    ];
+
+    firmasIds.forEach((id) => {
+      const canvas = document.getElementById(id) as HTMLCanvasElement;
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Configurar
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'black';
+
+      let firmando = false;
+      let ultimaX = 0;
+      let ultimaY = 0;
+
+      // Eventos de mouse
+      canvas.addEventListener('mousedown', (e) => {
+        firmando = true;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        ultimaX = (e.clientX - rect.left) * scaleX;
+        ultimaY = (e.clientY - rect.top) * scaleY;
+      });
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (!firmando) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+
+        this.dibujarLinea(ctx, ultimaX, ultimaY, x, y);
+
+        ultimaX = x;
+        ultimaY = y;
+      });
+
+      // Para que funcione aunque se suelte el mouse fuera del canvas
+      window.addEventListener('mouseup', () => {
+        firmando = false;
+      });
+
+      // Soporte para dispositivos táctiles
+      canvas.addEventListener(
+        'touchstart',
+        (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          firmando = true;
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+          ultimaX = (touch.clientX - rect.left) * scaleX;
+          ultimaY = (touch.clientY - rect.top) * scaleY;
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener(
+        'touchmove',
+        (e) => {
+          e.preventDefault();
+          if (!firmando) return;
+
+          const touch = e.touches[0];
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          const x = (touch.clientX - rect.left) * scaleX;
+          const y = (touch.clientY - rect.top) * scaleY;
+
+          this.dibujarLinea(ctx, ultimaX, ultimaY, x, y);
+
+          ultimaX = x;
+          ultimaY = y;
+        },
+        { passive: false }
+      );
+
+      canvas.addEventListener('touchend', () => {
+        firmando = false;
+      });
+    });
+  }
+
+  // PASO 4: Agrega método para limpiar las firmas adicionales
+  limpiarFirmaAdicional(id: string): void {
+    const canvas = document.getElementById(id) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  inicializarFirmasDinamicas(): void {
+    if (this.tipoConsentimientoSeleccionado === 'acido_hialuronico') {
+      const firmasIds = [
+        'firma-ciudad',
+        'firma-alergias',
+        'firma-paciente-adicional',
+        'firma-documento',
+      ];
+      this.inicializarFirmasConsentimiento(firmasIds);
+    } else if (this.tipoConsentimientoSeleccionado === 'atencion_cliente') {
+      const firmasIds = [
+        'firma-paciente-adicional', // Mismo ID que en ácido hialurónico para mantener consistencia
+        'firma-celular',
+        'firma-cc-cliente',
+        'firma-profesional',
+        'firma-cc-profesional',
+      ];
+      this.inicializarFirmasConsentimiento(firmasIds);
+    }
+  }
+  inicializarFirmasConsentimiento(firmasIds: string[]): void {
+    setTimeout(() => {
+      firmasIds.forEach((id) => {
+        const canvas = document.getElementById(id) as HTMLCanvasElement;
+        if (!canvas) {
+          console.warn(`Canvas no encontrado: ${id}`);
+          return;
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Configurar contexto
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'black';
+
+        let firmando = false;
+        let ultimaX = 0;
+        let ultimaY = 0;
+
+        // Función para obtener coordenadas ajustadas a la escala del canvas
+        const obtenerCoordenadas = (e: MouseEvent | Touch) => {
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+          return {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY,
+          };
+        };
+
+        // Eventos de mouse
+        canvas.addEventListener('mousedown', (e) => {
+          firmando = true;
+          const coords = obtenerCoordenadas(e);
+          ultimaX = coords.x;
+          ultimaY = coords.y;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+          if (!firmando) return;
+
+          const coords = obtenerCoordenadas(e);
+
+          ctx.beginPath();
+          ctx.moveTo(ultimaX, ultimaY);
+          ctx.lineTo(coords.x, coords.y);
+          ctx.stroke();
+
+          ultimaX = coords.x;
+          ultimaY = coords.y;
+        });
+
+        window.addEventListener('mouseup', () => {
+          firmando = false;
+        });
+
+        // Eventos touch para dispositivos móviles
+        canvas.addEventListener(
+          'touchstart',
+          (e) => {
+            e.preventDefault();
+            firmando = true;
+            const coords = obtenerCoordenadas(e.touches[0]);
+            ultimaX = coords.x;
+            ultimaY = coords.y;
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener(
+          'touchmove',
+          (e) => {
+            e.preventDefault();
+            if (!firmando) return;
+
+            const coords = obtenerCoordenadas(e.touches[0]);
+
+            ctx.beginPath();
+            ctx.moveTo(ultimaX, ultimaY);
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
+
+            ultimaX = coords.x;
+            ultimaY = coords.y;
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener('touchend', () => {
+          firmando = false;
+        });
+
+        // Limpiar botones si existen
+        const botonLimpiar = document.createElement('button');
+        botonLimpiar.type = 'button';
+        botonLimpiar.className = 'btn-limpiar-firma';
+        botonLimpiar.innerHTML = '<i class="fas fa-eraser"></i>';
+        botonLimpiar.onclick = () => this.limpiarFirmaDinamica(id);
+
+        // Agregar botón al contenedor del canvas
+        if (canvas.parentElement) {
+          canvas.parentElement.appendChild(botonLimpiar);
+        }
+      });
+    }, 200);
+  }
+
+  // Método para limpiar firmas
+  limpiarFirmaDinamica(id: string): void {
+    const canvas = document.getElementById(id) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  inicializarFirmasPorIds(ids: string[]): void {
+    setTimeout(() => {
+      ids.forEach((id) => {
+        const canvas = document.getElementById(id) as HTMLCanvasElement;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Configurar el contexto
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'black';
+
+        let firmando = false;
+        let ultimaX = 0;
+        let ultimaY = 0;
+
+        // Eventos de mouse
+        canvas.addEventListener('mousedown', (e) => {
+          firmando = true;
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+          ultimaX = (e.clientX - rect.left) * scaleX;
+          ultimaY = (e.clientY - rect.top) * scaleY;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+          if (!firmando) return;
+
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+
+          const x = (e.clientX - rect.left) * scaleX;
+          const y = (e.clientY - rect.top) * scaleY;
+
+          ctx.beginPath();
+          ctx.moveTo(ultimaX, ultimaY);
+          ctx.lineTo(x, y);
+          ctx.stroke();
+
+          ultimaX = x;
+          ultimaY = y;
+        });
+
+        window.addEventListener('mouseup', () => {
+          firmando = false;
+        });
+
+        // Soporte para dispositivos táctiles
+        canvas.addEventListener(
+          'touchstart',
+          (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            firmando = true;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            ultimaX = (touch.clientX - rect.left) * scaleX;
+            ultimaY = (touch.clientY - rect.top) * scaleY;
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener(
+          'touchmove',
+          (e) => {
+            e.preventDefault();
+            if (!firmando) return;
+
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const x = (touch.clientX - rect.left) * scaleX;
+            const y = (touch.clientY - rect.top) * scaleY;
+
+            ctx.beginPath();
+            ctx.moveTo(ultimaX, ultimaY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            ultimaX = x;
+            ultimaY = y;
+          },
+          { passive: false }
+        );
+
+        canvas.addEventListener('touchend', () => {
+          firmando = false;
+        });
+      });
+    }, 200);
   }
   obtenerTituloConsentimiento(): string {
     switch (this.tipoConsentimientoSeleccionado) {
-      case 'general':
-        return 'GENERAL';
-      case 'procedimiento':
-        return 'PROCEDIMIENTO ESPECÍFICO';
-      case 'terapia':
-        return 'TERAPIA AVANZADA';
+      case 'atencion_cliente':
+        return 'ATENCIÓN AL CLIENTE';
+      case 'acido_hialuronico':
+        return 'ÁCIDO HIALURÓNICO';
+      case 'dysport':
+        return 'DYSPORT';
+      case 'fibrina':
+        return 'FIBRINA';
+      case 'cauterizacion':
+        return 'CAUTERIZACIÓN DE LUNARES';
       default:
         return '';
     }
   }
   generarPDF(): void {
-    // Verificar si hay firmas
-    if (!this.firmaPaciente || !this.firmaDoctor) {
-      alert('Se requieren ambas firmas antes de generar el PDF');
-      return;
-    }
-
     // Verificar si el checkbox está marcado
+    if (this.tipoConsentimientoSeleccionado === 'acido_hialuronico') {
+      const firmasPaciente = document.getElementById(
+        'firma-paciente-adicional'
+      ) as HTMLCanvasElement;
+      const firmasDocumento = document.getElementById(
+        'firma-documento'
+      ) as HTMLCanvasElement;
+
+      if (
+        this.canvasEstaVacio(firmasPaciente) ||
+        this.canvasEstaVacio(firmasDocumento)
+      ) {
+        alert(
+          'Se requieren completar las firmas dentro del documento antes de generar el PDF'
+        );
+        return;
+      }
+    } else if (this.tipoConsentimientoSeleccionado === 'dysport') {
+      const firmaPaciente = document.getElementById(
+        'firma-paciente-dysport'
+      ) as HTMLCanvasElement;
+      const firmaDocumento = document.getElementById(
+        'firma-documento-dysport'
+      ) as HTMLCanvasElement;
+
+      if (
+        this.canvasEstaVacio(firmaPaciente) ||
+        this.canvasEstaVacio(firmaDocumento)
+      ) {
+        alert(
+          'Se requieren completar las firmas del paciente y documento antes de generar el PDF'
+        );
+        return;
+      }
+    } else if (this.tipoConsentimientoSeleccionado === 'fibrina') {
+      const firmaPaciente = document.getElementById(
+        'firma-paciente-fibrina'
+      ) as HTMLCanvasElement;
+      const firmaDocumento = document.getElementById(
+        'firma-documento-fibrina'
+      ) as HTMLCanvasElement;
+
+      if (
+        this.canvasEstaVacio(firmaPaciente) ||
+        this.canvasEstaVacio(firmaDocumento)
+      ) {
+        alert(
+          'Se requieren completar las firmas del paciente y documento antes de generar el PDF'
+        );
+        return;
+      }
+    } else if (this.tipoConsentimientoSeleccionado === 'cauterizacion') {
+      const firmaPaciente = document.getElementById(
+        'firma-paciente-cauterizacion'
+      ) as HTMLCanvasElement;
+      const firmaDocumento = document.getElementById(
+        'firma-documento-cauterizacion'
+      ) as HTMLCanvasElement;
+
+      if (
+        this.canvasEstaVacio(firmaPaciente) ||
+        this.canvasEstaVacio(firmaDocumento)
+      ) {
+        alert(
+          'Se requieren completar las firmas del paciente y documento antes de generar el PDF'
+        );
+        return;
+      }
+    }
     if (!this.consentimientoForm.valid) {
       alert('Debe aceptar los términos del consentimiento');
       return;
@@ -560,5 +1163,18 @@ export class CrearConsentimientoComponent {
           (instrucciones as HTMLElement).style.display = instruccionesDisplay;
         }
       });
+  }
+  canvasEstaVacio(canvas: HTMLCanvasElement): boolean {
+    const ctx = canvas.getContext('2d');
+    const pixeles = ctx?.getImageData(0, 0, canvas.width, canvas.height).data;
+
+    if (!pixeles) return true;
+
+    // Verificar si hay algún pixel no transparente
+    for (let i = 3; i < pixeles.length; i += 4) {
+      if (pixeles[i] > 0) return false;
+    }
+
+    return true;
   }
 }

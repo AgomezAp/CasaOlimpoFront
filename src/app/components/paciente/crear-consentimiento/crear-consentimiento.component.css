@@ -356,7 +356,75 @@ canvas.firma-canvas {
     width: 100%;
   }
 }
+/* Estilos para consentimiento de ácido hialurónico */
+.seccion-fecha, .seccion-identificacion, .seccion-objetivo, 
+.seccion-caracteristicas, .seccion-riesgos, .seccion-advertencias {
+  margin-bottom: 20px;
+}
 
+.seccion-objetivo h4, .seccion-caracteristicas h4, .seccion-riesgos h4 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.firma-field {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  min-width: 150px;
+  height: 40px;
+  margin: 0 5px;
+}
+
+.firma-field.large {
+  height: 60px;
+}
+
+.firma-field.full-width {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  height: 30px;
+}
+
+.firma-canvas-field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: crosshair;
+}
+
+.firma-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #333;
+}
+
+.fecha-actual {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.firmas-adicionales {
+  margin-top: 30px;
+}
+
+.firma-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.firma-row .firma-field {
+  flex: 1;
+  margin-left: 20px;
+}
 /* Estilos para la impresión */
 @media print {
   .consent-actions,
@@ -377,88 +445,50 @@ canvas.firma-canvas {
     padding: 0;
   }
 }
-/* Estilos para el consentimiento de ácido hialurónico */
-.seccion-acido h4 {
-  font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 10px;
+
+
+.firma-canvas-field {
+  border: 1px solid #ddd;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: crosshair;
 }
 
-.campo-firma-inline {
+.btn-limpiar-firma {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 2px 5px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.btn-limpiar-firma:hover {
+  background-color: #e9ecef;
+}
+
+.firma-field {
   display: inline-block;
   position: relative;
   vertical-align: middle;
+  min-width: 150px;
+  height: 40px;
   margin: 0 5px;
 }
 
-.firma-canvas-inline {
-  z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-}
 
-.firma-linea-inline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  border-bottom: 1px solid #333;
-}
 
-.firma-especifica {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
 
-.firma-row {
-  display: flex;
-  margin-bottom: 15px;
-  align-items: center;
-}
-
-.firma-row span {
-  width: 180px;
-  font-weight: bold;
-}
-
-.campo-firma-block {
-  position: relative;
-  flex: 1;
-  height: 70px;
-}
-
-.firma-canvas-block {
-  z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-}
-
-.firma-linea-block {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-bottom: 1px solid #333;
-}
-
-.documento-identificacion {
-  margin-top: 30px;
-}
-
-.fecha-actual {
-  font-weight: bold;
-}
 /* Media queries específicas para pantallas de 15.6 pulgadas */
-@media screen and (min-width: 1280px) and (max-width: 1920px) {
+@media screen and (min-width: 1366px)  {
   /* Ajustes generales del contenedor */
   :host {
     padding-left: 0; /* Eliminar el padding izquierdo para centrar mejor */
@@ -470,7 +500,7 @@ canvas.firma-canvas {
     max-width: 1195px;
     margin: 0 auto;
     padding: 0 20px;
-    margin-right: -20px;
+    margin-right: -10px;
   }
   /* Ajustar altura del preview para que se vea todo sin scroll */
   .consentimiento-preview {
@@ -491,6 +521,7 @@ canvas.firma-canvas {
   .consentimiento-body {
     font-size: 14px;
     line-height: 1.6;
+    margin: 30px;
   }
 
   /* Ajustes para firmas */
@@ -553,7 +584,141 @@ canvas.firma-canvas {
     font-size: 14px;
   }
 }
+/* Media queries para pantallas grandes (1600px o más) */
+@media screen and (min-width: 1600px) {
 
+  /* Aumentar tamaño del contenedor principal */
+  .data-section {
+    max-width: 1550px;
+    padding: 0 30px;
+  }
+
+  /* Mejorar visualización del preview */
+  .consentimiento-preview {
+    max-height: 700px;
+    padding: 30px;
+  }
+
+  /* Aumentar tamaño de fuente para pantallas grandes */
+  .consentimiento-header h3 {
+    font-size: 24px;
+  }
+
+  .consentimiento-info,
+  .consentimiento-body {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* Específicamente para el consentimiento DYSPORT */
+  #documento-consentimiento.dysport .consentimiento-body {
+    padding: 40px !important;
+    margin: 30px 60px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Aumentar tamaño de los campos de firma */
+  .firma-field {
+    min-width: 200px;
+    height: 50px;
+  }
+
+  .firma-field.large {
+    height: 80px;
+  }
+
+  /* Ajustes para la sección de firmas adicionales */
+  .firmas-adicionales {
+    margin-top: 40px;
+  }
+
+  .firma-row .firma-field {
+    margin-left: 30px;
+  }
+}
+
+/* Media queries para pantallas muy grandes (1920px o más - monitores Full HD) */
+@media screen and (min-width: 1920px) {
+  /* Contenedor principal aún más grande */
+  .data-section {
+    max-width: 1700px;
+  }
+
+  /* Aumentar área visible */
+  .consentimiento-preview {
+    max-height: 800px;
+  }
+
+  /* Específicamente para DYSPORT en pantallas muy grandes */
+  #documento-consentimiento.dysport .consentimiento-body {
+    padding: 50px 80px !important;
+    margin: 40px 80px !important;
+  }
+
+  /* Tamaños de texto más grandes */
+  .consentimiento-header h3 {
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+
+  .consentimiento-body {
+    font-size: 18px;
+    line-height: 2;
+  }
+
+  /* Campos de firma más grandes */
+  .firma-field {
+    min-width: 250px;
+    height: 60px;
+    margin: 0 10px;
+  }
+
+  .firma-field.large {
+    height: 100px;
+  }
+
+  /* Botones más grandes y claros */
+  .btn-preview, 
+  .btn-primary, 
+  .btn-secondary {
+    padding: 14px 28px;
+    font-size: 18px;
+  }
+}
+
+/* Para pantallas extra grandes (2560px o más - monitores 2K/QHD y superiores) */
+@media screen and (min-width: 2560px) {
+  .data-section {
+    max-width: 2200px;
+  }
+
+  .consentimiento-preview {
+    max-height: 1000px;
+    padding: 50px;
+  }
+
+  #documento-consentimiento.dysport .consentimiento-body {
+    padding: 80px 120px !important;
+    margin: 60px 100px !important;
+    border-radius: 12px !important;
+  }
+
+  .consentimiento-body {
+    font-size: 20px;
+    line-height: 2.2;
+  }
+
+  /* Sección de firmas aún más espaciosa */
+  .firma-field {
+    min-width: 300px;
+    height: 70px;
+  }
+
+  .firma-field.large {
+    height: 120px;
+  }
+}
 /* Para pantallas más pequeñas pero con alta resolución (como algunos laptops) */
 @media screen and (max-height: 800px) and (min-width: 1280px) {
   .consentimiento-preview {
