@@ -1,0 +1,575 @@
+/* Contenedor principal - aumentado a 1200px */
+:host {
+  display: block;
+  padding-left: 20px;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: auto !important;
+}
+.data-section {
+  max-width: 1500px;
+  margin: 0 auto;
+  overflow: hidden;
+  margin-right: 28px;
+}
+
+/* Título del consentimiento */
+h2.consentimiento-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Sección de consentimiento - borde más sutil */
+.consent-section {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+  background-color: white;
+}
+
+/* Selector de tipo de consentimiento */
+.tipo-consentimiento {
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.tipo-consentimiento label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Vista previa del consentimiento */
+.consentimiento-preview {
+  padding: 30px;
+  background-color: white;
+  max-height: 650px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#documento-consentimiento {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* Encabezado del consentimiento */
+.consentimiento-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.consentimiento-header h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: #333;
+}
+
+.consentimiento-info {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.consentimiento-info p {
+  margin: 8px 0;
+}
+
+/* Cuerpo del consentimiento */
+.consentimiento-body {
+  text-align: justify;
+  line-height: 1.8;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.consentimiento-body p,
+.consentimiento-body ul {
+  margin-bottom: 20px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.consentimiento-body li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* Sección de firmas - IMPORTANTE */
+.firma-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #ddd;
+}
+
+.firma-title {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.firma-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.firma-paciente,
+.firma-doctor {
+  flex: 1;
+  min-width: 350px; /* Mayor ancho mínimo */
+}
+
+.firma-label {
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* Canvas de firmas - CRÍTICO */
+.firma-canvas-container {
+  position: relative;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  height: 150px; /* Altura fija */
+  display: block;
+}
+
+canvas.firma-canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: crosshair;
+  border-radius: 4px;
+  touch-action: none; /* Importante para dispositivos táctiles */
+}
+
+/* Línea de firma */
+.firma-linea {
+  height: 2px;
+  background-color: #333;
+  width: 90%;
+  margin: 5px auto;
+  position: absolute;
+  bottom: 30px;
+  left: 5%;
+}
+
+.firma-nombre {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* Controles de firma */
+.firma-controls {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.btn-firma {
+  background-color: #e2e8f0;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #4a5568;
+  margin-top: 5px;
+}
+
+.btn-firma:hover {
+  background-color: #cbd5e0;
+  color: #2d3748;
+}
+
+/* Checkbox y acciones */
+.consent-actions {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.consent-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.consent-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.consent-checkbox label {
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Botones de acción */
+.btn-preview {
+  background-color: #7d746b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-preview:hover:not(:disabled) {
+  background-color: #635a52;
+}
+
+.btn-preview:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Botones adicionales */
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px 25px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background-color: #7d746b;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #635a52;
+}
+
+.btn-secondary {
+  background-color: #f7fafc;
+  border: 1px solid #cbd5e0;
+  color: #4a5568;
+}
+
+.btn-secondary:hover {
+  background-color: #edf2f7;
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Spinner para carga */
+.spinner-small {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Asegurarse que todo sea responsive */
+@media (max-width: 768px) {
+  .data-section {
+    padding: 10px;
+  }
+
+  .firma-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .firma-paciente,
+  .firma-doctor {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .consent-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-preview {
+    width: 100%;
+  }
+}
+
+/* Estilos para la impresión */
+@media print {
+  .consent-actions,
+  .form-actions,
+  .btn-firma {
+    display: none !important;
+  }
+
+  .data-section {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .consentimiento-preview {
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+  }
+}
+/* Estilos para el consentimiento de ácido hialurónico */
+.seccion-acido h4 {
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.campo-firma-inline {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+.firma-canvas-inline {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.firma-linea-inline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  border-bottom: 1px solid #333;
+}
+
+.firma-especifica {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.firma-row {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.firma-row span {
+  width: 180px;
+  font-weight: bold;
+}
+
+.campo-firma-block {
+  position: relative;
+  flex: 1;
+  height: 70px;
+}
+
+.firma-canvas-block {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.firma-linea-block {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #333;
+}
+
+.documento-identificacion {
+  margin-top: 30px;
+}
+
+.fecha-actual {
+  font-weight: bold;
+}
+/* Media queries específicas para pantallas de 15.6 pulgadas */
+@media screen and (min-width: 1280px) and (max-width: 1920px) {
+  /* Ajustes generales del contenedor */
+  :host {
+    padding-left: 0; /* Eliminar el padding izquierdo para centrar mejor */
+    width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  .data-section {
+    max-width: 1195px;
+    margin: 0 auto;
+    padding: 0 20px;
+    margin-right: -20px;
+  }
+  /* Ajustar altura del preview para que se vea todo sin scroll */
+  .consentimiento-preview {
+    max-height: 500px; /* Altura más controlada */
+    padding: 20px;
+  }
+
+  /* Reducir tamaño de textos */
+  .consentimiento-header h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .consentimiento-info {
+    font-size: 14px;
+  }
+
+  .consentimiento-body {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Ajustes para firmas */
+  .firma-section {
+    margin-top: 20px;
+    padding-top: 15px;
+  }
+
+  .firma-canvas-container {
+    height: 120px; /* Reducir altura */
+  }
+
+  /* Asegurar que las acciones de consentimiento estén siempre visibles */
+  .consent-actions {
+    position: sticky;
+    bottom: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 15px;
+  }
+}
+
+/* Específicamente para 1366x768 - resolución más común en laptops de 15.6" */
+@media screen and (width: 1366px) {
+  .data-section {
+    max-width: 1100px;
+  }
+
+  .consentimiento-preview {
+    max-height: 450px;
+  }
+
+  /* Ajustar espacio entre firmas */
+  .firma-container {
+    gap: 20px;
+  }
+
+  /* Hacer firmas más pequeñas */
+  .firma-paciente,
+  .firma-doctor {
+    min-width: 300px;
+  }
+
+  .firma-canvas-container {
+    height: 100px;
+  }
+
+  /* Reducir tamaños de fuente */
+  .firma-nombre {
+    font-size: 14px;
+  }
+
+  .consent-checkbox label {
+    font-size: 14px;
+  }
+
+  .btn-preview {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Para pantallas más pequeñas pero con alta resolución (como algunos laptops) */
+@media screen and (max-height: 800px) and (min-width: 1280px) {
+  .consentimiento-preview {
+    max-height: 400px;
+  }
+
+  .firma-canvas-container {
+    height: 90px;
+  }
+
+  .consentimiento-body p,
+  .consentimiento-body ul {
+    margin-bottom: 12px;
+  }
+
+  .firma-section {
+    margin-top: 15px;
+  }
+}

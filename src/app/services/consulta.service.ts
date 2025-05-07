@@ -111,7 +111,7 @@ obtenerConsultasOptimizadas(numeroDocumento: string): Observable<Consulta[]> {
   );
 }
 obtenerConsentimientoPDF(Cid: number): Observable<Blob> {
-  const url = `${this.appUrl}api/consulta/${Cid}/consentimiento`;
+  const url = `${this.appUrl}api/consulta/${Cid}/consentimiento/traer`;
   return this.http.get(url, {
     responseType: 'blob' as 'json',
   }).pipe(
@@ -125,6 +125,20 @@ obtenerConsentimientoPDF(Cid: number): Observable<Blob> {
       if (error.status === 404) {
         return throwError(() => new Error('Documento no encontrado'));
       }
+      return throwError(() => error);
+    })
+  );
+}
+guardarConsentimiento(consultaId: string, file: File | Blob): Observable<any> {
+  const formData = new FormData();
+  formData.append('consentimiento_info', file, 'consentimiento_info.pdf');
+  
+  return this.http.post<any>(
+    `${this.appUrl}api/consulta/${consultaId}/consentimiento`,
+    formData
+  ).pipe(
+    catchError(error => {
+      console.error('Error al guardar el consentimiento:', error);
       return throwError(() => error);
     })
   );

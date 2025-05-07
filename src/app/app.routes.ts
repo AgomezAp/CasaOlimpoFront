@@ -20,6 +20,7 @@ import { GestionUsuariosComponent } from './components/admin/gestion-usuarios/ge
 import { TransferenciaPacientesComponent } from './components/admin/transferencia-pacientes/transferencia-pacientes.component';
 import { FacturaIdComponent } from './components/facturacion/factura-id/factura-id.component';
 import { VerdatosconsultaComponent } from './components/paciente/verdatosconsulta/verdatosconsulta.component';
+import { CrearConsentimientoComponent } from './components/paciente/crear-consentimiento/crear-consentimiento.component';
 
 export const routes: Routes = [
     {
@@ -75,6 +76,10 @@ export const routes: Routes = [
     {
         path:'paciente/:numero_documento/consulta/:consulta_id',
        component:VerdatosconsultaComponent
+    },
+    {
+        path:'paciente/:numero_documento/consulta/:consulta_id/consentimiento',
+        component: CrearConsentimientoComponent
     },
     {
         path: 'admin',

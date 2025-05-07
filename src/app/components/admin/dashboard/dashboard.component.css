@@ -560,18 +560,19 @@
 @media (max-width: 768px) {
   /* Estructura básica */
   :host {
-    padding-left: 60px !important; /* Reducir el padding lateral */
+    padding-left: 52px !important; /* Reducido de 60px a 10px */
     margin-left: 0 !important;
-    width: calc(100% - 60px) !important; /* Usar más espacio horizontal */
+    width: calc(100% - 10px) !important; /* Ajustado para coincidir con el nuevo padding */
   }
 
   .dashboard-container {
-    padding: 10px 5px !important; /* Reducir padding horizontal */
-    margin-left: 35px !important; /* Eliminar margen izquierdo */
-    width: 100% !important; /* Ancho completo */
+    padding: 10px 5px !important;
+    margin-left: 0 !important; /* Eliminado el margen izquierdo de 35px */
+    margin-right: 5px !important; /* Agregado pequeño margen derecho */
+    width: 100% !important;
     max-width: none !important;
+    overflow-x: hidden !important; /* Prevenir scroll horizontal */
   }
-
   /* Encabezado principal */
   .dashboard-header h1 {
     font-size: 24px !important;
@@ -760,5 +761,87 @@
 
   .modal-body p {
     font-size: 14px !important;
+  }
+}
+@media (max-width: 932px) and (max-height: 500px) and (orientation: landscape) {
+  /* ===== CORRECCIÓN URGENTE DE ESTRUCTURA ===== */
+  :host {
+    padding-left: 0 !important; /* ELIMINADO completamente el padding izquierdo */
+    padding-top: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow-y: auto !important;
+  }
+
+  .dashboard-container {
+    padding: 5px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    overflow-x: hidden !important; 
+  }
+
+  /* ===== OPTIMIZACIÓN DEL TÍTULO ===== */
+  .page-title {
+    font-size: 20px !important;
+    margin: 5px 0 !important;
+    padding-left: 60px !important; /* Espacio para el menú lateral */
+  }
+
+  /* ===== LAYOUT OPTIMIZADO PARA HORIZONTAL ===== */
+  .card-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* 2 tarjetas por fila */
+    gap: 10px !important;
+    margin: 5px !important;
+    padding: 0 !important;
+  }
+
+  .admin-card {
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    height: auto !important;
+  }
+
+  /* ===== AJUSTES DE TABLA PARA ORIENTACIÓN HORIZONTAL ===== */
+  .users-table-container {
+    margin: 10px 5px !important;
+    padding: 10px !important;
+    border-radius: 0 !important;
+  }
+
+  /* Mantener tabla como tabla en horizontal (no convertir a tarjetas) */
+  .data-table thead {
+    display: table-header-group !important;
+  }
+
+  .data-table tbody tr {
+    display: table-row !important;
+  }
+
+  .data-table td {
+    display: table-cell !important;
+    padding: 5px 8px !important;
+    text-align: left !important;
+    padding-left: 8px !important; /* Corregir el padding que estaba en 40% */
+    min-height: unset !important; /* Quitar altura mínima */
+  }
+
+  .data-table td::before {
+    content: none !important; /* Eliminar las etiquetas en modo tarjeta */
+  }
+
+  /* Hacer que los botones sean más pequeños para ahorrar espacio vertical */
+  .btn-icon {
+    padding: 4px !important;
+    margin-right: 4px !important;
+  }
+
+  /* Ajuste fino para la paginación */
+  .pagination-controls {
+    margin: 5px 0 !important;
   }
 }

@@ -958,11 +958,7 @@ export class AgendaDashboardComponent implements OnInit {
       // Intentar obtener duración de diferentes propiedades
       if (normalized.duracion !== undefined) {
         duration = normalized.duracion;
-        /*  console.log(
-          `Usando duracion del backend para cita ${
-            appointment.id || appointment.Aid
-          }: ${duration}`
-        ); */
+       
       } else if (normalized.duration !== undefined) {
         duration = normalized.duration;
       } else if (normalized.minutos !== undefined) {
@@ -988,14 +984,6 @@ export class AgendaDashboardComponent implements OnInit {
       // Asignar la duración normalizada
       normalized.duration = duration;
 
-      // Log para verificar
-      /* console.log(
-        `Cita ID: ${normalized.id || normalized.Aid}, duración normalizada: ${
-          normalized.duration
-        }`
-      ); */
-
-      // Si no hay patientName pero tenemos las partes, construirlo
       if (!normalized.patientName) {
         if (normalized.nombre && normalized.apellidos) {
           normalized.patientName = `${normalized.nombre} ${normalized.apellidos}`;

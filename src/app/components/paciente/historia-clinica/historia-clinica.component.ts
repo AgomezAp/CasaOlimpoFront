@@ -4,6 +4,7 @@ import { ConsultaService } from '../../../services/consulta.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { finalize, Subscription } from 'rxjs';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-historia-clinica',
@@ -25,6 +26,7 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
   paginaActual: number = 1;
   elementosPorPagina: number = 4;
   totalConsultas: number = 0;
+  consultaSeleccionada: Consulta | null = null;
   paginatedConsultas: Consulta[] = [];
   cargandoCierre: { [key: number]: boolean } = {};
   cargandoPDF: { [key: number]: boolean } = {};
@@ -32,7 +34,8 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
   constructor(
     private consultaService: ConsultaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificacionService: NotificacionService
   ) {}
   get totalPages(): number {
     return this.totalPaginas;
@@ -51,6 +54,9 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
     ) {
       this.actualizarPaginacion(pagina);
     }
+  }
+  tieneConsentimiento(consulta: Consulta): boolean {
+    return !!(consulta.consentimiento_info || consulta.consentimiento_info || consulta.consentimiento_info);
   }
   paginaAnterior(): void {
     if (this.paginaActual > 1) {
@@ -256,6 +262,33 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
         },
       });
     this.subscriptions.push(cierreSub);
+  }
+  vincularConsentimiento(consulta: Consulta): void {
+    // Verificar que consulta.Cid exista antes de navegar
+    if (!consulta || !consulta.Cid) {
+      this.notificacionService.error('Error: No se puede identificar la consulta seleccionada');
+      console.error('Error: consulta.Cid es undefined', consulta);
+      return;
+    }
+    
+    // Verificar que numeroDocumento también exista
+    if (!this.numeroDocumento) {
+      this.notificacionService.error('Error: No se puede identificar al paciente');
+      console.error('Error: numeroDocumento es undefined');
+      return;
+    }
+  
+    // Almacenar la consulta seleccionada
+    this.consultaSeleccionada = consulta;
+    
+    // Navegar a la página de consentimiento con todos los parámetros validados
+    this.router.navigate([
+      '/paciente', 
+      this.numeroDocumento, 
+      'consulta', 
+      consulta.Cid.toString(), // Convertir a string para evitar problemas
+      'consentimiento'
+    ]);
   }
   verConsentimientoPDF(consulta: Consulta): void {
     if (this.cargandoPDF[consulta.Cid]) return;

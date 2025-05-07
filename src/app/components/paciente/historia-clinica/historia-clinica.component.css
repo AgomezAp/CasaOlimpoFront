@@ -157,7 +157,11 @@
   font-weight: 500;
   width: max-content;
 }
-
+.action-icon.consent{
+  background-color: #ceb580;
+  color: #e0d7ce;
+  border: none;
+}
 .estado-badge.abierto {
   background-color: #68f652;
   color: #000000;
@@ -201,7 +205,7 @@
 }
 
 .action-icon.close {
-  background-color: #e41414;
+  background-color: #d77777;
 }
 
 .action-icon.checked {
@@ -213,7 +217,7 @@
 }
 
 .action-icon.pdf {
-  background-color: #862828;
+  background-color: #7d746b;
 }
 
 .action-icon.disabled {
