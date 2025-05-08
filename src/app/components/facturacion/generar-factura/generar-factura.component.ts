@@ -5,16 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { DescuentoService } from '../../../services/descuento.service';
 import { CommonModule } from '@angular/common';
 import { NotificacionService } from '../../../services/notificacion.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   selector: 'app-generar-factura',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, NgSelectModule],
   templateUrl: './generar-factura.component.html',
   styleUrl: './generar-factura.component.css'
 })
 export class GenerarFacturaComponent {
   paciente: any;
   precio: number = 0;
-  descuento: number = 0;
+  descuento: any = 0;
   total: number = 0;
   tipoPago: string = 'Efectivo';
   descuentos: any[] = [];
@@ -52,9 +53,21 @@ export class GenerarFacturaComponent {
   }
 
   calcularTotal(): void {
-    this.total = Math.max(0, this.precio - (this.precio * (this.descuento / 100)));
+    let descuentoAplicado =  0;
+    if (this.descuento.includes('%')) {
+      const porcentaje = parseFloat(this.descuento.replace('%','')) || 0;
+      descuentoAplicado = this.precio * (porcentaje / 100);
+    } else {
+      descuentoAplicado = parseFloat(this.descuento) || 0;
+    }
+    this.total = Math.max(0, this.precio - descuentoAplicado);
   }
 
+  // agregarNuevo(valor: string): void {
+  //   if (!this.descuentos.find(d => d.porcentaje === valor)) {
+  //     this.descuentos.push({ motivo_descuento: 'Descuento personalizado', porcentaje: valor });
+  //   }
+  // }
   crearFactura(): void {
     const facturadata = {
       numero_documento: this.paciente.numero_documento,

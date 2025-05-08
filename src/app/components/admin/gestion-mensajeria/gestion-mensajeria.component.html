@@ -1,17 +1,27 @@
 <div class="gestion-mensajeria">
-    <h1>Gestión de Mensajería</h1>
+    <div class="mensajeria-header">
+        <h1>Gestión de Mensajería</h1>
+      </div>
     
-    <div class="botones">
-        <button (click)="verificar()">Verificar</button>
-        <button (click)="eliminar()">Eliminar</button>
-        <button (click)="nuevo()">Nuevo</button>
-    </div>
-    <div *ngIf="mensaje" [ngClass]="estiloMensaje" class="mensaje" >
-        {{mensaje}}
-    </div>
+    <div class="panel">
+        
+        <div class="descripcion-botones">
+            <p><strong>Verificar:</strong> Permite comprobar el estado actual de la sesión de mensajeria.</p>
+            <p><strong>Eliminar:</strong> Permite eliminar la sesión actual de mensajeria. Úsalo en caso de cambio de teléfono emisor.</p>
+            <p><strong>Nuevo:</strong> Genera una nueva sesión de mensajeria. Recuerda tener a mano un teléfono para conectar con el QR.</p>
+        </div>
+        <div class="botones">
+            <button class="btn-primary" (click)="verificar(true)">Verificar</button>
+            <button class="btn-primary" (click)="eliminar()">Eliminar</button>
+            <button class="btn-primary" (click)="nuevoSSE()">Nuevo</button>
+        </div>
+        <div *ngIf="mensaje" [ngClass]="estiloMensaje" class="mensaje" >
+            {{mensaje}}
+        </div>
 
-    <div *ngIf="qrCode" class="qr-container">
-        <h3>QR generado</h3>
-        <qrcode [qrdata]="qrCode" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+        <div *ngIf="qrCode" class="qr-container">
+            <h3>QR generado</h3>
+            <qrcode [qrdata]="qrCode" [width]="400" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
     </div>
 </div>
