@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit,NgZone} from '@angular/core';
 import { Consulta } from '../../../interfaces/consulta';
 import { ConsultaService } from '../../../services/consulta.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,12 +30,14 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
   paginatedConsultas: Consulta[] = [];
   cargandoCierre: { [key: number]: boolean } = {};
   cargandoPDF: { [key: number]: boolean } = {};
+  consentimientoCache: { [consultaId: number]: boolean } = {};
   private subscriptions: Subscription[] = [];
   constructor(
     private consultaService: ConsultaService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificacionService: NotificacionService
+    private notificacionService: NotificacionService,
+    private ngZone: NgZone
   ) {}
   get totalPages(): number {
     return this.totalPaginas;
@@ -55,9 +57,58 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
       this.actualizarPaginacion(pagina);
     }
   }
-  tieneConsentimiento(consulta: Consulta): boolean {
-    return !!(consulta.consentimiento_info || consulta.consentimiento_info || consulta.consentimiento_info);
+tieneConsentimiento(consulta: Consulta): boolean {
+  // Si ya tenemos el resultado en caché, devolverlo directamente
+  if (consulta.Cid in this.consentimientoCache) {
+    return this.consentimientoCache[consulta.Cid];
   }
+  
+  // Si tenemos evidencia directa en el objeto
+  if (consulta.consentimiento_check || consulta.consentimiento_info) {
+    this.consentimientoCache[consulta.Cid] = true;
+    return true;
+  }
+  
+  // Si no tenemos información aún, inicializamos como false
+  // y verificamos en segundo plano sin afectar el ciclo actual
+  if (!(consulta.Cid in this.consentimientoCache)) {
+    this.consentimientoCache[consulta.Cid] = false;
+    
+    // Programar verificación fuera del ciclo de detección de cambios
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        if (!this.cargandoPDF[consulta.Cid]) {
+          this.cargandoPDF[consulta.Cid] = true;
+          
+          this.consultaService.verificarExistenciaConsentimiento(consulta.Cid)
+            .pipe(
+              finalize(() => {
+                // Volver a la zona de Angular para actualizar UI
+                this.ngZone.run(() => {
+                  this.cargandoPDF[consulta.Cid] = false;
+                });
+              })
+            )
+            .subscribe({
+              next: (existe) => {
+                // Actualizar el cache dentro de la zona de Angular
+                this.ngZone.run(() => {
+                  this.consentimientoCache[consulta.Cid] = existe;
+                });
+              },
+              error: () => {
+                this.ngZone.run(() => {
+                  this.consentimientoCache[consulta.Cid] = false;
+                });
+              }
+            });
+        }
+      }, 10);
+    });
+  }
+  
+  return this.consentimientoCache[consulta.Cid];
+}
   paginaAnterior(): void {
     if (this.paginaActual > 1) {
       this.actualizarPaginacion(this.paginaActual - 1);
@@ -187,6 +238,9 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
             this.fechaCreacionHistoria = fechaMasAntigua;
           }
           this.actualizarPaginacion(1);
+
+          // Añadir esta línea: verificar consentimientos después de cargar
+          this.verificarEstadoConsentimientos();
         },
         error: (err) => {
           this.error = 'Error al cargar las historias clínicas';
@@ -264,31 +318,104 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
     this.subscriptions.push(cierreSub);
   }
   vincularConsentimiento(consulta: Consulta): void {
-    // Verificar que consulta.Cid exista antes de navegar
-    if (!consulta || !consulta.Cid) {
-      this.notificacionService.error('Error: No se puede identificar la consulta seleccionada');
-      console.error('Error: consulta.Cid es undefined', consulta);
+    // Verificar primero si ya existe un consentimiento
+    if (this.cargandoPDF[consulta.Cid]) {
+      this.notificacionService.info(
+        'Verificando si ya existe un consentimiento...'
+      );
       return;
     }
-    
-    // Verificar que numeroDocumento también exista
-    if (!this.numeroDocumento) {
-      this.notificacionService.error('Error: No se puede identificar al paciente');
-      console.error('Error: numeroDocumento es undefined');
-      return;
-    }
-  
-    // Almacenar la consulta seleccionada
-    this.consultaSeleccionada = consulta;
-    
-    // Navegar a la página de consentimiento con todos los parámetros validados
-    this.router.navigate([
-      '/paciente', 
-      this.numeroDocumento, 
-      'consulta', 
-      consulta.Cid.toString(), // Convertir a string para evitar problemas
-      'consentimiento'
-    ]);
+
+    this.cargandoPDF[consulta.Cid] = true;
+
+    // Verificamos en el backend si ya existe un consentimiento
+    this.consultaService
+      .verificarExistenciaConsentimiento(consulta.Cid)
+      .pipe(
+        finalize(() => {
+          this.cargandoPDF[consulta.Cid] = false;
+        })
+      )
+      .subscribe({
+        next: (existe) => {
+          // Guardamos el resultado para futuras verificaciones
+          (consulta as any)._tieneConsentimiento = existe;
+
+          if (existe) {
+            // Ya existe un consentimiento, mostramos mensaje y no permitimos crear otro
+            this.notificacionService.info(
+              'Esta consulta ya tiene un consentimiento informado asociado'
+            );
+          } else {
+            // No existe, continuamos con la creación
+            if (!consulta || !consulta.Cid) {
+              this.notificacionService.error(
+                'Error: No se puede identificar la consulta'
+              );
+              return;
+            }
+
+            if (!this.numeroDocumento) {
+              this.notificacionService.error(
+                'Error: No se puede identificar al paciente'
+              );
+              return;
+            }
+
+            // Almacenar la consulta seleccionada
+            this.consultaSeleccionada = consulta;
+
+            // Navegar a la página de creación de consentimiento
+            this.router.navigate([
+              '/paciente',
+              this.numeroDocumento,
+              'consulta',
+              consulta.Cid.toString(),
+              'consentimiento',
+            ]);
+          }
+        },
+        error: (err) => {
+          console.error('Error al verificar si existe consentimiento:', err);
+          this.notificacionService.error(
+            'Error al verificar si existe consentimiento'
+          );
+        },
+      });
+  }
+  verificarEstadoConsentimientos(): void {
+    if (!this.consultas || this.consultas.length === 0) return;
+
+    // Verificamos solo las consultas que no tengan ya la información
+    const consultasSinInfo = this.consultas.filter(
+      (c) =>
+        !c.consentimiento_check &&
+        !c.consentimiento_info &&
+        !(c as any)._tieneConsentimiento
+    );
+
+    // Si no hay consultas sin verificar, no hacemos nada
+    if (consultasSinInfo.length === 0) return;
+
+    // Limitamos a verificar máximo 5 consultas para no sobrecargar
+    const consultasAVerificar = consultasSinInfo.slice(0, 5);
+
+    // Para cada consulta que necesitamos verificar
+    consultasAVerificar.forEach((consulta) => {
+      this.consultaService
+        .verificarExistenciaConsentimiento(consulta.Cid)
+        .subscribe({
+          next: (existe) => {
+            console.log(
+              `Consulta ${consulta.Cid}: Precarga consentimiento: ${existe}`
+            );
+            (consulta as any)._tieneConsentimiento = existe;
+          },
+          error: () => {
+            (consulta as any)._tieneConsentimiento = false;
+          },
+        });
+    });
   }
   verConsentimientoPDF(consulta: Consulta): void {
     if (this.cargandoPDF[consulta.Cid]) return;
@@ -393,6 +520,11 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
   verConsulta(consulta: any): void {
-    this.router.navigate(['/paciente', this.numeroDocumento, 'consulta', consulta.Cid]);
+    this.router.navigate([
+      '/paciente',
+      this.numeroDocumento,
+      'consulta',
+      consulta.Cid,
+    ]);
   }
 }

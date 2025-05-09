@@ -357,12 +357,18 @@ canvas.firma-canvas {
   }
 }
 /* Estilos para consentimiento de ácido hialurónico */
-.seccion-fecha, .seccion-identificacion, .seccion-objetivo, 
-.seccion-caracteristicas, .seccion-riesgos, .seccion-advertencias {
+.seccion-fecha,
+.seccion-identificacion,
+.seccion-objetivo,
+.seccion-caracteristicas,
+.seccion-riesgos,
+.seccion-advertencias {
   margin-bottom: 20px;
 }
 
-.seccion-objetivo h4, .seccion-caracteristicas h4, .seccion-riesgos h4 {
+.seccion-objetivo h4,
+.seccion-caracteristicas h4,
+.seccion-riesgos h4 {
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -446,7 +452,6 @@ canvas.firma-canvas {
   }
 }
 
-
 .firma-canvas-field {
   border: 1px solid #ddd;
   background-color: rgba(255, 255, 255, 0.8);
@@ -484,11 +489,8 @@ canvas.firma-canvas {
   margin: 0 5px;
 }
 
-
-
-
 /* Media queries específicas para pantallas de 15.6 pulgadas */
-@media screen and (min-width: 1366px)  {
+@media (min-width: 1366px) {
   /* Ajustes generales del contenedor */
   :host {
     padding-left: 0; /* Eliminar el padding izquierdo para centrar mejor */
@@ -497,7 +499,7 @@ canvas.firma-canvas {
   }
 
   .data-section {
-    max-width: 1195px;
+    max-width: 1210px;
     margin: 0 auto;
     padding: 0 20px;
     margin-right: -10px;
@@ -544,11 +546,49 @@ canvas.firma-canvas {
     padding: 10px 15px;
   }
 }
+@media screen and (width: 820px) {
+ .data-section {
+    max-width: 1215px;
+    margin-left: 47px;
+  }
 
+  .consentimiento-preview {
+    max-height: 450px;
+  }
+
+  /* Ajustar espacio entre firmas */
+  .firma-container {
+    gap: 20px;
+  }
+
+  /* Hacer firmas más pequeñas */
+  .firma-paciente,
+  .firma-doctor {
+    min-width: 300px;
+  }
+
+  .firma-canvas-container {
+    height: 100px;
+  }
+
+  /* Reducir tamaños de fuente */
+  .firma-nombre {
+    font-size: 14px;
+  }
+
+  .consent-checkbox label {
+    font-size: 14px;
+  }
+
+  .btn-preview {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
 /* Específicamente para 1366x768 - resolución más común en laptops de 15.6" */
 @media screen and (width: 1366px) {
   .data-section {
-    max-width: 1100px;
+    max-width: 1215px;
   }
 
   .consentimiento-preview {
@@ -586,10 +626,15 @@ canvas.firma-canvas {
 }
 /* Media queries para pantallas grandes (1600px o más) */
 @media screen and (min-width: 1600px) {
-
+  :host {
+    display: block;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: auto !important;
+  }
   /* Aumentar tamaño del contenedor principal */
   .data-section {
-    max-width: 1550px;
+    max-width: 1550px! important; 
     padding: 0 30px;
   }
 
@@ -679,8 +724,8 @@ canvas.firma-canvas {
   }
 
   /* Botones más grandes y claros */
-  .btn-preview, 
-  .btn-primary, 
+  .btn-preview,
+  .btn-primary,
   .btn-secondary {
     padding: 14px 28px;
     font-size: 18px;
@@ -736,5 +781,377 @@ canvas.firma-canvas {
 
   .firma-section {
     margin-top: 15px;
+  }
+}
+.consentimiento-body {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 100px !important;
+  color: black !important;
+  background: white !important;
+}
+.consentimiento-body * {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: black !important;
+  background: white !important;
+}
+
+ul,
+ol {
+  display: block !important;
+  margin-left: 20px !important;
+  padding-left: 20px !important;
+}
+
+li {
+  display: list-item !important;
+  margin: 5px 0 !important;
+}
+
+p {
+  display: block !important;
+  margin: 10px 0 !important;
+}
+
+.firma-field {
+  position: relative !important;
+  display: block !important;
+  margin-bottom: 15px !important;
+}
+
+.firma-field.large {
+  min-height: 70px !important;
+}
+
+.firma-canvas-field {
+  width: 100% !important;
+  border: 1px solid #ccc !important;
+  display: block !important;
+}
+
+.firma-line {
+  border-bottom: 1px solid #333 !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.firmas-adicionales {
+  margin-top: 30px !important;
+  display: block !important;
+}
+
+/* Estilos específicos por tipo de consentimiento para forzar visibilidad */
+.acido_hialuronico,
+.dysport,
+.fibrina,
+.cauterizacion,
+.limpieza_facial,
+.atencion_cliente {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Visibilidad de header */
+.consentimiento-header {
+  display: block !important;
+  visibility: visible !important;
+  margin-bottom: 20px !important;
+}
+
+/* Visibilidad del contenedor principal */
+#documento-consentimiento {
+  display: block !important;
+  visibility: visible !important;
+  background-color: white !important;
+  color: black !important;
+  padding: 20px !important;
+}
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  :host {
+    display: block;
+    padding-left: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: auto !important;
+  }
+  #documento-consentimiento {
+    padding: 20px !important;
+    font-size: 14px !important;
+  }
+
+  .consentimiento-header h3 {
+    font-size: 26px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .consentimiento-body {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+
+  .firma-field {
+    min-height: 50px !important;
+  }
+
+  .firma-field.large {
+    min-height: 80px !important;
+  }
+
+  .seccion-identificacion,
+  .seccion-objetivo,
+  .seccion-caracteristicas,
+  .seccion-riesgos,
+  .seccion-advertencias {
+    margin-bottom: 25px !important;
+  }
+
+  /* Configuraciones específicas para iPad */
+  .consentimiento-info {
+    font-size: 15px !important;
+  }
+
+  .firma-canvas-field {
+    touch-action: none !important; /* Mejora la experiencia táctil en iPad */
+  }
+}
+
+/* ==== IPAD PRO ==== */
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+  :host {
+    display: block;
+    padding-right: 170px;
+    height: 100vh;
+    width: 110%;
+    box-sizing: border-box;
+    overflow: auto !important;
+  }
+  #documento-consentimiento {
+    padding: 30px !important;
+    max-width: 900px !important;
+    margin: 0 auto !important;
+  }
+
+  .consentimiento-header h3 {
+    font-size: 28px !important;
+  }
+
+  .consentimiento-body {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+  }
+
+  .firma-field {
+    min-height: 60px !important;
+  }
+
+  .firma-field.large {
+    min-height: 90px !important;
+  }
+
+  /* Hacer que las tablas se vean bien en iPad Pro */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 20px 0 !important;
+  }
+
+  td,
+  th {
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+    text-align: left !important;
+  }
+}
+
+/* ==== DISPOSITIVOS MÓVILES ==== */
+@media only screen and (max-width: 767px) {
+  #documento-consentimiento {
+    padding: 15px !important;
+    font-size: 14px !important;
+  }
+
+  .consentimiento-header h3 {
+    font-size: 20px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .consentimiento-body {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  .firma-field {
+    min-height: 40px !important;
+  }
+
+  .firma-field.large {
+    min-height: 60px !important;
+  }
+
+  .seccion-identificacion,
+  .seccion-objetivo,
+  .seccion-caracteristicas,
+  .seccion-riesgos,
+  .seccion-advertencias {
+    margin-bottom: 20px !important;
+  }
+
+  /* Ajustes específicos para mejor legibilidad en móviles */
+  p,
+  li {
+    font-size: 14px !important;
+  }
+
+  h4 {
+    font-size: 16px !important;
+    font-weight: bold !important;
+    margin-bottom: 10px !important;
+  }
+}
+
+/* ==== CONFIGURACIÓN PARA PDF ==== */
+@media print, (max-width: 595px) {
+  body,
+  html {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #documento-consentimiento {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+  }
+
+  .consentimiento-header h3 {
+    font-size: 18px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .consentimiento-body {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    text-align: justify !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  p,
+  li,
+  td,
+  th {
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
+  }
+
+  h4 {
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+    font-weight: bold !important;
+  }
+
+  /* Asegurar que no haya saltos de página inapropiados */
+  .seccion-identificacion,
+  .seccion-objetivo,
+  .seccion-caracteristicas,
+  .seccion-riesgos,
+  .seccion-advertencias {
+    page-break-inside: avoid !important;
+  }
+
+  /* Ajustes específicos para campos de firma */
+  .firma-field {
+    min-height: 30px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .firma-field.large {
+    min-height: 40px !important;
+  }
+
+  /* Ocultar todas las X y botones de limpiar */
+  .btn-limpiar-firma,
+  .clear-signature,
+  span:contains("x"),
+  x {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Asegurar que el contenido ocupe todo el ancho disponible */
+  table,
+  tr,
+  td,
+  th {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Asegurar que las imágenes se ajusten correctamente */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+@media screen and (min-width: 900px) and (max-width: 1199px) {
+  :host {
+    display: block;
+    padding-left: 75px;
+    height: 100vh;
+    width: 115%;
+    box-sizing: border-box;
+    overflow: auto !important;
+  }
+  #documento-consentimiento {
+    max-width: 800px !important;
+    margin: 40px auto 0 auto !important;
+    padding: 32px 32px 40px 32px !important;
+    background: #fff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07) !important;
+  }
+
+  .consentimiento-header {
+    margin-bottom: 28px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+  }
+
+  .consentimiento-header h3 {
+    font-size: 26px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .consentimiento-body {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    margin-bottom: 32px !important;
+  }
+
+  .firma-section {
+    margin-top: 32px !important;
+    padding-top: 18px !important;
+  }
+
+  .firma-canvas-container {
+    height: 120px !important;
+  }
+
+  .firma-field {
+    min-width: 180px !important;
+    min-height: 50px !important;
   }
 }

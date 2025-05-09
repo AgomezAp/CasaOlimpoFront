@@ -259,3 +259,82 @@
 .sidebar, .sidebar * {
   transition: all 0.3s ease;
 }
+/* Unificar comportamiento móvil y tablets: solo iconos, sin texto */
+@media (max-width: 1199px) {
+  .sidebar {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+  }
+
+  .sidebar-header {
+    padding: 10px 0 !important;
+  }
+
+  .app-title,
+  .sidebar-nav ul li a span,
+  .sidebar-nav .nav-link span,
+  .sidebar-footer {
+    display: none !important;
+  }
+
+  .sidebar-nav a {
+    justify-content: center !important;
+    padding: 18px 0 !important;
+  }
+
+  .sidebar-nav .nav-icon {
+    margin-right: 0 !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .logo-desktop {
+    display: none !important;
+  }
+  .logo-mobile {
+    display: block !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    margin: 0 auto !important;
+  }
+}
+@media (max-width: 1366px) {
+  .sidebar {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+  }
+
+  .sidebar-header {
+    padding: 10px 0 !important;
+  }
+
+  .app-title,
+  .sidebar-nav ul li a span,
+  .sidebar-nav .nav-link span,
+  .sidebar-footer {
+    display: none !important;
+  }
+
+  .sidebar-nav a {
+    justify-content: center !important;
+    padding: 18px 0 !important;
+  }
+
+  .sidebar-nav .nav-icon {
+    margin-right: 0 !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .logo-desktop {
+    display: none !important;
+  }
+  .logo-mobile {
+    display: block !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    margin: 0 auto !important;
+  }
+}

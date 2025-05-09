@@ -190,4 +190,48 @@ obtenerConsultaPaciente(numeroDocumento: string, consultaId: number): Observable
     })
   );
 }
+verificarExistenciaConsentimiento(consultaId: number): Observable<boolean> {
+  // Primero intentamos con el endpoint ideal (si existe)
+  const url = `${this.appUrl}api/consulta/${consultaId}/verificar-consentimiento`;
+  
+  // Si el endpoint no existe, usaremos un enfoque alternativo
+  return this.http.get<any>(url).pipe(
+    map(response => {
+      if (response && response.data) {
+        return !!response.data.tieneConsentimiento;
+      }
+      return false;
+    }),
+    catchError(error => {
+      console.log('Usando enfoque alternativo para verificar consentimiento de consulta', consultaId);
+      
+      // Si el endpoint no existe (404), usamos el método alternativo
+      return this.verificarConsentimientoAlternativo(consultaId);
+    })
+  );
+}
+
+/**
+ * Método alternativo para verificar si una consulta tiene consentimiento
+ * utilizando la información del objeto de consulta
+ */
+private verificarConsentimientoAlternativo(consultaId: number): Observable<boolean> {
+  // Usar el método existente para obtener la consulta completa
+  return this.obtenerConsultaPorId(consultaId).pipe(
+    map(consulta => {
+      // Verificar si alguno de estos campos indica la existencia de un consentimiento
+      const tieneConsentimiento = !!(
+        consulta.consentimiento_check || 
+        consulta.consentimiento_info
+      );
+      
+      console.log(`Consulta ${consultaId} verificada por método alternativo: ${tieneConsentimiento ? 'Tiene' : 'No tiene'} consentimiento`);
+      return tieneConsentimiento;
+    }),
+    catchError(error => {
+      console.error(`Error al verificar consentimiento de forma alternativa para consulta ${consultaId}:`, error);
+      return of(false);
+    })
+  );
+}
 }

@@ -168,7 +168,7 @@
   }
   
   .btn-upload {
-    background-color: #9c836e; /* Tono marrón suave */
+    background-color: #7d746b; /* Tono marrón suave */
     color: #e0d7ce;
     font-weight: 600;
     padding: 10px 20px;
@@ -177,7 +177,7 @@
   }
   
   .btn-upload:hover {
-    background-color: #876f5c;
+    background-color: #7d746b;
     transform: translateY(-2px);
   }
   

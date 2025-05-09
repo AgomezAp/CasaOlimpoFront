@@ -120,7 +120,12 @@
   font-size: 0.8rem;
   letter-spacing: 0.05em;
 }
-
+.historia-table td.procedimiento-cell {
+  max-width: 140px; /* Ajusta este valor según el ancho que necesites */
+  white-space: normal;
+  overflow: hidden;
+  word-wrap: break-word;
+}
 /* Celdas de tabla */
 .historia-table td {
   padding: 0.5rem 1rem; /* Padding reducido para filas más compactas */
@@ -340,5 +345,18 @@
   
   .action-button-container {
     justify-content: center;
+  }
+}
+/* En pantallas más grandes, permitir más espacio */
+@media screen and (min-width: 1600px) {
+  .historia-table td.procedimiento-cell {
+    max-width: 600px;
+  }
+}
+
+/* En pantallas muy grandes */
+@media screen and (min-width: 1920px) {
+  .historia-table td.procedimiento-cell {
+    max-width: 900px;
   }
 }

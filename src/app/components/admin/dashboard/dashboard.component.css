@@ -777,9 +777,10 @@
   .dashboard-container {
     padding: 5px !important;
     margin: 0 !important;
-    width: 100% !important;
+    width: 92% !important;
     max-width: none !important;
     overflow-x: hidden !important; 
+    padding-left: 63px !important; /* Espacio para el menú lateral */
   }
 
   /* ===== OPTIMIZACIÓN DEL TÍTULO ===== */

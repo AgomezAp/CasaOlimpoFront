@@ -1757,9 +1757,9 @@ textarea {
 /* Tablets (576px - 992px) */
 @media screen and (min-width: 576px) and (max-width: 991px) {
   .agenda-container {
-    width: 114%;
+    width: 121%;
     padding: 15px;
-    margin-left: 100px;
+    margin-left: 64px;
   }
   .agenda-title {
     font-size: 22px;

@@ -2,9 +2,9 @@
   <div class="section-header">
     <h2 class="section-title">Historia Clínica</h2>
     <div class="section-info">
-      <span *ngIf="fechaCreacionHistoria"
-        >Fecha creación: {{ fechaCreacionHistoria | date : "dd/MM/yyyy" }}</span
-      >
+      <span *ngIf="fechaCreacionHistoria">
+        Fecha creación: {{ fechaCreacionHistoria | date : "dd/MM/yyyy" }}
+      </span>
     </div>
   </div>
   <div class="section-divider"></div>
@@ -49,7 +49,7 @@
         >
           <td>{{ consulta.Cid }}</td>
           <td>{{ formatearFecha(consulta.fecha) }}</td>
-          <td>{{ consulta.motivo || "Sin procedimiento" }}</td>
+          <td class="procedimiento-cell">{{ consulta.motivo || "Sin procedimiento" }}</td>
           <td>
             <div
               class="estado-badge"
@@ -98,31 +98,35 @@
               >
                 <img src="/Check.png" alt="Completado" />
               </div>
+
+              <!-- Indicador de verificación de consentimiento -->
+              <div
+                *ngIf="cargandoPDF[consulta.Cid]"
+                class="action-icon verifying"
+                title="Verificando consentimiento"
+              >
+                <div class="spinner-small"></div>
+              </div>
+
+              <!-- Botón para crear consentimiento (solo si no existe) -->
               <button
+                *ngIf="!tieneConsentimiento(consulta) && !cargandoPDF[consulta.Cid]"
                 class="action-icon consent"
-                title="Consentimiento Informado"
+                title="Crear Consentimiento Informado"
                 [disabled]="!consulta || !consulta.Cid"
                 (click)="vincularConsentimiento(consulta)"
               >
                 <img src="/Firmar.png" alt="Vincular consentimiento" />
               </button>
+
+              <!-- Botón para ver consentimiento (solo si existe) -->
               <div
+                *ngIf="tieneConsentimiento(consulta) && !cargandoPDF[consulta.Cid]"
                 class="action-icon pdf"
-                [class.disabled]="cargandoPDF[consulta.Cid]"
-                (click)="
-                  !cargandoPDF[consulta.Cid] && verConsentimientoPDF(consulta)
-                "
-                title="Ver consentimiento"
+                (click)="verConsentimientoPDF(consulta)"
+                title="Ver consentimiento informado"
               >
-                <div
-                  *ngIf="cargandoPDF[consulta.Cid]"
-                  class="spinner-small"
-                ></div>
-                <img
-                  *ngIf="!cargandoPDF[consulta.Cid]"
-                  src="/Pdf.png"
-                  alt="Ver PDF"
-                />
+                <img src="/Pdf.png" alt="Ver consentimiento" />
               </div>
             </div>
           </td>

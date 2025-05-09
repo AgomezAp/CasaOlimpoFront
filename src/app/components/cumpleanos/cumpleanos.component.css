@@ -243,7 +243,7 @@
     :host {
       padding-left: 70px !important; /* Ajustado para la barra lateral compacta */
       margin-left: 0 !important; /* Eliminar margen que podría causar problemas */
-      width: calc(100% - 70px) !important; 
+      width: calc(106% - 40px) !important;
       padding-bottom: 30px !important; /* Espacio adicional inferior */
       overflow-y: auto !important; /* Permitir scroll vertical */
       overflow-x: hidden !important;

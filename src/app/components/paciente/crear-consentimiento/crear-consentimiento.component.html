@@ -17,6 +17,8 @@
           <option value="acido_hialuronico">Ácido Hialurónico</option>
           <option value="dysport">Dysport</option>
           <option value="fibrina">Fibrina</option>
+          <option value="cauterizacion">Cauterización</option>
+          <option value="limpieza_facial">Limpieza Facial</option>
         </select>
       </div>
 
@@ -48,13 +50,8 @@
           </div>
 
           <div
-            *ngIf="tipoConsentimientoSeleccionado === 'general'"
-            class="consentimiento-body"
-          >
-          </div>
-          <div
             *ngIf="tipoConsentimientoSeleccionado === 'acido_hialuronico'"
-            class="consentimiento-body"
+            class="consentimiento-body acido_hialuronico"
           >
             <div class="seccion-fecha">
               <p>
@@ -229,7 +226,7 @@
       <!-- CONSENTIMIENTO DE ATENCIÓN AL CLIENTE (CORREGIDO) -->
       <div
         *ngIf="tipoConsentimientoSeleccionado === 'atencion_cliente'"
-        class="consentimiento-body"
+        class="consentimiento-body atencion_cliente"
       >
         <h3 class="consent-subtitle">
           <strong>CONSENTIMIENTO INFORMADO PARA ATENCIÓN AL CLIENTE</strong>
@@ -377,7 +374,7 @@
       <!-- CONSENTIMIENTO DYSPORT -->
       <div
         *ngIf="tipoConsentimientoSeleccionado === 'dysport'"
-        class="consentimiento-body"
+        class="consentimiento-body dysport"
       >
         <h3 class="consent-subtitle">
           <strong>CONSENTIMIENTO INFORMADO DYSPORT</strong>
@@ -590,7 +587,7 @@
       <!-- CONSENTIMIENTO FIBRINA -->
       <div
         *ngIf="tipoConsentimientoSeleccionado === 'fibrina'"
-        class="consentimiento-body"
+        class="consentimiento-body fibrina"
       >
         <h3 class="consent-subtitle">
           <strong>CONSENTIMIENTO INFORMADO FIBRINA</strong>
@@ -816,7 +813,7 @@
       <!-- CONSENTIMIENTO CAUTERIZACIÓN DE LUNARES -->
       <div
         *ngIf="tipoConsentimientoSeleccionado === 'cauterizacion'"
-        class="consentimiento-body"
+        class="consentimiento-body cauterizacion"
       >
         <h3 class="consent-subtitle">
           <strong>CONSENTIMIENTO INFORMADO CAUTERIZACIÓN DE LUNARES</strong>
@@ -1015,7 +1012,229 @@
         </div>
       </div>
       <!-- FIN DEL CONSENTIMIENTO CAUTERIZACIÓN DE LUNARES -->
+      <!-- CONSENTIMIENTO LIMPIEZA FACIAL -->
+      <div
+        *ngIf="tipoConsentimientoSeleccionado === 'limpieza_facial'"
+       class="consentimiento-body limpieza_facial"
+      >
+        <h3 class="consent-subtitle">
+          <strong>CONSENTIMIENTO INFORMADO LIMPIEZA FACIAL</strong>
+        </h3>
 
+        <div class="seccion-fecha">
+          <p>
+            FECHA:
+            <span class="firma-field fecha-campo">
+              <canvas
+                id="firma-fecha-limpieza"
+                class="firma-canvas-field"
+                width="300"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+
+        <div class="seccion-identificacion">
+          <p>
+            Yo:
+            <span class="firma-field nombre-campo">
+              <canvas
+                id="firma-nombre-limpieza"
+                class="firma-canvas-field"
+                width="350"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            identificado con cedula de ciudadanía #
+            <span class="firma-field">
+              <canvas
+                id="firma-cedula-limpieza"
+                class="firma-canvas-field"
+                width="300"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            de
+            <span class="firma-field">
+              <canvas
+                id="firma-ciudad-limpieza"
+                class="firma-canvas-field"
+                width="200"
+                height="30"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+            luego de habérseme explicado en términos claros y sencillos los
+            alcances y riesgos del mismo, como así también las características y
+            beneficios esperados del tratamiento propuesto, autorizo a
+            <strong>CASA OLIMPO</strong>, y a su equipo, a realizar un
+            procedimiento conocido como <strong>LIMPIEZA FACIAL</strong>.
+          </p>
+        </div>
+
+        <p>
+          Cada tratamiento consigue este fin a través de diferentes mecanismos,
+          que en conjunto van encaminados a:
+        </p>
+
+        <ul>
+          <li>Eliminar capas de células muertas</li>
+          <li>Eliminar capas dañadas de piel</li>
+          <li>
+            Restructurar la arquitectura de las diferentes capas de la piel
+          </li>
+          <li>Aumentar el grosor y densidad de la dermis</li>
+          <li>Aumentar el grado de hidratación de la piel</li>
+          <li>Unificar el tono y coloración cutáneas</li>
+          <li>Restaurar volúmenes perdidos</li>
+        </ul>
+
+        <div class="seccion-caracteristicas">
+          <h4><strong>CARACTERÍSTICAS</strong></h4>
+          <p>
+            Tratamiento que consiste en una aplicación no quirúrgica que va
+            estimulando, a su vez, el colágeno y la hidratación de la piel.
+            Consiste en la mejora y restauración de la piel del rostro.
+          </p>
+        </div>
+
+        <p>
+          Declaro: que he acudido a consulta médica, que he discutido mi
+          situación actual de salud, la naturaleza del procedimiento solicitado
+          y recomendado, la perspectiva de éxito y los posibles riesgos y
+          beneficios de dicho tratamiento con un profesional de la salud.
+        </p>
+
+        <p>
+          Me han brindado también suficiente tiempo para hacer preguntas y/o
+          aclarar dudas, las cuales confirmo que han sido despejadas
+          satisfactoriamente. Por lo anterior apruebo el tratamiento de salud
+          propuesto. Consistente en limpieza facial y otros posibles
+          procedimientos.
+        </p>
+
+        <div class="seccion-efectos">
+          <p>
+            Se me ha advertido de los posibles
+            <strong>EFECTOS COLATERALES</strong> que incluyen y están limitados
+            a:
+          </p>
+          <ol>
+            <li>Enrojecimiento de la piel</li>
+            <li>Empeoramiento temporal del acné</li>
+            <li>Inflamación de la piel</li>
+            <li>Equimosis (morados)</li>
+            <li>Sensación de adormecimiento de la zona tratada</li>
+            <li>Sensación de hormigueo y sensibilidad</li>
+          </ol>
+        </div>
+
+        <div class="seccion-cuidados">
+          <h4><strong>CUIDADOS:</strong></h4>
+          <ul>
+            <li>Uso del protector solar diariamente.</li>
+            <li>Mantener el tratamiento indicado por el médico.</li>
+            <li>
+              Avisar oportunamente cualquier cambio que haya sido explicado.
+            </li>
+            <li>Evitar la auto manipulación.</li>
+            <li>Abstenerse cuidado directo con el sol.</li>
+          </ul>
+        </div>
+
+        <p>
+          Soy consciente que la práctica de la medicina y la cirugía no es una
+          ciencia exacta y reconozco que a pesar que el profesional me ha
+          informado adecuadamente del resultado deseado del procedimiento, no me
+          ha sido garantizada la obtención de los mismo en su totalidad.
+        </p>
+
+        <p>
+          Me comprometo a cooperar en el cuidado de la evolución del
+          procedimiento realizado cumpliendo fielmente los controles de cuidados
+          que el médico me ha explicado y los que me indique una vez realizado
+          el procedimiento, como así también tener en cuenta las pautas de
+          alarmas explicitadas, todo hasta que posea e alta médica; informando
+          de manera inmediata al profesional sobre cualquier complicación o
+          cambio que apareciera en la evolución normal de acuerdo a sus
+          explicaciones que el mismo me brindo sobre el particular.
+        </p>
+
+        <p>
+          Declaro bajo juramento no haber omitido o alterado datos al exponer
+          mis antecedentes clínico quirúrgicos, ni sobre anteriores tratamientos
+          u operaciones que me pudieron haber sido realizadas por otros
+          profesionales. Manifiesto ser alérgico a:
+          <span class="firma-field full-width">
+            <canvas
+              id="firma-alergias-limpieza"
+              class="firma-canvas-field"
+              width="600"
+              height="30"
+            ></canvas>
+            <div class="firma-line"></div>
+          </span>
+        </p>
+
+        <p>
+          Así mismo AUTORIZO a que me practiquen grabaciones fotografías en la
+          zona tratada que pueden ser utilizadas con fines científicos, docentes
+          o médicos, quedando entendido que su uso no constituya una violación a
+          la intimidad o confidencialidad a las que tengo derecho.
+        </p>
+
+        <p>
+          ME CONSTA que mis datos serán tratados de forma automatizada y
+          confidencial.
+        </p>
+
+        <p>
+          Se me ha explicado que en cualquier momento antes de llevarse a cabo
+          el procedimiento puedo retractarme del mismo, rechazando su ejecución,
+          para lo cual deberá comunicar dicha retracción.
+        </p>
+
+        <p>
+          He podido aclarar todas mis dudas acerca de todo lo anteriormente
+          expuesto y he entendido totalmente
+          <strong>ESTE DOCUMENTO DE CONSENTIMIENTO</strong> reafirmándome en
+          todas y cada uno de sus puntos y con la firma del documento consiento
+          que el tratamiento se realice.
+        </p>
+
+        <div class="firmas-adicionales">
+          <p class="firma-row">
+            FIRMA DEL PACIENTE:
+            <span class="firma-field large">
+              <canvas
+                id="firma-paciente-limpieza"
+                class="firma-canvas-field"
+                width="400"
+                height="60"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+
+          <p class="firma-row">
+            DOCUMENTO:
+            <span class="firma-field">
+              <canvas
+                id="firma-documento-limpieza"
+                class="firma-canvas-field"
+                width="400"
+                height="40"
+              ></canvas>
+              <div class="firma-line"></div>
+            </span>
+          </p>
+        </div>
+      </div>
+      <!-- FIN DEL CONSENTIMIENTO LIMPIEZA FACIAL -->
       <div class="consent-actions">
         <div class="consent-checkbox">
           <input
