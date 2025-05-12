@@ -50,18 +50,18 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-back:hover {
   background-color: #736355;
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-back:active {
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .btn-back .btn-icon {
   width: 18px;
@@ -85,14 +85,13 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 
 .btn-add:hover {
   background-color: #64594e;
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 .btn-add:active {
   transform: translateY(0);
@@ -161,7 +160,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
@@ -218,12 +217,12 @@
 
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  align-items: center;
   justify-content: center;
 }
 
 .action-icon {
-  background: none;
   border: none;
   cursor: pointer;
   font-size: 16px;
@@ -237,27 +236,27 @@
 }
 
 .action-icon.edit {
-  color: #3b82f6;
+  color: #f6da3b;
 }
 
 .action-icon.edit:hover {
-  background-color: #dbeafe;
+  background-color: #ffd900;
 }
 
 .action-icon.delete {
-  color: #ef4444;
+ color: #ef4444;
 }
 
 .action-icon.delete:hover {
-  background-color: #fee2e2;
+  background-color: #ff0000;
 }
 
 .action-icon.set-responsable {
-  color: #10b981;
+  color: rgb(85, 70, 31);
 }
 
 .action-icon.set-responsable:hover {
-  background-color: #d1fae5;
+  background-color: rgb(85, 70, 31);
 }
 
 .action-icon[disabled] {
@@ -316,7 +315,6 @@
 }
 
 .btn-close {
-  background: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
@@ -512,3 +510,42 @@ button[disabled] {
     align-self: flex-start;
   }
 }
+/* --- Botones de acción en la tabla de red familiar --- */
+.actions-cell {
+  width: 120px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botón base */
+.action-icon {
+  border: none;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  opacity: 1;
+}
+
+/* Iconos dentro del botón */
+.action-icon .btn-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  filter: none;
+  opacity: 1;
+}
+
+
+
+/* Hover y focus */

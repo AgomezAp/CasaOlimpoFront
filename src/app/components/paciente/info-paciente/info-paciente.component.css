@@ -206,7 +206,26 @@ app-paciente-nav {
 .data-row.alt-bg {
   background-color: rgba(138, 136, 134, 0.2);
 }
+.spinner-button {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  margin-right: 8px;
+  animation: spin 1s ease-in-out infinite;
+  vertical-align: middle;
+}
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-save:disabled, .btn-cancel:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
 .data-field {
   flex: 1;
   padding: 15px;

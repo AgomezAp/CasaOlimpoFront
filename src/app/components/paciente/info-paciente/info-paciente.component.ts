@@ -16,6 +16,7 @@ import { DashboardCitasComponent } from '../citas/dashboard-citas/dashboard-cita
 import { RecetaComponent } from '../receta/receta.component';
 import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 import { RedfamiliarService } from '../../../services/redfamiliar.service';
+import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-info-paciente',
@@ -49,13 +50,15 @@ export class InfoPacienteComponent implements OnInit {
   cargandoDoctor: boolean = false;
   esMenorDeEdad: boolean = false;
   tieneMiembrosRedFamiliar: boolean = false;
+  guardandoCambios = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private pacienteService: PacienteService,
     private formBuilder: FormBuilder,
     private sanitizer: DomSanitizer,
-    private redFamiliarService: RedfamiliarService 
+    private redFamiliarService: RedfamiliarService,
+    private notificacionService: NotificacionService, // Asegúrate de importar el servicio de notificaciones
   ) {
     this.pacienteForm = this.formBuilder.group({
       nombre: ['', Validators.required],
@@ -211,35 +214,46 @@ export class InfoPacienteComponent implements OnInit {
     this.actualizarFormulario(); // Restaurar datos originales
   }
 
-  guardarCambios(): void {
-    if (this.pacienteForm.invalid) {
-      Object.keys(this.pacienteForm.controls).forEach((key) => {
-        const control = this.pacienteForm.get(key);
-        if (control?.invalid) {
-          control.markAsTouched();
-        }
-      });
-      return;
-    }
-
-    this.loading = true;
-    const pacienteData = { ...this.pacienteForm.value };
-
-    this.pacienteService
-      .actualizarDatosPaciente(this.pacienteId, pacienteData)
-      .subscribe({
-        next: (response) => {
-          this.loading = false;
-          this.editMode = false;
-          this.cargarPaciente(); // Recargar datos actualizados
-        },
-        error: (error) => {
-          console.error('Error al guardar cambios:', error);
-          this.loading = false;
-          // Mostrar mensaje de error
-        },
-      });
+guardarCambios(): void {
+  // Validación de formulario
+  if (this.pacienteForm.invalid) {
+    Object.keys(this.pacienteForm.controls).forEach((key) => {
+      const control = this.pacienteForm.get(key);
+      if (control?.invalid) {
+        control.markAsTouched();
+      }
+    });
+    return;
   }
+
+  // Activar indicadores de carga
+  this.guardandoCambios = true;
+  this.loading = true;
+  
+  const pacienteData = { ...this.pacienteForm.value };
+
+  this.pacienteService
+    .actualizarDatosPaciente(this.pacienteId, pacienteData)
+    .subscribe({
+      next: (response) => {
+        console.log('Datos actualizados correctamente:', response);
+        this.editMode = false;
+        this.cargarPaciente(); // Recargar datos actualizados
+        
+        // Desactivar indicadores de carga
+        this.guardandoCambios = false;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error al guardar cambios:', error);
+        
+        // Desactivar indicadores de carga
+        this.guardandoCambios = false;
+        this.loading = false;
+        this.notificacionService.error('Error al guardar los cambios');
+      },
+    });
+}
   onTabChange(tabId: string): void {
     this.activeTab = tabId;
   }
