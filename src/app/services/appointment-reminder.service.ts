@@ -281,7 +281,7 @@ export class AppointmentReminderService {
     this.verificarCitasInminentes();
 
     // Configurar verificación cada minuto
-    this.temporizadorCitasInminentes = interval(600000).subscribe(() => {
+    this.temporizadorCitasInminentes = interval(240000).subscribe(() => {
       this.verificarCitasInminentes();
     });
   }

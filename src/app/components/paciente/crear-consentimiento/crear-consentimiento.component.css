@@ -499,10 +499,10 @@ canvas.firma-canvas {
   }
 
   .data-section {
-    max-width: 1210px;
+    max-width: 1052px;
     margin: 0 auto;
     padding: 0 20px;
-    margin-right: -10px;
+    margin-right: 82px;
   }
   /* Ajustar altura del preview para que se vea todo sin scroll */
   .consentimiento-preview {
@@ -634,7 +634,7 @@ canvas.firma-canvas {
   }
   /* Aumentar tamaño del contenedor principal */
   .data-section {
-    max-width: 1550px! important; 
+    max-width: 1400px !important;
     padding: 0 30px;
   }
 
@@ -925,7 +925,8 @@ p {
 @media only screen and (min-width: 1024px) and (max-width: 1366px) {
   :host {
     display: block;
-    padding-right: 170px;
+    padding-right: 114px;
+    padding-left: 80px;
     height: 100vh;
     width: 110%;
     box-sizing: border-box;

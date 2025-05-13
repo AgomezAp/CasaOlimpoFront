@@ -3,7 +3,7 @@
 <div class="patient-appointments-container">
   <div class="appointments-header">
     <button class="btn-add-appointment" (click)="openNewAppointmentModal()">
-      <img src="/Add.png" alt="Agregar" class="icon-add" /> Nueva Cita
+      <img src="/PrimeraCita.png" alt="Agregar" class="icon-add" /> Nueva Cita
     </button>
   </div>
 
@@ -83,9 +83,6 @@
   <!-- Mensaje cuando no hay citas -->
   <div class="empty-state" *ngIf="!loading && !error && citas.length === 0">
     <p>Este paciente aún no tiene citas registradas.</p>
-    <button class="btn-add-appointment" (click)="openNewAppointmentModal()">
-      <img src="/PrimeraCita.png" alt="Agregar" class="icon-add" /> Nueva Cita
-    </button>
   </div>
 
   <!-- Modal para nueva cita -->
