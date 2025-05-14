@@ -62,6 +62,7 @@ export class GenerarFacturaComponent {
       descuentoAplicado = parseFloat(this.descuento) || 0;
     }
     this.total = Math.max(0, this.precio - descuentoAplicado);
+    
   }
 
   // agregarNuevo(valor: string): void {
