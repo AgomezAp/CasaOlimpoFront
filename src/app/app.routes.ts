@@ -21,6 +21,7 @@ import { TransferenciaPacientesComponent } from './components/admin/transferenci
 import { FacturaIdComponent } from './components/facturacion/factura-id/factura-id.component';
 import { VerdatosconsultaComponent } from './components/paciente/verdatosconsulta/verdatosconsulta.component';
 import { CrearConsentimientoComponent } from './components/paciente/crear-consentimiento/crear-consentimiento.component';
+import { GestionMensajeriaComponent } from './components/admin/gestion-mensajeria/gestion-mensajeria.component';
 
 export const routes: Routes = [
     {
@@ -87,7 +88,8 @@ export const routes: Routes = [
         children: [
           { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
           { path: 'usuarios', component: GestionUsuariosComponent },
-          { path: 'transferencia', component: TransferenciaPacientesComponent }
+          { path: 'transferencia', component: TransferenciaPacientesComponent },
+          { path: 'mensajeria', component: GestionMensajeriaComponent}
         ]
       }
     

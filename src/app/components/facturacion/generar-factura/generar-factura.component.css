@@ -76,6 +76,17 @@
   margin-bottom: 25px;
   width: 100%;
 }
+.facturacion-form .procedimiento {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 700px;
+    align-items: center;
+}
+.procedimiento input {
+    width: 700px;
+    box-sizing: border-box;
+}
 
 /* Estilos para cada campo */
 .facturacion-form .contact > div,

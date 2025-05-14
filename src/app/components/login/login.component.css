@@ -70,7 +70,7 @@
   }
   
   .login-header h2 {
-    margin: 0 50px;
+    margin: 0 90px;
     color: #333;
     font-size: 24px;
     font-weight: 600;
@@ -97,7 +97,7 @@
     font-weight: 500;
     color: rgb(110,88,83);
     font-size: 14px;
-    padding: 0px 0px;
+    padding: 0px 5px;
     width: 100%;
   }
   
