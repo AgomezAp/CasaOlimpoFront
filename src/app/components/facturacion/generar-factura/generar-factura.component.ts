@@ -16,6 +16,7 @@ export class GenerarFacturaComponent {
   paciente: any;
   precio: number = 0;
   descuento: any = 0;
+  procedimiento: string = ''; 
   total: number = 0;
   tipoPago: string = 'Efectivo';
   descuentos: any[] = [];
@@ -72,7 +73,8 @@ export class GenerarFacturaComponent {
     const facturadata = {
       numero_documento: this.paciente.numero_documento,
       tipo_pago: this.tipoPago,
-      total: this.total
+      total: this.total,
+      procedimiento : this.procedimiento
     };
     console.log(facturadata)
     this.facturacionService.crearFactura(facturadata).subscribe({

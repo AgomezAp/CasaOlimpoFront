@@ -21,11 +21,15 @@
                 <label for="Telefono">Telefono:</label>
                 <input type="text" id="Telefono" name="Telefono" readonly value="{{paciente.telefono}}">
             </div>
+            <div class="procedimiento">
+                <label for="Procedimiento">Procedimiento:</label>
+                <input type="text" id="Procedimiento" name="Procedimiento" required [(ngModel)]="procedimiento" >
+            </div>
             <div class="precio">
                 <label for="precio">Precio:</label>
                 <input type="number" id="precio" name="precio" required [(ngModel)]="precio" (input)="calcularTotal()">
                 <label for="descuento">Descuento:</label>
-                <input list="descuentos" name="descuento" id="descuento" [(ngModel)]="descuento" (input)="calcularTotal()" required=""/>
+                <input list="descuentos" name="descuento" id="descuento" [(ngModel)]="descuento" (input)="calcularTotal()"/>
                     <datalist id="descuentos">
                         <option *ngFor="let descuento of descuentos" [value]="descuento.porcentaje + '%'">
                             {{ descuento.motivo_descuento }} - {{descuento.porcentaje}}%

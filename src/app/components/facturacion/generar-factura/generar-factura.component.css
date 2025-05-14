@@ -50,6 +50,17 @@ html, body {
     gap: 20px;
     align-items: center;
 }
+.facturacion-form .procedimiento {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 700px;
+    align-items: center;
+}
+.procedimiento input {
+    width: 700px;
+    box-sizing: border-box;
+}
 
 .facturacion-form .contact > div,
 .facturacion-form .direcion > div,

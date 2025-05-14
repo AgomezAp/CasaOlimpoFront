@@ -435,6 +435,11 @@
     height: 40px;
     object-fit: contain;
   }
+  .card-img-msj {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+  }
   /* Estilos para el overlay de carga */
 .loading-overlay {
   position: fixed;
@@ -502,6 +507,10 @@
   animation: spin 1s linear infinite;
 }
   .admin-card:hover .card-img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
+  .admin-card:hover .card-img-msj {
     transform: scale(1.1);
     transition: transform 0.3s ease;
   }
