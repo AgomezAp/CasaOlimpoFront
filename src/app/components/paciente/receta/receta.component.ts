@@ -195,6 +195,7 @@ export class RecetaComponent implements OnInit, OnChanges {
         this.mostrarFormularioReceta = false;
         this.recetaForm.reset();
         this.notificacionService.success('Receta guardada exitosamente');
+        
       },
       error: (error) => {
         console.error('Error al guardar receta:', error);
