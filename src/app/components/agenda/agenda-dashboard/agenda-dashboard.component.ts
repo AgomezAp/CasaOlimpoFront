@@ -47,7 +47,7 @@ export class AgendaDashboardComponent implements OnInit {
 
   // Variables para hora
   hours: string[] = [];
-  private readonly MAX_VISIBLE_APPOINTMENTS = 4; 
+  private readonly MAX_VISIBLE_APPOINTMENTS = 4;
   // Modal nueva cita
   showNewAppointmentModal: boolean = false;
   appointmentForm: FormGroup;
@@ -97,6 +97,12 @@ export class AgendaDashboardComponent implements OnInit {
     this.loadAppointments();
     this.loadAllPatients();
     this.generateHours(7, 20);
+    this.appointmentForm.get('date')?.valueChanges.subscribe(dateValue => {
+      if (dateValue) {
+        console.log("Fecha seleccionada cambiada a:", dateValue);
+        this.updateAvailableHours(dateValue);
+      }
+    });
   }
   generateHours(startHour: number, endHour: number): void {
     this.hours = [];
@@ -107,11 +113,11 @@ export class AgendaDashboardComponent implements OnInit {
   loadAllPatients(): void {
     this.pacienteService.obtenerPacientes().subscribe(
       (response: any) => {
-        console.log('Respuesta de pacientes:', response);
+        // console.log('Respuesta de pacientes:', response);
         this.allPatients = Array.isArray(response)
           ? response
           : response?.data || [];
-        console.log(`Cargados ${this.allPatients.length} pacientes`);
+        // console.log(`Cargados ${this.allPatients.length} pacientes`);
       },
       (error) => {
         console.error('Error al cargar pacientes:', error);
@@ -323,7 +329,7 @@ export class AgendaDashboardComponent implements OnInit {
       this.hours.push(`${i.toString().padStart(2, '0')}:00`);
     }
 
-    console.log('Horas cargadas:', this.hours);
+    //    console.log('Horas cargadas:', this.hours);
   }
   calculateAppointmentHeight(appointment: any): number {
     // Obtener duración usando el método dedicado que ya maneja todos los casos
@@ -397,8 +403,8 @@ export class AgendaDashboardComponent implements OnInit {
     }
 
     // Log para depuración
-    console.log('Días de la semana:', this.weekDays);
-    console.log('Citas disponibles:', this.appointments.length);
+    //console.log('Días de la semana:', this.weekDays);
+    //  console.log('Citas disponibles:', this.appointments.length);
   }
   getDayName(date: Date): string {
     const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
@@ -448,7 +454,7 @@ export class AgendaDashboardComponent implements OnInit {
         });
       }
 
-      console.log('WeekDays cargados correctamente:', this.weekDays);
+      //  console.log('WeekDays cargados correctamente:', this.weekDays);
     } catch (e) {
       console.error('Error al cargar días de la semana:', e);
     }
@@ -468,7 +474,7 @@ export class AgendaDashboardComponent implements OnInit {
     );
   }
   private inspeccionarDatosCrudos(data: any[]): void {
-    console.log('======= DATOS CRUDOS DE CITAS =======');
+    // console.log('======= DATOS CRUDOS DE CITAS =======');
     data.forEach((cita) => {
       // Verificar EXACTAMENTE cómo se llama la propiedad de duración
       const props = Object.keys(cita);
@@ -816,9 +822,26 @@ export class AgendaDashboardComponent implements OnInit {
   // Modal de nueva cita
   openNewAppointmentModal(): void {
     this.resetAppointmentForm();
+    const today = this.formatDateForInput(new Date());
+    this.appointmentForm.get('date')?.setValue(today);
+    
+    this.updateAvailableHours(today);
+    
+    console.log("Abriendo modal con fecha:", today);
+    
     this.showNewAppointmentModal = true;
   }
-
+  updateAvailableHours(dateString: string): void {
+    this.hours = this.getAvailableHours(dateString);
+    if (this.hours.length === 0) {
+      this.hours = ['No disponible'];
+    }
+    const currentHour = this.appointmentForm.get('time')?.value;
+    if (!this.hours.includes(currentHour)) {
+      this.appointmentForm.get('time')?.setValue(this.hours[0] || '');
+    }
+    console.log(`Horas disponibles para ${dateString}:`, this.hours);
+  }
   closeNewAppointmentModal(): void {
     this.showNewAppointmentModal = false;
   }
@@ -935,11 +958,7 @@ export class AgendaDashboardComponent implements OnInit {
       // Intentar obtener duración de diferentes propiedades
       if (normalized.duracion !== undefined) {
         duration = normalized.duracion;
-        console.log(
-          `Usando duracion del backend para cita ${
-            appointment.id || appointment.Aid
-          }: ${duration}`
-        );
+       
       } else if (normalized.duration !== undefined) {
         duration = normalized.duration;
       } else if (normalized.minutos !== undefined) {
@@ -965,14 +984,6 @@ export class AgendaDashboardComponent implements OnInit {
       // Asignar la duración normalizada
       normalized.duration = duration;
 
-      // Log para verificar
-      console.log(
-        `Cita ID: ${normalized.id || normalized.Aid}, duración normalizada: ${
-          normalized.duration
-        }`
-      );
-
-      // Si no hay patientName pero tenemos las partes, construirlo
       if (!normalized.patientName) {
         if (normalized.nombre && normalized.apellidos) {
           normalized.patientName = `${normalized.nombre} ${normalized.apellidos}`;
@@ -1050,7 +1061,7 @@ export class AgendaDashboardComponent implements OnInit {
           10
         ),
       };
-      console.log('Enviando cita con datos:', JSON.stringify(appointmentData));
+      //console.log('Enviando cita con datos:', JSON.stringify(appointmentData));
       appointmentData.numero_documento = this.selectedPatient.numero_documento;
 
       this.agendaService.createRegisteredAppointment(appointmentData).subscribe(
@@ -1110,7 +1121,10 @@ export class AgendaDashboardComponent implements OnInit {
         telefono: telefono,
         estado: 'Pendiente',
         descripcion: this.appointmentForm.get('notes')?.value || '',
-        duracion: parseInt(this.appointmentForm.get('duration')?.value || '60', 10)
+        duracion: parseInt(
+          this.appointmentForm.get('duration')?.value || '60',
+          10
+        ),
       };
 
       console.log(
@@ -1192,7 +1206,28 @@ export class AgendaDashboardComponent implements OnInit {
                 appointment
               )} ha sido confirmada correctamente`
             );
-            this.loadAppointments();
+
+            // Guardar el modo de vista actual antes de recargar
+            const currentMode = this.viewMode;
+
+            // Cargar nuevas citas
+            this.agendaService
+              .getAllAppointments()
+              .subscribe((appointments: any) => {
+                this.appointments = appointments;
+                this.normalizeAppointments();
+                this.filteredAppointments = [...this.appointments];
+                this.appointmentReminderService.updateWithExistingCitas(
+                  appointments
+                );
+                this.loadCalendarDays();
+                if (currentMode === 'week') {
+                  this.loadWeekDays();
+                } else if (currentMode === 'day') {
+                  this.loadDayAppointments();
+                }
+              });
+
             this.closeAppointmentDetailsModal();
           },
           error: (error: any) => {
@@ -1234,7 +1269,24 @@ export class AgendaDashboardComponent implements OnInit {
                 appointment
               )} ha sido cancelada correctamente`
             );
-            this.loadAppointments();
+            const currentMode = this.viewMode;
+            this.agendaService
+              .getAllAppointments()
+              .subscribe((appointments: any) => {
+                this.appointments = appointments;
+                this.normalizeAppointments();
+                this.filteredAppointments = [...this.appointments];
+                this.appointmentReminderService.updateWithExistingCitas(
+                  appointments
+                );
+                this.loadCalendarDays();
+                if (currentMode === 'week') {
+                  this.loadWeekDays();
+                } else if (currentMode === 'day') {
+                  this.loadDayAppointments();
+                }
+              });
+
             this.closeAppointmentDetailsModal();
           },
           (error: any) => {
@@ -1247,22 +1299,22 @@ export class AgendaDashboardComponent implements OnInit {
         );
     }
   }
-
   deleteAppointment(appointment: any): void {
     if (
       confirm(
         '¿Está seguro de eliminar esta cita? Esta acción no se puede deshacer.'
       )
     ) {
-      // Guardar la vista actual y otros datos relevantes
       const currentViewMode = this.viewMode;
       const currentDate = this.selectedDay ? new Date(this.selectedDay) : null;
-      
+
       this.loadingAction.delete = true;
-      
+
       this.agendaService
         .deleteAppointment(
-          appointment.id?.toString() || appointment.Aid?.toString() || appointment.ANRid?.toString(),
+          appointment.id?.toString() ||
+            appointment.Aid?.toString() ||
+            appointment.ANRid?.toString(),
           appointment.isRegistered !== false
         )
         .subscribe(
@@ -1273,21 +1325,18 @@ export class AgendaDashboardComponent implements OnInit {
                 appointment
               )} ha sido eliminada correctamente`
             );
-            
-            // 1. Recargar todas las citas
+
             this.loadAppointments();
-            
-            // 2. Actualización específica según la vista activa
+
             if (currentViewMode === 'week') {
               this.loadWeekDays();
             } else if (currentViewMode === 'day' && currentDate) {
               this.selectedDay = currentDate;
               this.loadDayAppointments();
             }
-            
-            // 3. Eliminar la cita del array local si existe
+
             this.removeDeletedAppointmentFromLocalData(appointment);
-            
+
             this.closeAppointmentDetailsModal();
           },
           (error: any) => {
@@ -1301,35 +1350,33 @@ export class AgendaDashboardComponent implements OnInit {
     }
   }
   private removeDeletedAppointmentFromLocalData(appointment: any): void {
-    const appointmentId = appointment.id || appointment.Aid || appointment.ANRid;
-    
-    // Actualizar calendarDays (vista mensual)
-    this.calendarDays.forEach(day => {
+    const appointmentId =
+      appointment.id || appointment.Aid || appointment.ANRid;
+
+    this.calendarDays.forEach((day) => {
       if (day.appointments && day.appointments.length > 0) {
-        day.appointments = day.appointments.filter((app:any) => 
-          (app.id !== appointmentId) && 
-          (app.Aid !== appointmentId) && 
-          (app.ANRid !== appointmentId)
+        day.appointments = day.appointments.filter(
+          (app: any) =>
+            app.id !== appointmentId &&
+            app.Aid !== appointmentId &&
+            app.ANRid !== appointmentId
         );
       }
     });
-    
-    // Actualizar dayAppointments (vista diaria)
+
     if (this.dayAppointments && this.dayAppointments.length > 0) {
-      this.dayAppointments = this.dayAppointments.filter(app => 
-        (app.id !== appointmentId) && 
-        (app.Aid !== appointmentId) && 
-        (app.ANRid !== appointmentId)
+      this.dayAppointments = this.dayAppointments.filter(
+        (app) =>
+          app.id !== appointmentId &&
+          app.Aid !== appointmentId &&
+          app.ANRid !== appointmentId
       );
     }
-    
+
     this.detectChangesIfNeeded();
   }
   private detectChangesIfNeeded(): void {
-    setTimeout(() => {
-      console.log('Forzando actualización de la vista');
-    }, 0);
-    
+    setTimeout(() => {}, 0);
   }
   isAppointmentCompleted(appointment: any): boolean {
     if (!appointment) return false;
@@ -1387,26 +1434,14 @@ export class AgendaDashboardComponent implements OnInit {
     this.agendaService.getAllAppointments().subscribe(
       (appointments: any) => {
         this.appointments = appointments;
-
-        // Aplicar normalización de datos para asegurar formato correcto
         this.normalizeAppointments();
-
-        // Error: response no está definido, debes usar appointments
-        this.inspeccionarDatosCrudos(appointments); // Corregido aquí
-
+        // this.inspeccionarDatosCrudos(appointments);
         this.filteredAppointments = [...this.appointments];
-
-        // IMPORTANTE: Actualizar las notificaciones con las citas obtenidas
         this.appointmentReminderService.updateWithExistingCitas(appointments);
-        console.log(
-          'Citas procesadas para notificaciones:',
-          appointments.length
-        );
 
         this.loadCalendarDays();
       },
       (error: any) => {
-        console.error('Error al cargar citas:', error);
         this.notificacionService.error('Ocurrió un error al cargar las citas');
       }
     );
@@ -1447,7 +1482,6 @@ export class AgendaDashboardComponent implements OnInit {
 
       return 'Paciente sin nombre';
     } catch (e) {
-      console.error('Error al obtener nombre:', e);
       return 'Error al obtener nombre';
     }
   }
@@ -1467,7 +1501,10 @@ export class AgendaDashboardComponent implements OnInit {
         .trim();
 
       // Manejar posibles variaciones de nombres de estado
-      if (normalizedState === 'programada' || normalizedState === 'programada') {
+      if (
+        normalizedState === 'programada' ||
+        normalizedState === 'programada'
+      ) {
         return (
           appointmentState === 'programada' ||
           appointmentState === 'programada' ||
@@ -1493,49 +1530,61 @@ export class AgendaDashboardComponent implements OnInit {
         );
       }
 
-      // Comparación directa como fallback
       return appointmentState === normalizedState;
     });
-
-    // Log para depuración
-    console.log(
-      `Filtrado por estado: ${state}. Citas encontradas: ${this.filteredAppointments.length}`
-    );
-
-    // Actualizar vista
     this.refreshView();
   }
 
   openEditModal(appointment: any): void {
     this.appointmentBeingEdited = { ...appointment };
-    
+
     // Crear formulario con los datos de la cita
     this.editForm = this.fb.group({
-      date: [appointment.date || this.formatDateForInput(new Date()), Validators.required],
+      date: [
+        appointment.date || this.formatDateForInput(new Date()),
+        Validators.required,
+      ],
       time: [appointment.time || '', Validators.required],
       duration: [appointment.duration || 60, Validators.required],
       notes: [appointment.descripcion || appointment.notes || ''],
-      status: [appointment.status || 'programada']
+      status: [appointment.status || 'programada'],
     });
-    
+
     // Si es paciente no registrado, añadir campos adicionales
     if (!appointment.isRegistered) {
-      this.editForm.addControl('nombre', this.fb.control(appointment.patientName?.split(' ')[0] || '', Validators.required));
-      this.editForm.addControl('apellidos', this.fb.control(appointment.patientName?.split(' ').slice(1).join(' ') || '', Validators.required));
-      this.editForm.addControl('telefono', this.fb.control(appointment.phone || ''));
+      this.editForm.addControl(
+        'nombre',
+        this.fb.control(
+          appointment.patientName?.split(' ')[0] || '',
+          Validators.required
+        )
+      );
+      this.editForm.addControl(
+        'apellidos',
+        this.fb.control(
+          appointment.patientName?.split(' ').slice(1).join(' ') || '',
+          Validators.required
+        )
+      );
+      this.editForm.addControl(
+        'telefono',
+        this.fb.control(appointment.phone || '')
+      );
     }
-    
+
     this.showEditModal = true;
   }
   saveEditedAppointment(): void {
     if (this.editForm.invalid) {
-      this.notificacionService.warning('Por favor complete todos los campos requeridos');
+      this.notificacionService.warning(
+        'Por favor complete todos los campos requeridos'
+      );
       return;
     }
-    
+
     const appointmentId = this.appointmentBeingEdited.id;
     const isRegistered = this.appointmentBeingEdited.isRegistered;
-    
+
     // Preparar datos para actualización
     const updateData: any = {
       fecha_cita: this.editForm.get('date')?.value,
@@ -1544,7 +1593,7 @@ export class AgendaDashboardComponent implements OnInit {
       estado: this.mapStatusToBackend(this.editForm.get('status')?.value),
       duracion: parseInt(this.editForm.get('duration')?.value || '60', 10),
     };
-    
+
     // Si es paciente no registrado, añadir datos de contacto
     if (!isRegistered) {
       updateData.nombre = this.editForm.get('nombre')?.value;
@@ -1552,34 +1601,33 @@ export class AgendaDashboardComponent implements OnInit {
       updateData.telefono = this.editForm.get('telefono')?.value;
       updateData.descripcion = this.editForm.get('notes')?.value || '';
     }
-    
-    console.log(`Actualizando cita ${appointmentId} con datos:`, updateData);
-    
+
     // Llamar al servicio para actualizar
-    this.agendaService.updateAppointment(appointmentId.toString(), updateData, isRegistered).subscribe({
-      next: (response) => {
-        console.log('Respuesta de actualización:', response);
-        this.notificacionService.success('Cita actualizada correctamente');
-        this.showEditModal = false;
-        this.loadAppointments(); // Recargar citas
-      },
-      error: (error) => {
-        console.error('Error al actualizar cita:', error);
-        this.notificacionService.error('Error al actualizar la cita');
-      }
-    });
+    this.agendaService
+      .updateAppointment(appointmentId.toString(), updateData, isRegistered)
+      .subscribe({
+        next: (response) => {
+          console.log('Respuesta de actualización:', response);
+          this.notificacionService.success('Cita actualizada correctamente');
+          this.showEditModal = false;
+          this.loadAppointments(); // Recargar citas
+        },
+        error: (error) => {
+          console.error('Error al actualizar cita:', error);
+          this.notificacionService.error('Error al actualizar la cita');
+        },
+      });
   }
-  
+
   // Método auxiliar para mapeo de estado
   mapStatusToBackend(status: string): string {
-    const mapping: {[key: string]: string} = {
-      'Programada': 'Programada',
-      'Confirmada': 'Confirmada',
-      'Cancelada': 'Cancelada'
+    const mapping: { [key: string]: string } = {
+      Programada: 'Programada',
+      Confirmada: 'Confirmada',
+      Cancelada: 'Cancelada',
     };
     return mapping[status] || 'Programada';
   }
-
 
   refreshView(): void {
     // Actualizar la vista actual según el modo seleccionado
@@ -1634,7 +1682,49 @@ export class AgendaDashboardComponent implements OnInit {
     );
   }
   closeDetailsModal(): void {
-  this.showAppointmentDetailsModal = false;
-  this.selectedAppointment = null;
-}
+    this.showAppointmentDetailsModal = false;
+    this.selectedAppointment = null;
+  }
+  getAvailableHours(selectedDate: string): string[] {
+    if (!selectedDate) return [];
+    const formattedSelectedDate = selectedDate.split('T')[0];
+    const appointmentsForDay = this.appointments.filter((app) => {
+      const appDate = app.date || app.fecha;
+      const formattedAppDate =
+        typeof appDate === 'string'
+          ? appDate.split('T')[0]
+          : new Date(appDate).toISOString().split('T')[0];
+      return formattedAppDate === formattedSelectedDate;
+    });
+    const allHours: string[] = [];
+    for (let i = 7; i <= 20; i++) {
+      allHours.push(`${i.toString().padStart(2, '0')}:00`);
+      if (i < 20) {
+        allHours.push(`${i.toString().padStart(2, '0')}:30`);
+      }
+    }
+    return allHours.filter((hour) => {
+      return !appointmentsForDay.some((appointment) => {
+        const appointmentHour = appointment.time || appointment.hora;
+        if (!appointmentHour) return false;
+
+        const [appH, appM] = appointmentHour.split(':').map(Number);
+        const appStartMinutes = appH * 60 + appM;
+
+        const [h, m] = hour.split(':').map(Number);
+        const hourInMinutes = h * 60 + m;
+
+        const duration = appointment.duration
+          ? parseInt(appointment.duration)
+          : 60;
+        const appEndMinutes = appStartMinutes + duration;
+
+        return (
+          (hourInMinutes >= appStartMinutes && hourInMinutes < appEndMinutes) ||
+          (hourInMinutes + 60 > appStartMinutes &&
+            hourInMinutes < appEndMinutes)
+        );
+      });
+    });
+  }
 }

@@ -1,11 +1,12 @@
 <div class="cumple">
-    <h2>Cumpleaños</h2>
+    <h2 class="page-title">Cumpleaños</h2>
     <div class="mensaje">
         <label for="message" >🎉🎁🎉 Escribe el mensaje que quieras compartir con tus clientes: 🎉🎁🎉</label>
         <textarea id="message" placeholder="Ingresa tu mensaje aquí" name="mensaje" [(ngModel)]="mensaje" required></textarea>
         <label for="hora">Escoje la hora que deseas enviar los mensaje</label>
         <input type="time" name="hora" id="hora" [(ngModel)]="hora">
-        <button (click)="enviarMensaje()">Guardar</button>
+        <button (click)="enviarMensaje()"> <img src="/Guardar.png" alt="Agregar Paciente" class="btn-icon">
+            Guardar</button>
     </div>
     <div class="lista-cumple">
         <h3>Cumpleañeros de Casa Olimpo</h3>
@@ -18,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let persona of personas">
+                <tr *ngFor="let persona of personas; let i = index" [ngClass]="{'odd-row': i % 2 !== 0}">
                     <td>{{persona.nombre}}</td>
                     <td>{{persona.fecha_nacimiento}}</td>
                     <td>{{persona.edad}}</td>

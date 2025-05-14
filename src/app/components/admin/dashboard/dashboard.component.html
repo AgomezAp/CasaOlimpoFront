@@ -1,6 +1,6 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
-    <h1>Panel de Administración</h1>
+    <h1 class="page-title">Pacientes</h1> 
   </div>
 
   <div class="card-container">
@@ -25,26 +25,11 @@
         <p>Transfiere pacientes entre doctores</p>
       </div>
     </div>
-
-    <div class="admin-card" [routerLink]="['/admin/mensajeria']">
-      <div class="card-icon">
-        <img src="/GestionMensajeria.png" alt="Gestión de mensajeria" class="card-img-msj">
-      </div>
-      <div class="card-content">
-        <h3>Gestión de Mensajeria</h3>
-        <p>Administra las sesiones de la mensajeria </p>
-      </div>
-    </div>
   </div>
-  
-
   <!-- Tabla de usuarios del sistema -->
   <div class="users-table-container">
     <div class="table-header">
       <h2>Usuarios del Sistema</h2>
-      <button class="btn-primary" (click)="navegarACrearUsuario()">
-        <i class="fas fa-plus"></i> Nuevo Usuario
-      </button>
     </div>
 
     <table class="data-table">
@@ -59,14 +44,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let usuario of usuariosPaginados">
-          <td>{{ usuario.nombre }} {{ usuario.apellidos }}</td>
-          <td>{{ usuario.correo }}</td>
-          <td>
+          <td data-label="Nombre">{{ usuario.nombre }} {{ usuario.apellidos }}</td>
+          <td data-label="Correo">{{ usuario.correo }}</td>
+          <td data-label="Rol">
             <span class="badge" [ngClass]="getRolClass(usuario.rol)">{{
               usuario.rol
             }}</span>
           </td>
-          <td>
+          <td data-label="Estado">
             <span
               class="status-badge"
               [ngClass]="getStatusClass(usuario.activo)"
@@ -74,7 +59,7 @@
               {{ usuario.activo ? "Activo" : "Inactivo" }}
             </span>
           </td>
-          <td class="actions-column">
+          <td data-label="Acciones" class="actions-column">
             <button
               class="btn-icon"
               (click)="resetPassword(usuario)"
@@ -144,8 +129,8 @@
       de {{ usuarios.length }} usuarios
     </div>
   </div>
-  <div class="modal-overlay" *ngIf="mostrarModal">
-    <div class="modal-container">
+  <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Restablecer Contraseña</h3>
         <button class="close-btn" (click)="cerrarModal()">×</button>

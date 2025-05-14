@@ -1,7 +1,10 @@
 <div class="sidebar">
   <!-- Logo o título -->
   <div class="sidebar-header">
-    <h2 class="app-title">Casa Olimpo</h2>
+    <div class="logo-container">
+      <img src="assets/LogoDorado.png" alt="Casa Olimpo" class="logo-desktop">
+      <img src="assets/SimboloGrisOscuro.webp" alt="Casa Olimpo" class="logo-mobile">
+    </div>
   </div>
 
   <!-- Menú de navegación -->
@@ -74,13 +77,14 @@
       </li>
     </ul>
       <a [routerLink]="['/admin']" routerLinkActive="active" class="nav-link">
-        <i class="fas fa-cog"></i> Administración
+        <img src="/admin.png" alt="admin" class="nav-icon" />
+        <span>Administración</span>
       </a>
   </nav>
   
   <!-- Footer con información -->
-  <div class="sidebar-footer">
+ <!--  <div class="sidebar-footer">
     <p>© 2025 Casa Olimpo</p>
-  </div>
+  </div> -->
 </div>
 <app-appointment-notifications></app-appointment-notifications>

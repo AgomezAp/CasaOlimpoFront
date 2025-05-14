@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environments';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +15,8 @@ export class FacturacionService {
     this.appUrl = environment.apiUrl
    }
 
-   crearFactura(factura: any): Observable<any> {
-    return this.http.post(`${this.appUrl}${this.apiUrl}/crearFactura`, factura, {
-      responseType: 'blob' as 'json'
-    })
+   crearFactura(){
+    return this.http.post(`${this.appUrl}${this.apiUrl}/crearFactura`, {})
    }
 
    imprimir(){

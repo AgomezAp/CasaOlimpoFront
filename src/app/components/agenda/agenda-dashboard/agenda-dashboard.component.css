@@ -7,8 +7,9 @@
 
 :host {
   display: block; /* Asegura que el componente ocupe espacio */
-  width: 80%; /* Ocupa el ancho disponible en su contenedor padre */
+  width: 84%; /* Ocupa el ancho disponible en su contenedor padre */
   box-sizing: border-box;
+  min-height: 100vh;
   /* overflow-x: hidden; /* CAMBIO: Quitado de aquí, se maneja en contenedores internos si es necesario */
 }
 
@@ -133,15 +134,15 @@ body {
 }
 
 .view-btn.active {
-  background-color: #4299e1;
-  color: white;
+  background-color: #7d746b;
+  color: #e0d7ce;
 }
 
 /* Botón de nueva cita */
 .add-appointment-btn {
   padding: 8px 16px;
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -423,11 +424,11 @@ body {
 }
 .appointment-preview:not(.unregistered) .patient-type-indicator {
   background-color: #3182ce;
-  color: white;
+  color: #e0d7ce;
 }
 .appointment-preview.unregistered .patient-type-indicator {
   background-color: #d69e2e;
-  color: white;
+  color: #e0d7ce;
 }
 
 /* Iconos de estado en preview */
@@ -705,7 +706,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: #555;
-  color: white;
+  color: #e0d7ce;
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 12px;
@@ -991,7 +992,7 @@ body {
   bottom: calc(100% + 5px);
   left: 0;
   background: #333;
-  color: white;
+  color: #e0d7ce;
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 12px;
@@ -1404,8 +1405,8 @@ textarea {
 
 .save-btn {
   padding: 10px 20px;
-  background-color: #3182ce;
-  color: white;
+  background-color: #7d746b;
+  color: #e0d7ce;
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -1457,9 +1458,9 @@ textarea {
   border-radius: 0 6px 6px 0;
 }
 .tab-btn.active {
-  background-color: #3182ce;
-  color: white;
-  border-color: #3182ce;
+  background-color: #7d746b;
+  color: #e0d7ce;
+  border-color: #7d746b;
   z-index: 1; /* Poner tab activa por encima */
 }
 
@@ -1544,7 +1545,8 @@ textarea {
 @media screen and (max-width: 575px) {
   .agenda-container {
     padding: 10px;
-    margin-left: 100px;
+    margin-left: 69px;
+    width: 121%;
   }
   .agenda-title {
     font-size: 20px;
@@ -1755,7 +1757,9 @@ textarea {
 /* Tablets (576px - 992px) */
 @media screen and (min-width: 576px) and (max-width: 991px) {
   .agenda-container {
+    width: 121%;
     padding: 15px;
+    margin-left: 64px;
   }
   .agenda-title {
     font-size: 22px;
@@ -1856,7 +1860,7 @@ textarea {
 @media screen and (min-width: 1400px) {
   .agenda-container {
     /* CAMBIO: No establecer max-width ni margin aquí. */
-    padding: 15px; /* Más padding en pantallas grandes */
+    padding: 15px; /* Más padding en pantallas grandes */ 
   }
   .agenda-title {
     font-size: 24px;
@@ -2254,4 +2258,76 @@ textarea.form-control {
   color: #dc3545;
   font-size: 12px;
   margin-top: 5px;
+}
+@media (max-width: 992px){
+  :host {
+    padding-right: 70px !important; /* Reemplaza los 300px solo en pantallas medianas */
+  }
+}
+/* Media query optimizado para pantallas de 15.6" */
+@media screen and (min-width: 1366px) {
+  .agenda-container {
+    padding: 12px; /* Padding ligeramente reducido */
+    width: 95%; /* Ancho relativo para aprovechar el espacio disponible */
+  }
+  
+  .agenda-title {
+    font-size: 22px; /* Tamaño de fuente ligeramente reducido */
+  }
+  
+  .calendar-grid {
+    grid-auto-rows: minmax(110px, auto); /* Altura de filas optimizada */
+  }
+  
+  .calendar-day {
+    min-height: 110px; 
+    padding: 7px; /* Padding ligeramente reducido */
+  }
+  
+  .name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    font-size: 12px; /* Tamaño ajustado para visibilidad */
+  }
+  
+  .day-number {
+    font-size: 14px;
+  }
+  
+  .calendar-day.today .day-number {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .appointment-preview {
+    padding: 5px 7px;
+    font-size: 12px; /* Tamaño ligeramente reducido */
+  }
+  
+  .time {
+    font-size: 10px;
+  }
+  
+  .patient-type-indicator {
+    font-size: 9px;
+    padding: 1px 3px;
+  }
+  
+  .status-icon {
+    font-size: 13px;
+    width: 15px;
+    height: 15px;
+  }
+  
+  .more-appointments {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+
+  /* Vistas semanal/diaria espaciosas */
+  .day-column,
+  .day-column-body {
+    min-width: 90px; /* Ligeramente más estrecho */
+  }
 }

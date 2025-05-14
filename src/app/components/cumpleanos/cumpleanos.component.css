@@ -1,35 +1,70 @@
-/* Estilos generales */
-html, body {
-    height: 1000px;
-    background-color: rgba(195, 181, 170, 0.6);
-}
-
-.cumple {
+:host {
+    display: block;
+    padding-left: 300px;
+    padding-top: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .page-title {
+    color: rgba(0, 0, 0, 0.7); 
+    font-size: 42px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin: 0 0 20px 0; 
+  }
+  .cumple {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra los elementos hijos */
-    gap: 30px;
-    margin: 20px 0 400px 300px; 
-}
-
-.cumple h2 {
-    text-decoration-line: underline;
-    font-size: 25px;
-    color: #7d746b;
-    margin-bottom: auto;
-}
-
-/* Contenedor del mensaje - ahora centrado y con ancho controlado */
-.mensaje,
-.lista-cumple {
-    width: calc(100% - 300px);
-    max-width: 700px; /* Ancho máximo controlado */
+    align-items: center;
+    width: calc(100% - 40px);
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative; /* Añadido para estabilizar el posicionamiento */
+  }
+  
+.mensaje button.save-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    background-color: #7d746b;
+    color: #e0d7ce;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .mensaje button.save-btn:hover {
+    background-color: #635a52;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(125, 116, 107, 0.4);
+  }
+  
+  /* Estilo para el icono dentro del botón */
+  .mensaje .btn-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    margin-right: 2px; /* Un pequeño ajuste adicional */
+  }
+  .mensaje,
+  .lista-cumple {
+    width: 100%; /* Cambio crítico - estaba causando el problema */
+    max-width: 700px;
     background: #fff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    margin: 20px auto 20px 300;
-}
+    margin: 20px auto; /* Corregido - faltaba unidad */
+    box-sizing: border-box;
+    position: relative; /* Para estabilizar el contenido */
+  }
 
 .mensaje h2,
 .lista-cumple h2 {
@@ -54,48 +89,45 @@ html, body {
     padding: 12px 15px;
     font-size: 16px;
     font-family: inherit;
-    border: 2px solid #e0d7ce;
+    border: none; /* Quitar borde */
     border-radius: 8px;
     margin: 15px auto;
     transition: border 0.3s;
     box-sizing: border-box;
     height: 50px;
-    background-color: #e0dece;
+    background-color: rgba(138, 136, 134, 0.2);
     flex: 1;
     min-width: 200px;
 }
 .mensaje textarea {
-    width: 100%; /* Ajuste para considerar el padding */
+    width: 100%;
     min-height: 100px;
     max-height: 300px;
     padding: 15px;
     font-size: 16px;
     font-family: inherit;
-    border: 2px solid #e0d7ce;
+    border: none; /* Quitar borde */
     border-radius: 8px;
     margin: 15px auto;
-    background-color: #e0dece;
+    background-color: rgba(138, 136, 134, 0.2);
     resize: none;
-    transition: border 0.3s, height 0.2s;
-    box-sizing: border-box; /* Evita que el padding afecte el ancho total */
+    box-sizing: border-box;
     overflow-y: hidden;
     line-height: 1.5;
     word-wrap: break-word;
 }
-
-.mensaje textarea:focus
+.mensaje textarea:focus,
 .mensaje input:focus {
-    border-color: #7d746b;
     outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2); /* En lugar de borde, usar sombra sutil */
     min-height: 120px;
 }
-
 .mensaje button {
     padding: 14px 25px;
     font-size: 16px;
     font-weight: 600;
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -125,7 +157,7 @@ html, body {
 
 .table-cumple th {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     text-align: left;
     padding: 15px 20px;
     font-weight: 500;
@@ -141,33 +173,123 @@ html, body {
 }
 
 .table-cumple tr.odd-row {
-    background-color: rgba(238, 238, 238, 0.5);
+    background-color: rgba(138, 136, 134, 0.2);
 }
 
-
-
-/* Responsive para móvil (768px) */
 @media (max-width: 768px) {
+    :host {
+        padding-left: 0 !important; /* Quitar completamente el padding izquierdo */
+        margin-left: 20px !important; /* Usar margen en lugar de padding */
+        width: calc(100% - 70px) !important; /* Ajustar ancho considerando la barra */
+        padding-top: 5px;
+        position: relative;
+        overflow-x: hidden !important;
+      }
+      
+    /* Ajustar el contenedor principal para usar todo el ancho */
     .cumple {
-        margin-left: 90px;
-        width: calc(100% - 90px);
-        padding: 15px 20px; /* Menos padding en móvil */
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 10px !important;
+      box-sizing: border-box;
     }
     
-    .mensaje, .lista-cumple {
-        max-width: 100%; /* Ocupa todo el ancho disponible en móvil */
-        padding: 15px;
+    /* Título más pequeño */
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 15px;
     }
     
+    /* Ajustar contenedores de mensajes y listas */
+    .mensaje, 
+    .lista-cumple {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 10px 0 !important;
+      padding: 15px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Inputs y textareas */
+    .mensaje textarea,
     .mensaje input {
-        height: 80px;
-        padding: 10px;
-        width: calc(100% - 20px); /* Ajuste para móvil */
+      width: 100% !important;
+      min-height: 80px;
+      padding: 10px !important;
+      margin: 8px 0 !important;
+      font-size: 14px !important;
     }
     
-    .lista-cumple th, .lista-cumple td {
-        padding: 8px 10px;
-        font-size: 14px;
-        max-width: 150px; /* Menor ancho máximo en móvil */
+    /* Tabla más compacta */
+    .table-cumple th, 
+    .table-cumple td {
+      padding: 8px !important;
+      font-size: 13px !important;
     }
-}
+    
+    /* Botón optimizado */
+    .mensaje button,
+    .mensaje button.save-btn {
+      width: 100% !important;
+      padding: 10px 15px !important;
+      margin: 15px 0 5px !important;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    :host {
+      padding-left: 70px !important; /* Ajustado para la barra lateral compacta */
+      margin-left: 0 !important; /* Eliminar margen que podría causar problemas */
+      width: calc(106% - 40px) !important;
+      padding-bottom: 30px !important; /* Espacio adicional inferior */
+      overflow-y: auto !important; /* Permitir scroll vertical */
+      overflow-x: hidden !important;
+    }
+    
+    .page-title {
+      font-size: 32px; /* Título más pequeño */
+      margin-bottom: 15px;
+    }
+    
+    .cumple {
+      width: 95% !important;
+      max-width: 700px !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+    }
+    
+    .mensaje, 
+    .lista-cumple {
+      width: 100% !important;
+      border-radius: 15px;
+      padding: 20px !important;
+      margin: 15px auto !important;
+    }
+    
+    /* Ajustar para pantallas muy pequeñas */
+    @media (max-width: 768px) {
+      :host {
+        padding-left: 65px !important; /* Barra aún más compacta */
+        margin-left: 0 !important;
+      }
+      
+      .page-title {
+        font-size: 28px;
+      }
+      
+      .mensaje, 
+      .lista-cumple {
+        padding: 15px !important;
+      }
+    }
+    
+    /* Dispositivos extra pequeños */
+    @media (max-width: 360px) {
+      :host {
+        padding-left: 60px !important;
+      }
+    }
+  }

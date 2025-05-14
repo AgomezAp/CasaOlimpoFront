@@ -34,12 +34,10 @@ export class EditarDatosComponent implements OnInit {
       enfermedad_actual: ['', Validators.required],
       objetivos_terapia: ['', Validators.required],
       historia_problema: ['', Validators.required],
-      desarrollo: ['', Validators.required],
-      plan_terapeutico: ['', Validators.required],
       tipo_diagnostico: ['', Validators.required],
-      analisis_diagnostico: ['', Validators.required],
       plan_tratamiento: ['', Validators.required],
-      recomendaciones: ['']
+      contraindicaciones: ['', Validators.required], 
+      recomendaciones: [''],
     });
   }
 
@@ -78,12 +76,10 @@ export class EditarDatosComponent implements OnInit {
             enfermedad_actual: consulta.enfermedad_actual || '',
             objetivos_terapia: consulta.objetivos_terapia || '',
             historia_problema: consulta.historia_problema || '',
-            desarrollo: consulta.desarrollo || '',
-            plan_terapeutico: consulta.plan_terapeutico || '',
             tipo_diagnostico: consulta.tipo_diagnostico || '',
-            analisis_diagnostico: consulta.analisis_diagnostico || '',
             plan_tratamiento: consulta.plan_tratamiento || '',
-            recomendaciones: consulta.recomendaciones || ''
+            recomendaciones: consulta.recomendaciones || '',
+            contraindicaciones:consulta.contraindicaciones|| ''
           });
         },
         error: (err) => {

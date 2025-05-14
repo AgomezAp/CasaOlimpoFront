@@ -32,7 +32,7 @@
   .logo {
     max-width: 100%;
     height: auto;
-    max-height: 20px; /* Tamaño aumentado ligeramente */
+    max-height: 19px; /* Tamaño aumentado ligeramente */
   }
   
   /* Estilos de la navegación */
@@ -95,7 +95,7 @@
   
   /* Footer */
   .sidebar-footer {
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     font-size: 18px; /* Se mantiene el tamaño actual */
     color: #fffaec;
@@ -177,4 +177,164 @@
 
 .nav-item.admin-link .nav-link:hover {
   color: #64594e;
+}
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 0;
+  width: 100%;
+}
+
+.logo-desktop {
+  max-width: 70%; 
+  max-height: 75px; 
+  height: auto;
+  display: block;
+  object-fit: contain; /* Mantiene la proporción */
+}
+
+.logo-mobile {
+  max-width: 60%;
+  height: auto;
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: 60px; /* Ancho reducido en móviles */
+  }
+  
+  /* Ocultar texto en los enlaces */
+  .sidebar-nav ul li a span,
+  .sidebar-nav .nav-link span,
+  .sidebar-footer,
+  .app-title {
+    display: none;
+  }
+  
+  /* Centrar los iconos */
+  .sidebar-nav ul li a,
+  .sidebar-nav .nav-link {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  
+  /* Ajustar tamaño de iconos para mejor visibilidad */
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Ajustar posición del badge de notificación */
+  .badge-notification {
+    right: 5px;
+    top: 2px;
+  }
+  
+  /* Centrar header con logo/icono si es necesario */
+  .sidebar-header {
+    justify-content: center;
+    padding: 15px 0;
+  }
+  
+  /* Asegurar que el contenido principal se ajuste */
+  :host-context(.app-container) .main-content {
+    margin-left: 60px;
+  }
+  .logo-desktop {
+    display: none;
+  }
+  
+  .logo-mobile {
+    display: block;
+  }
+  
+  .sidebar-header {
+    padding: 10px 0;
+  }
+}
+
+/* Mejorar la transición */
+.sidebar, .sidebar * {
+  transition: all 0.3s ease;
+}
+/* Unificar comportamiento móvil y tablets: solo iconos, sin texto */
+@media (max-width: 1199px) {
+  .sidebar {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+  }
+
+  .sidebar-header {
+    padding: 10px 0 !important;
+  }
+
+  .app-title,
+  .sidebar-nav ul li a span,
+  .sidebar-nav .nav-link span,
+  .sidebar-footer {
+    display: none !important;
+  }
+
+  .sidebar-nav a {
+    justify-content: center !important;
+    padding: 18px 0 !important;
+  }
+
+  .sidebar-nav .nav-icon {
+    margin-right: 0 !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .logo-desktop {
+    display: none !important;
+  }
+  .logo-mobile {
+    display: block !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    margin: 0 auto !important;
+  }
+}
+@media (max-width: 1366px) {
+  .sidebar {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+  }
+
+  .sidebar-header {
+    padding: 10px 0 !important;
+  }
+
+  .app-title,
+  .sidebar-nav ul li a span,
+  .sidebar-nav .nav-link span,
+  .sidebar-footer {
+    display: none !important;
+  }
+
+  .sidebar-nav a {
+    justify-content: center !important;
+    padding: 18px 0 !important;
+  }
+
+  .sidebar-nav .nav-icon {
+    margin-right: 0 !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .logo-desktop {
+    display: none !important;
+  }
+  .logo-mobile {
+    display: block !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    margin: 0 auto !important;
+  }
 }

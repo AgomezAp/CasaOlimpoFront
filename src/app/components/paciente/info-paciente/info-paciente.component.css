@@ -178,7 +178,7 @@ app-paciente-nav {
 
 .section-divider {
   height: 4px;
-  background-color: rgba(125, 116, 107, 0.5);
+  background-color: rgba(125, 116, 107, 0.9);
   margin-bottom: 20px;
   border-radius: 2px;
 }
@@ -186,7 +186,7 @@ app-paciente-nav {
 .data-grid {
   display: flex;
   flex-direction: column;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -195,7 +195,7 @@ app-paciente-nav {
 .data-row {
   display: flex;
   margin-bottom: 0;
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid #000000;
   border-right: none !important;
 }
 
@@ -206,12 +206,31 @@ app-paciente-nav {
 .data-row.alt-bg {
   background-color: rgba(138, 136, 134, 0.2);
 }
+.spinner-button {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  margin-right: 8px;
+  animation: spin 1s ease-in-out infinite;
+  vertical-align: middle;
+}
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-save:disabled, .btn-cancel:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
 .data-field {
   flex: 1;
   padding: 15px;
   position: relative;
-  border-right: 4px solid #000000;
+  border-right: 1px solid #000000;
   display: flex;
   align-items: center;
   border-right: none !important;
@@ -346,7 +365,7 @@ textarea {
   justify-content: center;
   margin-bottom: -10px;
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
 }
  .btn-save, .btn-cancel {
   padding: 12px 25px;
@@ -362,12 +381,12 @@ textarea {
 
 .btn-primary {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
 }
 
 .btn-save {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
 }
 
 .btn-cancel {
@@ -401,7 +420,7 @@ app-receta table {
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   margin-bottom: 15px;
   overflow-x: auto;
   min-width: 900px; 
@@ -438,7 +457,7 @@ app-receta td {
   text-align: left;
   word-break: break-word;
   overflow-wrap: break-word;
-  border: 2px solid #000000; 
+  border: 1px solid #000000; 
   max-width: 200px; 
 }
 .table-responsive-container {

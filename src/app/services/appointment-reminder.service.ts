@@ -281,7 +281,7 @@ export class AppointmentReminderService {
     this.verificarCitasInminentes();
 
     // Configurar verificación cada minuto
-    this.temporizadorCitasInminentes = interval(600000).subscribe(() => {
+    this.temporizadorCitasInminentes = interval(240000).subscribe(() => {
       this.verificarCitasInminentes();
     });
   }
@@ -390,35 +390,74 @@ export class AppointmentReminderService {
     try {
       const fechaStr = cita.fecha_cita || cita.fecha || cita.date;
       if (!fechaStr) {
-        console.debug(
-          'Cita sin fecha definida:',
-          cita.id || cita.Aid || cita.ANRid
-        );
+        console.debug('Cita sin fecha definida:', cita.id || cita.Aid || cita.ANRid);
         return null;
       }
-
-      const fecha = new Date(fechaStr);
+  
+      let fecha: Date;
+      
+      // ENFOQUE MEJORADO: Normalizar todas las fechas de manera consistente
+      if (typeof fechaStr === 'string') {
+        // Si es un string, procesar según su formato
+        if (fechaStr.includes('T')) {
+          const [year, month, day] = fechaStr.split('T')[0].split('-').map(Number);
+          fecha = new Date(year, month - 1, day, 12, 0, 0); // 12:00 PM
+        } else if (fechaStr.includes('-')) {
+          // Formato YYYY-MM-DD sin la T
+          const [year, month, day] = fechaStr.split('-').map(Number);
+          fecha = new Date(year, month - 1, day, 12, 0, 0); // 12:00 PM
+        } else if (fechaStr.includes('/')) {
+          // Formato MM/DD/YYYY o DD/MM/YYYY
+          const parts = fechaStr.split('/').map(Number);
+          
+          // Determinar el formato (asumiendo MM/DD/YYYY si el primer número es ≤ 12)
+          if (parts[0] <= 12) {
+            fecha = new Date(parts[2], parts[0] - 1, parts[1], 12, 0, 0);
+          } else {
+            fecha = new Date(parts[2], parts[1] - 1, parts[0], 12, 0, 0);
+          }
+        } else {
+          // Último recurso: usar el constructor de Date pero luego normalizarlo
+          fecha = new Date(fechaStr);
+          // Normalizar a medio día para evitar problemas de zona horaria
+          fecha = new Date(
+            fecha.getFullYear(), 
+            fecha.getMonth(), 
+            fecha.getDate(), 
+            12, 0, 0
+          );
+        }
+      } else if (fechaStr instanceof Date) {
+        // Si ya es un objeto Date, normalizarlo a medio día
+        fecha = new Date(
+          fechaStr.getFullYear(),
+          fechaStr.getMonth(),
+          fechaStr.getDate(),
+          12, 0, 0
+        );
+      } else {
+        // No es un formato reconocido
+        console.warn('Formato de fecha no reconocido:', fechaStr);
+        return null;
+      }
+      
+      // Verificar que la fecha sea válida
       if (isNaN(fecha.getTime())) {
-        console.warn(
-          'Formato de fecha inválido:',
-          fechaStr,
-          'en cita:',
-          cita.id || cita.Aid || cita.ANRid
-        );
+        console.warn('Fecha inválida después de normalizar:', fechaStr);
         return null;
       }
-
-      // Para depuración
+  
+      // Log para depuración
       const isRegistered = cita.isRegistered !== false;
       console.debug(
-        `Fecha encontrada: ${fecha.toLocaleDateString()} en cita ${
+        `Fecha normalizada: ${fecha.toLocaleDateString()} (${fecha.toISOString()}) en cita ${
           isRegistered ? 'registrada' : 'no registrada'
         }`
       );
-
+  
       return fecha;
     } catch (e) {
-      console.error('Error procesando fecha:', e);
+      console.error('Error procesando fecha:', e, 'en cita:', cita);
       return null;
     }
   }
@@ -435,11 +474,26 @@ export class AppointmentReminderService {
   }
 
   private sonMismoDia(fecha1: Date, fecha2: Date): boolean {
-    return (
+    // Verificar que ambos parámetros sean fechas válidas
+    if (!(fecha1 instanceof Date) || !(fecha2 instanceof Date) || 
+        isNaN(fecha1.getTime()) || isNaN(fecha2.getTime())) {
+      console.warn('sonMismoDia recibió fechas inválidas:', fecha1, fecha2);
+      return false;
+    }
+    
+    // Comparación solo de año/mes/día
+    const resultado = (
       fecha1.getFullYear() === fecha2.getFullYear() &&
       fecha1.getMonth() === fecha2.getMonth() &&
       fecha1.getDate() === fecha2.getDate()
     );
+    
+    // Log para depuración
+    if (resultado) {
+      console.debug(`Fechas coinciden como mismo día: ${fecha1.toLocaleDateString()} = ${fecha2.toLocaleDateString()}`);
+    }
+    
+    return resultado;
   }
 
   private obtenerNombrePaciente(cita: any): string {
@@ -478,7 +532,6 @@ export class AppointmentReminderService {
     this.notificacionHaSidoSolicitada = false;
   }
   public updateWithExistingCitas(citas: any[]): void {
-    // Simplemente delega al método procesarCitas
     this.procesarCitas(citas);
   }
 

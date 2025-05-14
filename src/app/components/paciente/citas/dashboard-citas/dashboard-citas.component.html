@@ -1,174 +1,219 @@
+<h2 class="section-title">Historial de Citas</h2>
+<div class="section-divider"></div>
 <div class="patient-appointments-container">
-    <!-- Header con título y botón de nueva cita -->
-    <div class="appointments-header">
-      <h2 class="section-title">Historial de Citas</h2>
-      <button class="btn-add-appointment" (click)="openNewAppointmentModal()">
-        <i class="fas fa-plus"></i> Nueva Cita
+  <div class="appointments-header">
+    <button class="btn-add-appointment" (click)="openNewAppointmentModal()">
+      <img src="/PrimeraCita.png" alt="Agregar" class="icon-add" /> Nueva Cita
+    </button>
+  </div>
+
+  <!-- Estado de carga y errores -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Cargando citas...</p>
+  </div>
+
+  <div class="error-state" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Tabla de citas -->
+  <div class="appointments-table-container" *ngIf="!loading && !error">
+    <table class="appointments-table">
+      <thead>
+        <tr>
+          <th>FECHA</th>
+          <th>HORA</th>
+          <th>PROCEDIMIENTO</th>
+          <th class="text-center">ESTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="citas.length === 0">
+          <td colspan="4" class="no-appointments">
+            No hay citas registradas para este paciente
+          </td>
+        </tr>
+
+        <tr
+         *ngFor="let cita of citasPaginadas; let i = index" [ngClass]="{ 'past-appointment': isCitaPasada(cita.fecha_cita) }">
+          <td>{{ formatFecha(cita.fecha_cita) }}</td>
+          <td>{{ cita.hora_cita }}</td>
+          <td>{{ cita.descripcion || "Consulta general" }}</td>
+          <td class="text-center estado-column">
+            <span
+              class="estado-badge"
+              [ngClass]="getEstadoIcon(cita.estado).class"
+              title="{{ cita.estado }}"
+            >
+              {{ getEstadoIcon(cita.estado).icon }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="paginacion-controles" *ngIf="totalPaginas > 1">
+      <button 
+        class="btn-paginacion" 
+        [disabled]="paginaActual === 1"
+        (click)="paginaAnterior()">
+        &laquo; Anterior
+      </button>
+      
+      <div class="paginas-numeros">
+        <span *ngFor="let p of [].constructor(totalPaginas); let i = index">
+          <button 
+            class="btn-pagina" 
+            [class.activa]="paginaActual === i+1"
+            (click)="irAPagina(i+1)">
+            {{ i + 1 }}
+          </button>
+        </span>
+      </div>
+      
+      <button 
+        class="btn-paginacion" 
+        [disabled]="paginaActual === totalPaginas"
+        (click)="paginaSiguiente()">
+        Siguiente &raquo;
       </button>
     </div>
-  
-    <!-- Estado de carga y errores -->
-    <div class="loading-state" *ngIf="loading">
-      <div class="spinner"></div>
-      <p>Cargando citas...</p>
-    </div>
-  
-    <div class="error-state" *ngIf="error">
-      <p>{{ error }}</p>
-    </div>
-  
-    <!-- Tabla de citas -->
-    <div class="appointments-table-container" *ngIf="!loading && !error">
-      <table class="appointments-table">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Procedimiento</th>
-            <th class="text-center">Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="citas.length === 0">
-            <td colspan="4" class="no-appointments">
-              No hay citas registradas para este paciente
-            </td>
-          </tr>
-          
-          <tr *ngFor="let cita of citas" [ngClass]="{'past-appointment': isCitaPasada(cita.fecha_cita)}">
-            <td>{{ formatFecha(cita.fecha_cita) }}</td>
-            <td>{{ cita.hora_cita }}</td>
-            <td>{{ cita.descripcion || 'Consulta general' }}</td>
-            <td class="text-center estado-column">
-              <span 
-                class="estado-badge" 
-                [ngClass]="getEstadoIcon(cita.estado).class"
-                title="{{cita.estado}}">
-                {{ getEstadoIcon(cita.estado).icon }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Mensaje cuando no hay citas -->
-    <div class="empty-state" *ngIf="!loading && !error && citas.length === 0">
-      <p>Este paciente aún no tiene citas registradas.</p>
-      <button class="btn-add-first-appointment" (click)="openNewAppointmentModal()">
-        Programar Primera Cita
-      </button>
-    </div>
-  
-    <!-- Modal para nueva cita -->
-    <div class="modal-overlay" [class.active]="showNewAppointmentModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Nueva Cita</h3>
-          <button class="close-btn" (click)="closeNewAppointmentModal()">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-          <form [formGroup]="citaForm" (ngSubmit)="saveCita()">
-            <!-- Selector de fecha -->
-            <div class="form-group">
-              <label>Fecha:</label>
-              <div class="date-selector">
-                <div class="date-grid">
-                  <button 
-                    type="button" 
-                    *ngFor="let date of availableDates.slice(0, 15)" 
-                    class="date-option"
-                    [class.selected]="selectedDate && selectedDate.toDateString() === date.toDateString()"
-                    (click)="onDateSelected(date)">
-                    {{ formatDateForDisplay(date) }}
-                  </button>
-                </div>
-                <div class="selected-date" *ngIf="selectedDate">
-                  Fecha seleccionada: <strong>{{ formatDateForDisplay(selectedDate) }}</strong>
-                </div>
-              </div>
-            </div>
-  
-            <!-- Selector de hora -->
-            <div class="form-group" *ngIf="selectedDate">
-              <label>Hora:</label>
-              
-              <!-- Indicador de carga mientras se obtienen las horas -->
-              <div class="loading-hours" *ngIf="cargandoHoras">
-                <div class="spinner-sm"></div>
-                <span>Consultando disponibilidad...</span>
-              </div>
-              
-              <!-- Mensaje si no hay horas disponibles -->
-              <div class="no-hours-available" *ngIf="!cargandoHoras && availableHours.length === 0">
-                <p>No hay horas disponibles para esta fecha. Por favor seleccione otra fecha.</p>
-              </div>
-              
-              <!-- Selector de horas disponibles -->
-              <div class="hour-selector" *ngIf="!cargandoHoras && availableHours.length > 0">
-                <button 
-                  type="button" 
-                  *ngFor="let hour of availableHours" 
-                  class="hour-option"
-                  [class.selected]="citaForm.get('hora_cita')?.value === hour"
-                  (click)="onHourSelected(hour)">
-                  {{ hour }}
+  </div>
+
+  <!-- Mensaje cuando no hay citas -->
+  <div class="empty-state" *ngIf="!loading && !error && citas.length === 0">
+    <p>Este paciente aún no tiene citas registradas.</p>
+  </div>
+
+  <!-- Modal para nueva cita -->
+  <div class="modal-overlay" [class.active]="showNewAppointmentModal" (click)="closeNewAppointmentModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Nueva Cita</h3>
+        <button class="close-btn" (click)="closeNewAppointmentModal()">
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="citaForm" (ngSubmit)="saveCita()">
+          <!-- Selector de fecha -->
+          <div class="form-group">
+            <label>Fecha:</label>
+            <div class="date-selector">
+              <div class="date-grid">
+                <button
+                  type="button"
+                  *ngFor="let date of availableDates.slice(0, 15)"
+                  class="date-option"
+                  [class.selected]="
+                    selectedDate &&
+                    selectedDate.toDateString() === date.toDateString()
+                  "
+                  (click)="onDateSelected(date)"
+                >
+                  {{ formatDateForDisplay(date) }}
                 </button>
               </div>
+              <div class="selected-date" *ngIf="selectedDate">
+                Fecha seleccionada:
+                <strong>{{ formatDateForDisplay(selectedDate) }}</strong>
+              </div>
             </div>
-  
-            <!-- Tipo de cita -->
-            <div class="form-group">
-              <label>Tipo de cita:</label>
-              <select formControlName="tipo" class="form-control">
-                <option value="consulta">Consulta general</option>
-                <option value="control">Control</option>
-                <option value="procedimiento">Procedimiento</option>
-                <option value="urgencia">Urgencia</option>
-              </select>
+          </div>
+
+          <!-- Selector de hora -->
+          <div class="form-group" *ngIf="selectedDate">
+            <label>Hora:</label>
+
+            <!-- Indicador de carga mientras se obtienen las horas -->
+            <div class="loading-hours" *ngIf="cargandoHoras">
+              <div class="spinner-sm"></div>
+              <span>Consultando disponibilidad...</span>
             </div>
-  
-            <!-- Duración -->
-            <div class="form-group">
-              <label>Duración (minutos):</label>
-              <select formControlName="duracion" class="form-control">
-                <option value="30">30 minutos</option>
-                <option value="45">45 minutos</option>
-                <option value="60">1 hora</option>
-                <option value="90">1 hora y 30 minutos</option>
-                <option value="120">2 horas</option>
-              </select>
+
+            <!-- Mensaje si no hay horas disponibles -->
+            <div
+              class="no-hours-available"
+              *ngIf="!cargandoHoras && availableHours.length === 0"
+            >
+              <p>
+                No hay horas disponibles para esta fecha. Por favor seleccione
+                otra fecha.
+              </p>
             </div>
-  
-            <!-- Descripción -->
-            <div class="form-group">
-              <label>Notas:</label>
-              <textarea 
-                formControlName="descripcion"
-                rows="3" 
-                class="form-control" 
-                placeholder="Detalles adicionales sobre la cita..."></textarea>
-            </div>
-  
-            <!-- Botones de acción -->
-            <div class="form-actions">
-              <button 
-                type="button" 
-                class="btn-cancel" 
-                (click)="closeNewAppointmentModal()">
-                Cancelar
-              </button>
-              <button 
-                type="submit" 
-                class="btn-save" 
-                [disabled]="citaForm.invalid || savingCita">
-                <span *ngIf="!savingCita">Guardar Cita</span>
-                <div *ngIf="savingCita" class="spinner-sm"></div>
+
+            <!-- Selector de horas disponibles -->
+            <div
+              class="hour-selector"
+              *ngIf="!cargandoHoras && availableHours.length > 0"
+            >
+              <button
+                type="button"
+                *ngFor="let hour of availableHours"
+                class="hour-option"
+                [class.selected]="citaForm.get('hora_cita')?.value === hour"
+                (click)="onHourSelected(hour)"
+              >
+                {{ hour }}
               </button>
             </div>
-          </form>
-        </div>
+          </div>
+
+          <!-- Tipo de cita -->
+          <div class="form-group">
+            <label>Tipo de cita:</label>
+            <select formControlName="tipo" class="form-control">
+              <option value="consulta">Consulta general</option>
+              <option value="control">Control</option>
+              <option value="procedimiento">Procedimiento</option>
+              <option value="urgencia">Urgencia</option>
+            </select>
+          </div>
+
+          <!-- Duración -->
+          <div class="form-group">
+            <label>Duración (minutos):</label>
+            <select formControlName="duracion" class="form-control">
+              <option value="30">30 minutos</option>
+              <option value="45">45 minutos</option>
+              <option value="60">1 hora</option>
+              <option value="90">1 hora y 30 minutos</option>
+              <option value="120">2 horas</option>
+            </select>
+          </div>
+
+          <!-- Descripción -->
+          <div class="form-group">
+            <label>Notas:</label>
+            <textarea
+              formControlName="descripcion"
+              rows="3"
+              class="form-control"
+              placeholder="Detalles adicionales sobre la cita..."
+            ></textarea>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-cancel"
+              (click)="closeNewAppointmentModal()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-save"
+              [disabled]="citaForm.invalid || savingCita"
+            >
+              <span *ngIf="!savingCita">Guardar Cita</span>
+              <div *ngIf="savingCita" class="spinner-sm"></div>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  </div >
+  </div>
+</div>

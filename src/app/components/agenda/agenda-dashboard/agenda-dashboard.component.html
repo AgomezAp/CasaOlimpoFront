@@ -347,8 +347,8 @@
   </div>
 
   <!-- Modal para Nueva Cita -->
-  <div class="modal" [class.active]="showNewAppointmentModal">
-    <div class="modal-content">
+  <div class="modal" [class.active]="showNewAppointmentModal" (click)="closeNewAppointmentModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Nueva Cita</h3>
         <button class="close-btn" (click)="closeNewAppointmentModal()">
@@ -497,8 +497,15 @@
               <input type="date" formControlName="date" />
             </div>
             <div class="form-group half">
-              <label>Hora:</label>
-              <input type="time" formControlName="time" />
+              <div class="form-group">
+                <label for="appointmentTime">Hora:</label>
+                <select id="appointmentTime" class="form-control" formControlName="time">
+                  <option *ngFor="let hour of hours" [value]="hour">{{ hour }}</option>
+                </select>
+                <div *ngIf="hours.length === 1 && hours[0] === 'No disponible'" class="validation-message">
+                  No hay horarios disponibles para esta fecha
+                </div>
+              </div>
             </div>
           </div>
 
@@ -513,7 +520,7 @@
           </div>
 
           <div class="form-group">
-            <label>Duración (minutos):</label>
+            <label>Duración</label>
             <select formControlName="duration">
               <option value="30">30 minutos</option>
               <option value="45">45 minutos</option>
@@ -551,8 +558,8 @@
   </div>
 
   <!-- Modal para Ver Detalles de Cita -->
-  <div class="modal" [class.active]="showAppointmentDetailsModal">
-    <div class="modal-content">
+  <div class="modal" [class.active]="showAppointmentDetailsModal" (click)="closeAppointmentDetailsModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div
         class="modal-header"
         [ngClass]="
@@ -658,7 +665,7 @@
                 filter: contrast(1.3) brightness(0.7);
               "
             />
-            Editar
+            Reprogramar
           </button>
 
           <button
@@ -758,8 +765,8 @@
     </div>
   </div>
   <!-- Modal de edición de cita -->
-  <div class="modal" [class.active]="showEditModal">
-    <div class="modal-content">
+  <div class="modal" [class.active]="showEditModal" (click)="showEditModal = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Editar Cita</h3>
         <button class="close-btn" (click)="showEditModal = false">

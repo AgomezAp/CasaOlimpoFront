@@ -10,12 +10,12 @@
   
   /* Estilo para el título principal */
   .page-title {
-    color: rgba(0, 0, 0, 0.7); /* Negro con 70% de opacidad */
-    font-size: 32px;
+    color: rgba(0, 0, 0, 0.7); 
+    font-size: 42px;
     font-weight: 600;
     text-align: center;
     width: 100%;
-    margin: 0 0 20px 0; /* Eliminar margen superior, añadir margen inferior */
+    margin: 0 0 20px 0; 
   }
   
   /* Contenedor principal sin margen izquierdo (ya aplicado en :host) */
@@ -31,7 +31,7 @@
   }
   
   .content-container {
-    width: 1010px;
+    width: 1300px;
     height: 570px; /* Cambiamos max-height por height fija */
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 40px;
@@ -66,7 +66,7 @@
   }
   
   .search-box input {
-    width: 100%;
+    width: 50%;
     padding: 10px 15px;
     padding-left: 40px;
     border: 1px solid #ddd;
@@ -87,7 +87,7 @@
   
   .btn-new {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 20px;
     padding: 10px 20px;
@@ -223,7 +223,7 @@
 
 .pagination-btn {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   border: none;
   border-radius: 4px;
   padding: 8px 12px;
@@ -265,7 +265,7 @@
 
 .pagination-page-btn.active {
   background-color: #7d746b;
-  color: white;
+  color: #e0d7ce;
   font-weight: bold;
 }
 
@@ -350,7 +350,83 @@
       max-height: 500px;
     }
   }
+  @media (max-width: 992px) {
+    /* Ajuste específico cuando la barra lateral es compacta en tablets */
+    :host {
+      padding-left: 70px !important;
+      padding-bottom: 120px !important; /* Espacio para la paginación */
+      height: auto !important; /* Permitir que se expanda según el contenido */
+      min-height: 100vh !important; /* Asegurar altura mínima */
+      overflow-y: auto !important; /* Permitir scroll vertical */
+      overflow-x: hidden !important; /* Prevenir scroll horizontal */
+    }
+    
+    /* Ajustar el contenedor principal para scroll */
+    .main-content {
+      height: auto !important;
+      min-height: calc(100vh - 70px) !important;
+      overflow: visible !important;
+      padding-bottom: 100px !important;
+      align-items: flex-start !important;
+    }
+    
+    /* Modificar contenedor para ver paginación */
+    .content-container {
+      width: 95%; 
+      border-radius: 25px;
+      max-height: 80vh !important; /* Altura máxima relativa */
+      padding: 20px;
+      margin-bottom: 60px !important; /* Espacio para paginación */
+      overflow: visible !important; /* Crítico: permite que la paginación se vea */
+      position: relative !important; /* Para posicionar elementos hijos */
+    }
+    
+    /* Asegurar que la tabla tenga scroll propio */
+    .table-container {
+      max-height: calc(80vh - 150px) !important;
+      overflow-y: auto !important;
+    }
+    
+    /* Posicionar la paginación para que siempre sea visible */
+    .pagination-container {
+      position: relative !important;
+      bottom: auto !important;
+      margin-top: 30px !important;
+      margin-bottom: 50px !important;
+      width: 100% !important;
+      z-index: 10 !important;
+    }
+    
+    /* Hacer los controles de paginación más táctiles */
+    .pagination-controls {
+      gap: 8px !important;
+    }
+    
+    .pagination-btn, .pagination-page-btn {
+      min-width: 38px !important;
+      min-height: 38px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+  }
   
+  /* Ajustes adicionales para móvil */
+  @media (max-width: 768px) {
+    :host {
+      padding-left: 65px !important;
+    }
+    
+    .pagination-container {
+      margin-bottom: 70px !important;
+    }
+    
+    /* Hacer más táctil en móviles */
+    .pagination-btn, .pagination-page-btn {
+      min-width: 42px !important;
+      min-height: 42px !important;
+    }
+  }
   @media (max-width: 768px) {
     :host {
       padding-left: 90px; /* Ajuste para navbar más estrecho en móviles */

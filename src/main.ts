@@ -22,8 +22,8 @@ bootstrapApplication(AppComponent, {
     BrowserAnimationsModule,
     FontAwesomeModule,
     provideHttpClient(),  
-    provideCharts(withDefaultRegisterables()),  // Agrega el proveedor de gráficos
-    provideHttpClient(withInterceptors([tokenInterceptor])),   // Agrega el proveedor de animaciones
+    provideCharts(withDefaultRegisterables()),  
+    provideHttpClient(withInterceptors([tokenInterceptor])),   
     provideToastr({
       timeOut: 1200,
       positionClass: 'toast-top-right',

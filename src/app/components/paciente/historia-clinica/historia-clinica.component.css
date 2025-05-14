@@ -1,352 +1,362 @@
+/* ===== ESTILOS GENERALES ===== */
 .historia-clinica-container {
-    padding: 20px;
-    overflow-x: hidden;
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .section-title {
-    color: #000000;
-    font-size: 26px;
-    margin: 0;
-    font-weight: 600;
-  }
-  
-  .section-info {
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .section-divider {
-    height: 4px;
-    background-color: rgba(125, 116, 107, 0.5);
-    margin-bottom: 20px;
-    border-radius: 2px;
-  }
-  
-  /* Tabla con bordes delineados */
-  .table-responsive-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 20px;
-  }
-  
-  .historia-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: none; /* Quitamos el borde general */
-    table-layout: auto;
-  }
-  
-  
-.historia-table th, 
-.historia-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border: none; /* Quitamos todos los bordes */
-  border-bottom: 2px solid #000000; /* Solo borde inferior negro */
-}
-.historia-table thead th {
-  border-top: 2px solid #000000;
-}
-  .historia-table th {
-    background-color: rgba(125, 116, 107, 0.2);
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
-  }
-  
-  /* Filas alternadas */
-  .historia-table tr {
-    background-color: #ffffff;
-  }
-  
-  .historia-table tr.alt-row {
-    background-color: rgba(138, 136, 134, 0.2); /* #8a8886 al 20% de opacidad */
-  }
-  
-  /* Badges de estado */
-  .estado-badge {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-    text-align: center;
-    min-width: 80px;
-  }
-  
-  .estado-badge.abierto {
-    background-color: rgba(76, 175, 80, 0.2);
-    color: #388e3c;
-    border: 1px solid #388e3c;
-  }
-  
-  .estado-badge.cerrado {
-    background-color: rgba(158, 158, 158, 0.2);
-    color: #616161;
-    border: 1px solid #616161;
-  }
-  
-  /* Iconos de acciones */
-  .action-icons {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-  
-  .action-icon {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.2s;
-  }
-  
-  .action-icon img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .action-icon.edit {
-    background-color: rgba(33, 150, 243, 0.1);
-  }
-  
-  .action-icon.edit:hover {
-    background-color: rgba(33, 150, 243, 0.2);
-  }
-  
-  .action-icon.view {
-    background-color: rgba(125, 116, 107, 0.1);
-  }
-  
-  .action-icon.view:hover {
-    background-color: rgba(125, 116, 107, 0.2);
-  }
-  
-  .action-icon.checked {
-    background-color: rgba(76, 175, 80, 0.1);
-    cursor: default;
-  }
-  /* Estilo para el icono PDF */
-.action-icon.pdf {
-  background-color: #f8f4f0; /* Color crema suave */
-  border: 1px solid #e6d9cc;
+  font-family: "Poppins", sans-serif;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
 }
 
-.action-icon.pdf:hover {
-  background-color: #f0e6dc;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* ===== TÍTULOS Y ENCABEZADOS ===== */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Spinner pequeño para indicadores de carga */
+.section-title {
+  color: #000000;
+  font-size: 26px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.section-info {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.section-divider {
+  height: 4px;
+  background-color: rgba(125, 116, 107, 0.9);
+  margin-bottom: 20px;
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+/* ===== ESTADOS DE CARGA Y MENSAJES ===== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(125, 116, 107, 0.2);
+  border-radius: 50%;
+  border-top: 3px solid #7d746b;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
 .spinner-small {
-  display: inline-block;
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(0,0,0,0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: #7d746b;
-  animation: spin 0.8s linear infinite;
-}
-
-/* Estado deshabilitado para iconos */
-.action-icon.disabled {
-  opacity: 0.6;
-  pointer-events: none;
-  cursor: not-allowed;
+  border-top: 2px solid #7d746b;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-  /* Loader */
-  .loading-container {
-    display: flex;
+
+.error-message {
+  padding: 15px;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.info-message {
+  text-align: center;
+  padding: 40px 0;
+  color: #6b7280;
+}
+
+.warning-message {
+  padding: 12px 15px;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  color: #856404;
+  margin-top: 15px;
+  border-radius: 4px;
+}
+
+/* ===== TABLA DE HISTORIA CLÍNICA ===== */
+.table-responsive-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.historia-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  background: white;
+  border: 1px solid #000000; /* Borde exterior completo */
+}
+
+/* Encabezados de tabla */
+.historia-table th {
+  background-color: #8a8178; /* Color gris/marrón como en la imagen */
+  color: #fffaec;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.5rem 1rem; /* Padding reducido para filas más compactas */
+  border-bottom: 1px solid #000000; /* Solo borde inferior */
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+.historia-table td.procedimiento-cell {
+  max-width: 140px; /* Ajusta este valor según el ancho que necesites */
+  white-space: normal;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+/* Celdas de tabla */
+.historia-table td {
+  padding: 0.5rem 1rem; /* Padding reducido para filas más compactas */
+  border-bottom: 1px solid #000000; /* Solo borde inferior */
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: #374151;
+  vertical-align: middle;
+}
+
+/* Eliminar borde inferior de la última fila */
+.historia-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Filas alternadas */
+.historia-table tbody tr {
+  background-color: white;
+}
+
+.historia-table tbody tr.alt-row {
+  background-color: rgba(138, 136, 134, 0.1); /* Fondo más sutil */
+}
+
+/* ===== ESTADO BADGE ===== */
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  width: max-content;
+}
+.action-icon.consent{
+  background-color: #ceb580;
+  color: #e0d7ce;
+  border: none;
+}
+.estado-badge.abierto {
+  background-color: #68f652;
+  color: #000000;
+}
+
+.estado-badge.cerrado {
+  background-color: #b1b1b1;
+  color: #000000;
+}
+
+/* ===== ICONOS DE ACCIÓN ===== */
+.action-icons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-icon img {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+}
+
+.action-icon:hover img {
+  transform: scale(1.15);
+}
+
+.action-icon.edit {
+  background-color: #dbc711;
+}
+
+.action-icon.close {
+  background-color: #d77777;
+}
+
+.action-icon.checked {
+  background-color: #48a42f;
+}
+
+.action-icon.view {
+  background-color: #046efb;
+}
+
+.action-icon.pdf {
+  background-color: #7d746b;
+}
+
+.action-icon.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== PAGINACIÓN ===== */
+.paginacion-controles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 5px;
+}
+
+.paginas-numeros {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.btn-paginacion {
+  background-color: #7d746b;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #e0d7ce;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.btn-paginacion:hover:not(:disabled) {
+  background-color: #64594e;
+}
+
+.btn-paginacion:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-pagina {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #7d746b;
+  background-color: white;
+  color: #7d746b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-pagina:hover {
+  background-color: #d9d6d2;
+}
+
+.btn-pagina.activa {
+  background-color: #7d746b;
+  color: #e0d7ce;
+  border: none;
+}
+
+/* ===== BOTÓN DE NUEVA HISTORIA CLÍNICA ===== */
+.action-button-container {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  background-color: #7d746b;
+  color: #e0d7ce;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #635546;
+  transform: translateY(-1px);
+}
+
+.add-icon {
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .section-header {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 0;
+    align-items: flex-start;
   }
   
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(125, 116, 107, 0.2);
-    border-radius: 50%;
-    border-left-color: #7d746b;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
+  .section-info {
+    margin-top: 0.5rem;
   }
   
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Mensajes */
-  .error-message {
-    background-color: rgba(244, 67, 54, 0.1);
-    color: #d32f2f;
-    border: 1px solid #d32f2f;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .info-message {
-    background-color: rgba(3, 169, 244, 0.1);
-    color: #0277bd;
-    border: 1px solid #0277bd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .warning-message {
-    background-color: rgba(255, 152, 0, 0.1);
-    color: #ef6c00;
-    border: 1px solid #ef6c00;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  /* Botón de acción */
-  .action-button-container {
-    margin-top: 20px;
+  .action-icons {
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
   
   .btn-primary {
-    background-color: #7d746b;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 12px 25px;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .btn-primary:hover {
-    background-color: #64594e;
-    transform: translateY(-2px);
-  }
-  
-  .btn-primary .add-icon {
-    width: 18px;
-    height: 18px;
-  }
-  /* Añade estos estilos */
-
-.action-icons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .action-icon.close {
-    background-color: rgba(244, 67, 54, 0.1);
-  }
-  
-  .action-icon.close:hover {
-    background-color: rgba(244, 67, 54, 0.2);
-    transform: scale(1.1);
-  }
-  .progress-bar-container {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 3px;
-    z-index: 1000;
-    background-color: #f0f0f0;
+    justify-content: center;
   }
   
-  .progress-bar {
-    height: 100%;
-    width: 0;
-    background-color: #7d746b;
-    animation: progress 2s ease-in-out infinite;
+  .action-button-container {
+    justify-content: center;
   }
-  
-  @keyframes progress {
-    0% { width: 0%; }
-    50% { width: 70%; }
-    100% { width: 100%; }
+}
+/* En pantallas más grandes, permitir más espacio */
+@media screen and (min-width: 1600px) {
+  .historia-table td.procedimiento-cell {
+    max-width: 600px;
   }
-  
-  /* Indicador pequeño para acciones individuales */
-  .spinner-small {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(0,0,0,0.1);
-    border-radius: 50%;
-    border-top-color: #7d746b;
-    animation: spin 0.8s linear infinite;
-    vertical-align: middle;
-    margin-right: 5px;
+}
+
+/* En pantallas muy grandes */
+@media screen and (min-width: 1920px) {
+  .historia-table td.procedimiento-cell {
+    max-width: 900px;
   }
-  
-  /* Estilos para notificaciones no bloqueantes */
-  .notificacion {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 4px;
-    background-color: #f0f0f0;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    z-index: 1000;
-    transform: translateY(-100px);
-    opacity: 0;
-    transition: all 0.3s ease;
-  }
-  
-  .notificacion.mostrar {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  
-  .notificacion.exito {
-    background-color: #e0f2e9;
-    color: #2e7d32;
-    border-left: 4px solid #2e7d32;
-  }
-  
-  .notificacion.error {
-    background-color: #fdecea;
-    color: #c62828;
-    border-left: 4px solid #c62828;
-  }
-  /* Responsive */
-  @media (max-width: 768px) {
-    .section-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    
-    .action-icon {
-      width: 28px;
-      height: 28px;
-    }
-    
-    .action-icon img {
-      width: 16px;
-      height: 16px;
-    }
-  }
+}

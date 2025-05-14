@@ -10,13 +10,22 @@
   /* Título de página */
   .page-title {
     color: rgba(0, 0, 0, 0.7);
-    font-size: 32px;
+    font-size: 42px;
     font-weight: 600;
     text-align: center;
     width: 100%;
     margin: 0 0 20px 0;
   }
-  
+  .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%237d746b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+    background-repeat: no-repeat;
+  }
   /* Contenedor principal */
   .main-content {
     margin-left: 0;
@@ -47,32 +56,21 @@
     align-items: center;
     margin-bottom: 20px;
   }
-  
   .search-box {
     position: relative;
     width: 50%;
   }
   
   .search-box input {
-    width: 100%;
-    padding: 12px 40px 12px 15px;
+    width: 50%;
+    padding: 12px 15px 12px 40px; /* Cambiado: más padding a la izquierda */
     border-radius: 25px;
     border: 1px solid #ddd;
     font-size: 14px;
   }
-  
-  .search-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #7d746b;
-    font-size: 16px;
-  }
-  
   .btn-new {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 25px;
     padding: 12px 20px;
@@ -131,7 +129,7 @@
   .btn-generate,
   .btn-ver {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 25px;
     width: 10px;
@@ -197,7 +195,7 @@
   
   .pagination-btn {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
@@ -239,7 +237,7 @@
   
   .pagination-page-btn.active {
     background-color: #7d746b;
-    color: white;
+    color: #e0d7ce;
     font-weight: bold;
   }
   

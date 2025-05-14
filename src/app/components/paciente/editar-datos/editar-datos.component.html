@@ -1,140 +1,176 @@
 <div class="editar-consulta-container">
-    <!-- Indicador de carga -->
-    <div *ngIf="cargando" class="loading-container">
-      <div class="spinner"></div>
-      <p>Cargando datos de la consulta...</p>
-    </div>
-  
-    <!-- Mensaje de error -->
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
-  
-    <!-- Formulario principal -->
-    <form [formGroup]="consultaForm" class="consulta-form" *ngIf="!cargando && !error">
-      
-      <!-- SECCIÓN 1: DATOS DE LA CONSULTA -->
-      <div class="seccion-container">
-        <h2 class="seccion-titulo">Datos de la Consulta</h2>
-        <div class="linea-divisora"></div>
-        
-        <table class="datos-tabla">
-          <tr class="fila-alternada">
-            <td class="label-celda">Motivo de la<br>consulta:</td>
-            <td class="input-celda">
-              <input type="text" formControlName="motivo" class="form-control" 
-                     [class.invalid]="isFieldInvalid('motivo')">
-              <div *ngIf="isFieldInvalid('motivo')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="label-celda">Enfermedad<br>actual:</td>
-            <td class="input-celda">
-              <textarea formControlName="enfermedad_actual" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('enfermedad_actual')"></textarea>
-              <div *ngIf="isFieldInvalid('enfermedad_actual')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr class="fila-alternada">
-            <td class="label-celda">Objetivos<br>terapéuticos:</td>
-            <td class="input-celda">
-              <textarea formControlName="objetivos_terapia" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('objetivos_terapia')"></textarea>
-              <div *ngIf="isFieldInvalid('objetivos_terapia')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="label-celda">Historia del<br>problema:</td>
-            <td class="input-celda">
-              <textarea formControlName="historia_problema" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('historia_problema')"></textarea>
-              <div *ngIf="isFieldInvalid('historia_problema')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr class="fila-alternada">
-            <td class="label-celda">Desarrollo de<br>la sesión:</td>
-            <td class="input-celda">
-              <textarea formControlName="desarrollo" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('desarrollo')"></textarea>
-              <div *ngIf="isFieldInvalid('desarrollo')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="label-celda">Plan<br>terapéutico:</td>
-            <td class="input-celda">
-              <textarea formControlName="plan_terapeutico" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('plan_terapeutico')"></textarea>
-              <div *ngIf="isFieldInvalid('plan_terapeutico')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      
-      <!-- SECCIÓN 2: DIAGNÓSTICO (título más grande) -->
-      <div class="seccion-container">
-        <h2 class="seccion-titulo diagnostico">Diagnóstico</h2>
-        <div class="linea-divisora"></div>
-        
-        <table class="datos-tabla">
-          <tr class="fila-alternada">
-            <td class="label-celda">Tipo de<br>diagnóstico:</td>
-            <td class="input-celda">
-              <textarea formControlName="tipo_diagnostico" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('tipo_diagnostico')"></textarea>
-              <div *ngIf="isFieldInvalid('tipo_diagnostico')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="label-celda">Análisis y<br>diagnóstico:</td>
-            <td class="input-celda">
-              <textarea formControlName="analisis_diagnostico" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('analisis_diagnostico')"></textarea>
-              <div *ngIf="isFieldInvalid('analisis_diagnostico')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-        </table>
-      </div>
-      
-      <!-- SECCIÓN 3: PLAN Y TRATAMIENTO -->
-      <div class="seccion-container">
-        <h2 class="seccion-titulo">Plan y Tratamiento</h2>
-        <div class="linea-divisora"></div>
-        
-        <table class="datos-tabla">
-          <tr class="fila-alternada">
-            <td class="label-celda">Plan de<br>tratamiento:</td>
-            <td class="input-celda">
-              <textarea formControlName="plan_tratamiento" class="form-control" rows="2"
-                      [class.invalid]="isFieldInvalid('plan_tratamiento')"></textarea>
-              <div *ngIf="isFieldInvalid('plan_tratamiento')" class="error-text">Este campo es obligatorio</div>
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="label-celda">Recomendaciones:</td>
-            <td class="input-celda">
-              <textarea formControlName="recomendaciones" class="form-control" rows="2"></textarea>
-            </td>
-          </tr>
-        </table>
-      </div>
-      
-      <!-- BOTONES DE ACCIÓN -->
-      <div class="botones-container">
-        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="guardando">
-          Cancelar
-        </button>
-        <button type="button" class="btn-primary" (click)="guardarCambios()" [disabled]="guardando || consultaForm.invalid">
-          <div *ngIf="guardando" class="spinner-small"></div>
-          <span *ngIf="!guardando">Guardar Cambios</span>
-          <span *ngIf="guardando">Guardando...</span>
-        </button>
-      </div>
-    </form>
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando datos de la consulta...</p>
   </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Formulario principal -->
+  <form
+    [formGroup]="consultaForm"
+    class="consulta-form"
+    *ngIf="!cargando && !error"
+  >
+    <!-- SECCIÓN 1: DATOS DE LA CONSULTA -->
+    <div class="seccion-container">
+      <h2 class="seccion-titulo">Datos de la Consulta</h2>
+      <div class="linea-divisora"></div>
+
+      <table class="datos-tabla">
+        <tr class="fila-alternada">
+          <td class="label-celda">Motivo de la<br />consulta:</td>
+          <td class="input-celda">
+            <input
+              type="text"
+              formControlName="motivo"
+              class="form-control"
+              [class.invalid]="isFieldInvalid('motivo')"
+            />
+            <div *ngIf="isFieldInvalid('motivo')" class="error-text">
+              Este campo es obligatorio
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="label-celda">Enfermedades<br />importantes:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="enfermedad_actual"
+              class="form-control"
+              rows="2"
+              [class.invalid]="isFieldInvalid('enfermedad_actual')"
+            ></textarea>
+            <div *ngIf="isFieldInvalid('enfermedad_actual')" class="error-text">
+              Este campo es obligatorio
+            </div>
+          </td>
+        </tr>
+
+        <tr class="fila-alternada">
+          <td class="label-celda">Mundo<br />ideal:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="objetivos_terapia"
+              class="form-control"
+              rows="2"
+              [class.invalid]="isFieldInvalid('objetivos_terapia')"
+            ></textarea>
+            <div *ngIf="isFieldInvalid('objetivos_terapia')" class="error-text">
+              Este campo es obligatorio
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="label-celda">Tratamientos<br />anteriores:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="historia_problema"
+              class="form-control"
+              rows="2"
+              [class.invalid]="isFieldInvalid('historia_problema')"
+            ></textarea>
+            <div *ngIf="isFieldInvalid('historia_problema')" class="error-text">
+              Este campo es obligatorio
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- SECCIÓN 2: DIAGNÓSTICO (título más grande) -->
+    <div class="seccion-container">
+      <h2 class="seccion-titulo diagnostico">Diagnóstico</h2>
+      <div class="linea-divisora"></div>
+
+      <table class="datos-tabla">
+        <tr class="fila-alternada">
+          <td class="label-celda">Tipo de<br />diagnóstico:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="tipo_diagnostico"
+              class="form-control"
+              rows="2"
+              [class.invalid]="isFieldInvalid('tipo_diagnostico')"
+            ></textarea>
+            <div *ngIf="isFieldInvalid('tipo_diagnostico')" class="error-text">
+              Este campo es obligatorio
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- SECCIÓN 3: PLAN Y TRATAMIENTO -->
+    <div class="seccion-container">
+      <h2 class="seccion-titulo">Plan y Tratamiento</h2>
+      <div class="linea-divisora"></div>
+
+      <table class="datos-tabla">
+        <tr class="fila-alternada">
+          <td class="label-celda">Plan de<br />tratamiento:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="plan_tratamiento"
+              class="form-control"
+              rows="2"
+              [class.invalid]="isFieldInvalid('plan_tratamiento')"
+            ></textarea>
+            <div *ngIf="isFieldInvalid('plan_tratamiento')" class="error-text">
+              Este campo es obligatorio
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="label-celda">Recomendaciones:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="recomendaciones"
+              class="form-control"
+              rows="2"
+            ></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="label-celda">Contraindicaciones:</td>
+          <td class="input-celda">
+            <textarea
+              formControlName="contraindicaciones"
+              class="form-control"
+              rows="2"
+            ></textarea>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- BOTONES DE ACCIÓN -->
+    <div class="botones-container">
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="cancelar()"
+        [disabled]="guardando"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="guardarCambios()"
+        [disabled]="guardando || consultaForm.invalid"
+      >
+        <div *ngIf="guardando" class="spinner-small"></div>
+        <span *ngIf="!guardando">Guardar Cambios</span>
+        <span *ngIf="guardando">Guardando...</span>
+      </button>
+    </div>
+  </form>
+</div>
