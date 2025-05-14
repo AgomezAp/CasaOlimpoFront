@@ -253,21 +253,10 @@ export class AgregarPacienteComponent implements OnInit {
     return datosCorregidos;
   }
   onCancel() {
+    // Regresar a la lista de pacientes sin guardar
     this.router.navigate(['/paciente-dashboard']);
   }
-  ngAfterViewInit() {
-    // Detectar cambios en el input para actualizar la clase has-value
-    const dateInput = document.getElementById('fecha_nacimiento') as HTMLInputElement;
-    if (dateInput) {
-      dateInput.addEventListener('change', () => {
-        if (dateInput.value) {
-          dateInput.classList.add('has-value');
-        } else {
-          dateInput.classList.remove('has-value');
-        }
-      });
-    }
-  }
+
   onPhotoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {

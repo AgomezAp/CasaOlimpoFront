@@ -28,8 +28,10 @@ export class NavBarComponent {
   ];
   logout(): void {
     // Limpiar localStorage
-    localStorage.clear();
-    sessionStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('nombreCompleto');
+    
     // Redireccionar al login
     this.router.navigate(['/']);
   }

@@ -1,358 +1,335 @@
 /* Reglas críticas para forzar scroll - NO MODIFICAR */
 :host {
-  display: block !important;
-  height: auto !important;
-  min-height: 100vh !important;
-  overflow-y: auto !important;
-  position: relative !important;
-  background-color: rgba(195, 181, 170, 0.6) !important; /* #c3b5aa con 60% de opacidad */
-}
-
-/* Forzar scroll en elementos principales */
-:root, body, html, app-root, .app-container {
-  overflow-y: auto !important;
-  height: auto !important;
-  min-height: 100% !important;
-}
-
-/* Contenedor principal con mejor responsividad */
-.editar-consulta-container {
-  background-color: white !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 20px;
-  overflow-y: visible !important;
-  position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
-  overflow-y: auto !important; /* Cambiado de visible a auto */
-  height: calc(100vh - 40px); /* Altura basada en viewport */
-  min-height: auto !important; /* Eliminar min-height conflictivo */
-}
-
-/* Para pantallas grandes, desplazar a la derecha */
-@media (min-width: 1400px) {
-  .editar-consulta-container {
-    width: 65%;
-    margin-right: 5%;
-    margin-left: auto;
-  }
-}
-
-/* Para pantallas medianas */
-@media (min-width: 992px) and (max-width: 1399px) {
-  .editar-consulta-container {
-    width: 75%;
-    margin-right: 8%;
-    margin-left: auto;
-  }
-}
-
-.consulta-form {
-  margin-bottom: 30px;
-  overflow-y: visible !important;
-}
-
-/* Estilos para las secciones - MODIFICADO PARA PARECER INFO COMPONENT */
-.seccion-container {
-  margin-bottom: 25px;
-  padding: 0;
-  border: 0;
-  box-shadow: none;
-  background-color: transparent;
-}
-
-/* Título de sección - MODIFICADO PARA PARECER INFO COMPONENT */
-.seccion-titulo {
-  color: rgba(0, 0, 0, 1);
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-  padding: 0 0 5px 0;
-  border-bottom: 0;
-}
-
-/* Línea divisora - MODIFICADA PARA PARECER INFO COMPONENT */
-.linea-divisora {
-  height: 2px;
-  background: rgba(0, 0, 0, 1);
-  margin-bottom: 15px;
-  width: 100%;
-  border-radius: 0;
-}
-
-/* Estilos para las tablas con filas alternadas - MODIFICADOS PARA PARECER INFO COMPONENT */
-.datos-tabla {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-bottom: 20px;
-  border: 1px solid #000000; /* Borde exterior para toda la tabla */
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-/* Filas de tabla - MODIFICADAS PARA PARECER INFO COMPONENT */
-.datos-tabla tr {
-  border-bottom: 1px solid #000000;
-  background-color: #ffffff;
-}
-.datos-tabla td {
-  border: none; /* Eliminar todos los bordes individuales */
-  border-bottom: 1px solid #000000; /* Opcional: reforzar el borde inferior */
-}
-.datos-tabla tr:last-child td {
-  border-bottom: none;
-}
-.datos-tabla tr:last-child {
-  border-bottom: none;
-}
-
-/* Filas alternadas con fondo gris claro */
-.fila-alternada {
-  background-color: rgba(138, 136, 134, 0.2) !important;
-}
-
-/* Etiquetas de campo - MODIFICADAS PARA ESTAR MÁS PEGADAS */
-.label-celda {
-  width: 160px;
-  padding: 12px 15px 12px 15px;
-  font-weight: 600;
-  color: #000000;
-  vertical-align: middle;
-  border-right: none; /* Eliminar el borde vertical */
-}
-
-/* Celdas de input - MODIFICADAS PARA ESTAR MÁS PEGADAS */
-.input-celda {
-  padding: 8px 12px;
-  vertical-align: middle;
-}
-
-/* Spinner de carga */
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 30px 0;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(125, 116, 107, 0.2);
-  border-radius: 50%;
-  border-top: 4px solid #7d746b;
-  animation: spin 1s linear infinite;
-}
-
-.spinner-small {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 0.8s linear infinite;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Mensajes de error */
-.error-message {
-  background-color: #fdecea;
-  color: #c62828;
-  padding: 12px 15px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  border-left: 4px solid #c62828;
-  width: 85%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Para pantallas grandes, alinear errores con el contenedor */
-@media (min-width: 1400px) {
-  .error-message {
-    width: 65%;
-    margin-right: 5%;
-    margin-left: auto;
-  }
-}
-
-/* Para pantallas medianas */
-@media (min-width: 992px) and (max-width: 1399px) {
-  .error-message {
-    width: 75%;
-    margin-right: 8%;
-    margin-left: auto;
-  }
-}
-
-/* Estilos para inputs y textareas */
-.form-control {
-  width: 96%;
-  padding: 8px 10px;
-  border: 1px solid rgba(125, 116, 107, 0.3);
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: #fcfcfc;
-  margin: 0;
-}
-
-.form-control:focus {
-  border-color: #7d746b;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.15);
-}
-
-.form-control.invalid {
-  border-color: #d32f2f;
-  background-color: #fff8f8;
-}
-
-textarea.form-control {
-  min-height: 80px;
-  resize: vertical;
-}
-
-.consent-note {
-  background-color: #e8f5e9;
-  border-left: 4px solid #4caf50;
-  padding: 15px;
-  margin: 20px 0;
-  border-radius: 4px;
-}
-
-.consent-note p {
-  margin: 0;
-  color: #2e7d32;
-}
-
-/* Botones y acciones */
-.botones-container {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 30px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-
-.btn-primary, 
-.btn-secondary {
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-weight: 500;
-  min-width: 120px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.btn-primary {
-  background-color: #7d746b;
-  border: none;
-  color: #e0d7ce;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #6a635c;
-}
-
-.btn-secondary {
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  color: #333;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: #e9e9e9;
-}
-
-.btn-primary:disabled, 
-.btn-secondary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* Responsivo para pantallas pequeñas */
-@media (max-width: 991px) {
-  .editar-consulta-container {
-    padding: 20px;
-    margin: 15px auto;
-    border-radius: 30px;
-    width: 90%;
+    display: block !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+    position: relative !important;
+    background-color: rgba(195, 181, 170, 0.6) !important; /* #c3b5aa con 60% de opacidad */
   }
   
+  /* Forzar scroll en elementos principales */
+  :root, body, html, app-root, .app-container {
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100% !important;
+  }
+  
+  /* Contenedor principal con mejor responsividad */
+  .editar-consulta-container {
+    background-color: white !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    overflow-y: visible !important;
+    position: relative;
+    
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-y: auto !important; /* Cambiado de visible a auto */
+    height: calc(100vh - 40px); /* Altura basada en viewport */
+    min-height: auto !important; /* Eliminar min-height conflictivo */
+  }
+  
+  /* Para pantallas grandes, desplazar a la derecha */
+  @media (min-width: 1400px) {
+    .editar-consulta-container {
+      width: 65%;
+      margin-right: 5%;
+      margin-left: auto;
+    }
+  }
+  
+  /* Para pantallas medianas */
+  @media (min-width: 992px) and (max-width: 1399px) {
+    .editar-consulta-container {
+      width: 75%;
+      margin-right: 8%;
+      margin-left: auto;
+    }
+  }
+  
+  .consulta-form {
+    margin-bottom: 30px;
+    overflow-y: visible !important;
+  }
+  
+  /* Estilos para las secciones */
+  .seccion-container {
+    margin-bottom: 30px;
+  }
+  
+  .seccion-titulo {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  /* Título de Diagnóstico más grande */
+  .seccion-titulo.diagnostico {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .linea-divisora {
+    height: 3px;
+    background-color: #333;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  /* Estilos para las tablas con filas alternadas */
+  .datos-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .datos-tabla tr {
+    border-bottom: 1px solid #eee;
+    background-color: #ffffff;
+  }
+  
+  .fila-alternada {
+    background-color: rgba(138, 136, 134, 0.2) !important; /* #8a8886 con 20% opacidad */
+  }
+  
+  .label-celda {
+    width: 25%;
+    padding: 12px 15px;
+    font-weight: 700; /* Negrilla para títulos de campos */
+    color: #333;
+    vertical-align: top;
+    padding-top: 20px;
+  }
+  
+  .input-celda {
+    width: 75%;
+    padding: 10px;
+    vertical-align: top;
+  }
+  
+  /* Spinner de carga */
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(125, 116, 107, 0.2);
+    border-radius: 50%;
+    border-top: 4px solid #7d746b;
+    animation: spin 1s linear infinite;
+  }
+  
+  .spinner-small {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Mensajes de error */
   .error-message {
-    width: 90%;
+    background-color: #fdecea;
+    color: #c62828;
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-left: 4px solid #c62828;
+    width: 85%;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
   }
   
-  .seccion-titulo {
-    font-size: 1.3rem;
+  /* Para pantallas grandes, alinear errores con el contenedor */
+  @media (min-width: 1400px) {
+    .error-message {
+      width: 65%;
+      margin-right: 5%;
+      margin-left: auto;
+    }
   }
   
-  .seccion-titulo.diagnostico {
-    font-size: 1.6rem;
-  }
-}
-
-/* Móviles */
-@media (max-width: 768px) {
-  .editar-consulta-container {
-    padding: 15px;
-    margin: 10px auto;
-    border-radius: 25px;
-    width: 95%;
+  /* Para pantallas medianas */
+  @media (min-width: 992px) and (max-width: 1399px) {
+    .error-message {
+      width: 75%;
+      margin-right: 8%;
+      margin-left: auto;
+    }
   }
   
-  .error-message {
-    width: 95%;
-  }
-  
-  .label-celda, .input-celda {
-    display: block;
+  /* Estilos para inputs y textareas CON BORDES MÁS VISIBLES */
+  .form-control {
     width: 100%;
-    padding: 8px;
+    padding: 10px 12px;
+    border: 2px solid #ddd; /* Borde más visible */
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    background-color: #fcfcfc;
   }
   
-  .label-celda {
-    padding-bottom: 0;
-    border-right: none;
-    border-bottom: 1px solid #e0e0e0;
+  .form-control:focus {
+    border-color: #7d746b;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(125, 116, 107, 0.15);
   }
   
-  .datos-tabla, .datos-tabla tbody, .datos-tabla tr {
-    display: block;
+  .form-control.invalid {
+    border-color: #d32f2f;
+    background-color: #fff8f8;
   }
   
+  textarea.form-control {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .consent-note {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+  
+  .consent-note p {
+    margin: 0;
+    color: #2e7d32;
+  }
+  
+  /* Botones y acciones */
   .botones-container {
-    flex-direction: column-reverse;
-    gap: 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
   }
   
   .btn-primary, 
   .btn-secondary {
-    width: 100%;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    min-width: 120px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
   }
   
-  .seccion-titulo {
-    font-size: 1.2rem;
+  .btn-primary {
+    background-color: #7d746b;
+    border: none;
+    color: white;
   }
   
-  .seccion-titulo.diagnostico {
-    font-size: 1.4rem;
+  .btn-primary:hover:not(:disabled) {
+    background-color: #6a635c;
   }
-}
+  
+  .btn-secondary {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+  
+  .btn-secondary:hover:not(:disabled) {
+    background-color: #e9e9e9;
+  }
+  
+  .btn-primary:disabled, 
+  .btn-secondary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  /* Responsivo para pantallas pequeñas */
+  @media (max-width: 991px) {
+    .editar-consulta-container {
+      padding: 20px;
+      margin: 15px auto;
+      border-radius: 30px;
+      width: 90%;
+    }
+    
+    .error-message {
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .seccion-titulo {
+      font-size: 1.3rem;
+    }
+    
+    .seccion-titulo.diagnostico {
+      font-size: 1.6rem;
+    }
+  }
+  
+  /* Móviles */
+  @media (max-width: 768px) {
+    .editar-consulta-container {
+      padding: 15px;
+      margin: 10px auto;
+      border-radius: 25px;
+      width: 95%;
+    }
+    
+    .error-message {
+      width: 95%;
+    }
+    
+    .label-celda, .input-celda {
+      display: block;
+      width: 100%;
+      padding: 8px;
+    }
+    
+    .label-celda {
+      padding-bottom: 0;
+    }
+    
+    .datos-tabla, .datos-tabla tbody, .datos-tabla tr {
+      display: block;
+    }
+    
+    .botones-container {
+      flex-direction: column-reverse;
+      gap: 10px;
+    }
+    
+    .btn-primary, 
+    .btn-secondary {
+      width: 100%;
+    }
+    
+    .seccion-titulo {
+      font-size: 1.2rem;
+    }
+    
+    .seccion-titulo.diagnostico {
+      font-size: 1.4rem;
+    }
+  }

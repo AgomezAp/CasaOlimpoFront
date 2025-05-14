@@ -37,10 +37,7 @@ export class DashboardCitasComponent implements OnInit {
   availableDates: Date[] = [];
   selectedDate: Date | null = null;
   availableHours: string[] = [];
- //variables para la paginación
-  paginaActual: number = 1;
-  citasPorPagina: number = 6; // Mostrar 6 citas por página
-  citasPaginadas: any[] = [];
+
   constructor(
     private agendaService: AgendaService,
     private notificacionService: NotificacionService,
@@ -58,9 +55,7 @@ export class DashboardCitasComponent implements OnInit {
     // Generar fechas disponibles (próximos 60 días)
     this.generateAvailableDates();
   }
-  get totalPaginas(): number {
-    return Math.ceil(this.citas.length / this.citasPorPagina);
-  }
+
   ngOnInit(): void {
     if (this.numeroDocumento || this.pacienteId) {
       this.cargarCitas();
@@ -69,50 +64,7 @@ export class DashboardCitasComponent implements OnInit {
       this.loading = false;
     }
   }
-  actualizarPaginacion(pagina: number = this.paginaActual): void {
-    // Validar página
-    if (pagina < 1) pagina = 1;
-    if (this.totalPaginas > 0 && pagina > this.totalPaginas) {
-      pagina = this.totalPaginas;
-    }
-    
-    // Actualizar página actual
-    this.paginaActual = pagina;
-    
-    // Si no hay citas, array vacío
-    if (!this.citas || this.citas.length === 0) {
-      this.citasPaginadas = [];
-      return;
-    }
-    
-    // Calcular índices
-    const inicio = (pagina - 1) * this.citasPorPagina;
-    const fin = Math.min(inicio + this.citasPorPagina, this.citas.length);
-    
-    // Obtener las citas para esta página
-    this.citasPaginadas = this.citas.slice(inicio, fin);
-  }
-  
-  // Ir a página específica
-  irAPagina(pagina: number): void {
-    if (pagina >= 1 && pagina <= this.totalPaginas && pagina !== this.paginaActual) {
-      this.actualizarPaginacion(pagina);
-    }
-  }
-  
-  // Ir a página anterior
-  paginaAnterior(): void {
-    if (this.paginaActual > 1) {
-      this.actualizarPaginacion(this.paginaActual - 1);
-    }
-  }
-  
-  // Ir a página siguiente
-  paginaSiguiente(): void {
-    if (this.paginaActual < this.totalPaginas) {
-      this.actualizarPaginacion(this.paginaActual + 1);
-    }
-  }
+
   cargarCitas(): void {
     this.loading = true;
     // Usar el numeroDocumento si está disponible, de lo contrario usar el ID
@@ -122,7 +74,6 @@ export class DashboardCitasComponent implements OnInit {
       next: (response: any) => {
         this.citas = response.data || [];
         this.loading = false;
-        this.actualizarPaginacion(1);
       },
       error: (error: any) => {
         console.error('Error al cargar citas:', error);
@@ -179,16 +130,17 @@ export class DashboardCitasComponent implements OnInit {
     }
   }
 
-  onDateSelected(date: Date): void {
-    this.selectedDate = date;
-    const fechaFormateada = this.formatDateForBackend(date);
-    this.citaForm.patchValue({ fecha_cita: fechaFormateada });
-
-    // Indicar que estamos cargando las horas
-    this.cargandoHoras = true;
-
-    // Obtener las horas ocupadas para esta fecha
-    this.agendaService.getHorasOcupadas(fechaFormateada).subscribe({
+onDateSelected(date: Date): void {
+  this.selectedDate = date;
+  const fechaFormateada = this.formatDateForBackend(date);
+  this.citaForm.patchValue({ fecha_cita: fechaFormateada });
+  
+  // Indicar que estamos cargando las horas
+  this.cargandoHoras = true;
+  
+  // Obtener las horas ocupadas para esta fecha
+  this.agendaService.getHorasOcupadas(fechaFormateada)
+    .subscribe({
       next: (horasOcupadas) => {
         this.horasOcupadas = horasOcupadas;
         this.generateAvailableHours();
@@ -200,9 +152,9 @@ export class DashboardCitasComponent implements OnInit {
         this.horasOcupadas = [];
         this.generateAvailableHours();
         this.cargandoHoras = false;
-      },
+      }
     });
-  }
+}
 
   formatDateForBackend(date: Date): string {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
@@ -219,7 +171,7 @@ export class DashboardCitasComponent implements OnInit {
   generateAvailableHours(): void {
     // Resetear las horas disponibles
     this.availableHours = [];
-
+    
     // Generar horas de 8:00 a 17:00
     const horasPosibles: string[] = [];
     for (let hour = 8; hour <= 17; hour++) {
@@ -228,43 +180,42 @@ export class DashboardCitasComponent implements OnInit {
         horasPosibles.push(`${hour.toString().padStart(2, '0')}:30`);
       }
     }
-
+    
     // Filtrar las horas ocupadas
-    this.availableHours = horasPosibles.filter((hora) => {
+    this.availableHours = horasPosibles.filter(hora => {
       // Verificar si esta hora está en el arreglo de horas ocupadas
-      const estaOcupada = this.horasOcupadas.some((horaOcupada) => {
+      const estaOcupada = this.horasOcupadas.some(horaOcupada => {
         // Comparar solo la hora y minutos, ignorando segundos
         return horaOcupada.substring(0, 5) === hora;
       });
-
+      
       // Incluir solo si NO está ocupada
       return !estaOcupada;
     });
-
+    
     // Si es el día actual, filtrar horas pasadas
     const today = new Date();
-    if (
-      this.selectedDate &&
-      this.selectedDate.getDate() === today.getDate() &&
-      this.selectedDate.getMonth() === today.getMonth() &&
-      this.selectedDate.getFullYear() === today.getFullYear()
-    ) {
+    if (this.selectedDate && 
+        this.selectedDate.getDate() === today.getDate() &&
+        this.selectedDate.getMonth() === today.getMonth() &&
+        this.selectedDate.getFullYear() === today.getFullYear()) {
+      
       const horaActual = today.getHours();
       const minutosActuales = today.getMinutes();
-
+      
       // Filtrar horas que ya han pasado
-      this.availableHours = this.availableHours.filter((hora) => {
+      this.availableHours = this.availableHours.filter(hora => {
         const [horaStr, minutosStr] = hora.split(':');
         const horaNum = parseInt(horaStr, 10);
         const minutosNum = parseInt(minutosStr, 10);
-
+        
         // Comparar con la hora actual
         if (horaNum > horaActual) return true;
         if (horaNum === horaActual && minutosNum > minutosActuales) return true;
         return false;
       });
     }
-
+    
     // Si no quedan horas disponibles, mostrar mensaje
     if (this.availableHours.length === 0) {
       this.notificacionService.info('No hay horas disponibles para esta fecha');
