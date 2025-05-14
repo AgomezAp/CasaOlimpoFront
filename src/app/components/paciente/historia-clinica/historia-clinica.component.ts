@@ -1,17 +1,16 @@
-import { Component, Input, OnDestroy, OnInit,NgZone} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Consulta } from '../../../interfaces/consulta';
 import { ConsultaService } from '../../../services/consulta.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { finalize, Subscription } from 'rxjs';
-import { NotificacionService } from '../../../services/notificacion.service';
 
 @Component({
   selector: 'app-historia-clinica',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,],
   templateUrl: './historia-clinica.component.html',
-  styleUrl: './historia-clinica.component.css',
+  styleUrl: './historia-clinica.component.css'
 })
 export class HistoriaClinicaComponent implements OnInit, OnDestroy {
   @Input() pacienteId: string = '';
@@ -24,123 +23,32 @@ export class HistoriaClinicaComponent implements OnInit, OnDestroy {
   fechaCreacionHistoria: Date | null = null;
   tieneConsultaAbierta: boolean = false;
   paginaActual: number = 1;
-  elementosPorPagina: number = 4;
+  elementosPorPagina: number = 5; // 5 consultas por página
   totalConsultas: number = 0;
-  consultaSeleccionada: Consulta | null = null;
-  paginatedConsultas: Consulta[] = [];
-  cargandoCierre: { [key: number]: boolean } = {};
+  
+  // Para manejar cierres individuales
+  cargandoCierre: {[key: number]: boolean} = {};
   cargandoPDF: { [key: number]: boolean } = {};
-  consentimientoCache: { [consultaId: number]: boolean } = {};
+  // Para limpieza
   private subscriptions: Subscription[] = [];
+  
   constructor(
     private consultaService: ConsultaService,
     private route: ActivatedRoute,
-    private router: Router,
-    private notificacionService: NotificacionService,
-    private ngZone: NgZone
-  ) {}
-  get totalPages(): number {
-    return this.totalPaginas;
-  }
-  get currentPage(): number {
-    return this.paginaActual;
-  }
-  set currentPage(value: number) {
-    this.paginaActual = value;
-  }
-  irAPagina(pagina: number): void {
-    if (
-      pagina >= 1 &&
-      pagina <= this.totalPaginas &&
-      pagina !== this.paginaActual
-    ) {
-      this.actualizarPaginacion(pagina);
-    }
-  }
-tieneConsentimiento(consulta: Consulta): boolean {
-  // Si ya tenemos el resultado en caché, devolverlo directamente
-  if (consulta.Cid in this.consentimientoCache) {
-    return this.consentimientoCache[consulta.Cid];
-  }
-  
-  // Si tenemos evidencia directa en el objeto
-  if (consulta.consentimiento_check || consulta.consentimiento_info) {
-    this.consentimientoCache[consulta.Cid] = true;
-    return true;
-  }
-  
-  // Si no tenemos información aún, inicializamos como false
-  // y verificamos en segundo plano sin afectar el ciclo actual
-  if (!(consulta.Cid in this.consentimientoCache)) {
-    this.consentimientoCache[consulta.Cid] = false;
-    
-    // Programar verificación fuera del ciclo de detección de cambios
-    this.ngZone.runOutsideAngular(() => {
-      setTimeout(() => {
-        if (!this.cargandoPDF[consulta.Cid]) {
-          this.cargandoPDF[consulta.Cid] = true;
-          
-          this.consultaService.verificarExistenciaConsentimiento(consulta.Cid)
-            .pipe(
-              finalize(() => {
-                // Volver a la zona de Angular para actualizar UI
-                this.ngZone.run(() => {
-                  this.cargandoPDF[consulta.Cid] = false;
-                });
-              })
-            )
-            .subscribe({
-              next: (existe) => {
-                // Actualizar el cache dentro de la zona de Angular
-                this.ngZone.run(() => {
-                  this.consentimientoCache[consulta.Cid] = existe;
-                });
-              },
-              error: () => {
-                this.ngZone.run(() => {
-                  this.consentimientoCache[consulta.Cid] = false;
-                });
-              }
-            });
-        }
-      }, 10);
-    });
-  }
-  
-  return this.consentimientoCache[consulta.Cid];
-}
-  paginaAnterior(): void {
-    if (this.paginaActual > 1) {
-      this.actualizarPaginacion(this.paginaActual - 1);
-    }
-  }
-  paginaSiguiente(): void {
-    if (this.paginaActual < this.totalPaginas) {
-      this.actualizarPaginacion(this.paginaActual + 1);
-    }
-  }
-  private actualizarPaginacion(pagina: number = this.paginaActual): void {
-    if (pagina < 1) pagina = 1;
-    if (this.totalPaginas > 0 && pagina > this.totalPaginas)
-      pagina = this.totalPaginas;
-    this.paginaActual = pagina;
-    if (!this.consultas || this.consultas.length === 0) {
-      this.paginatedConsultas = [];
-      return;
-    }
-    this.totalConsultas = this.consultas.length;
-    const inicio = (pagina - 1) * this.elementosPorPagina;
-    const fin = Math.min(inicio + this.elementosPorPagina, this.totalConsultas);
-    this.paginatedConsultas = this.consultas.slice(inicio, fin);
-  }
+    private router: Router
+  ) { }
+
   ngOnInit(): void {
-    const routeSub = this.route.parent?.params.subscribe((params) => {
+    // Obtener el número de documento del paciente de la URL
+    const routeSub = this.route.parent?.params.subscribe(params => {
       this.numeroDocumento = params['numero_documento'];
       if (this.numeroDocumento) {
+        // Cargar información básica y consultas en paralelo
         this.cargarInformacionBasica();
         this.cargarConsultasDePaciente();
       } else {
-        const paramSub = this.route.params.subscribe((routeParams) => {
+        // Último intento: verificar si hay un parámetro en la URL actual
+        const paramSub = this.route.params.subscribe(routeParams => {
           this.numeroDocumento = routeParams['numero_documento'];
           if (this.numeroDocumento) {
             this.cargarInformacionBasica();
@@ -155,40 +63,45 @@ tieneConsentimiento(consulta: Consulta): boolean {
     });
     if (routeSub) this.subscriptions.push(routeSub);
   }
+  
+  // Cargar información básica primero (rápido)
   cargarInformacionBasica(): void {
-    const infoSub = this.consultaService
-      .obtenerInformacionBasicaPaciente(this.numeroDocumento)
+    const infoSub = this.consultaService.obtenerInformacionBasicaPaciente(this.numeroDocumento)
       .pipe(
         finalize(() => {
           this.cargandoInformacion = false;
+          // Si ya tenemos las consultas, desactivar cargando general
           if (!this.cargandoConsultas) {
             this.cargando = false;
           }
         })
       )
       .subscribe({
-        next: (info: any) => {
-          this.fechaCreacionHistoria = info.fechaCreacion
-            ? new Date(info.fechaCreacion)
-            : null;
+        next: (info:any) => {
+          this.fechaCreacionHistoria = info.fechaCreacion ? new Date(info.fechaCreacion) : null;
           this.tieneConsultaAbierta = info.tieneConsultaAbierta;
         },
-        error: (err: any) => {
-          console.error('Error al cargar información básica:', err);
-        },
+        error: (err:any) => {
+          console.error("Error al cargar información básica:", err);
+          // No mostrar error aquí, seguimos con las consultas
+        }
       });
     this.subscriptions.push(infoSub);
   }
   get totalPaginas(): number {
     return Math.ceil(this.totalConsultas / this.elementosPorPagina);
   }
+  
+  // Método para cargar consultas paginadas
   cargarConsultasPaginadas(pagina: number): void {
     if (pagina < 1 || (this.totalPaginas > 0 && pagina > this.totalPaginas)) {
       return;
     }
+    
     this.cargandoConsultas = true;
-    const consultasSub = this.consultaService
-      .obtenerConsultasOptimizadas(this.numeroDocumento)
+    
+    // Usar el método existente por ahora, después implementar paginación real
+    const consultasSub = this.consultaService.obtenerConsultasOptimizadas(this.numeroDocumento)
       .pipe(
         finalize(() => {
           this.cargandoConsultas = false;
@@ -199,7 +112,7 @@ tieneConsentimiento(consulta: Consulta): boolean {
           this.consultas = consultas;
           this.totalConsultas = consultas.length;
           this.paginaActual = pagina;
-
+          
           // Aplicar paginación manual (para pruebas)
           const inicio = (pagina - 1) * this.elementosPorPagina;
           const fin = inicio + this.elementosPorPagina;
@@ -208,17 +121,17 @@ tieneConsentimiento(consulta: Consulta): boolean {
         error: (err) => {
           this.error = 'Error al cargar las historias clínicas';
           console.error('Detalles:', err);
-        },
+        }
       });
-
+      
     this.subscriptions.push(consultasSub);
   }
   cargarConsultasDePaciente(): void {
-    const consultasSub = this.consultaService
-      .obtenerConsultasOptimizadas(this.numeroDocumento)
+    const consultasSub = this.consultaService.obtenerConsultasOptimizadas(this.numeroDocumento)
       .pipe(
         finalize(() => {
           this.cargandoConsultas = false;
+          // Si ya tenemos la información básica, desactivar cargando general
           if (!this.cargandoInformacion) {
             this.cargando = false;
           }
@@ -227,9 +140,11 @@ tieneConsentimiento(consulta: Consulta): boolean {
       .subscribe({
         next: (consultas) => {
           this.consultas = consultas;
-          this.tieneConsultaAbierta = this.consultas.some(
-            (consulta) => consulta.abierto
-          );
+          
+          // Verificar si existe alguna consulta abierta
+          this.tieneConsultaAbierta = this.consultas.some(consulta => consulta.abierto);
+          
+          // Si no tenemos fecha de creación de la información básica, la calculamos
           if (!this.fechaCreacionHistoria && this.consultas.length > 0) {
             const fechaMasAntigua = this.consultas.reduce((min, consulta) => {
               const fecha = new Date(consulta.fecha);
@@ -237,191 +152,92 @@ tieneConsentimiento(consulta: Consulta): boolean {
             }, new Date(this.consultas[0].fecha));
             this.fechaCreacionHistoria = fechaMasAntigua;
           }
-          this.actualizarPaginacion(1);
-
-          // Añadir esta línea: verificar consentimientos después de cargar
-          this.verificarEstadoConsentimientos();
         },
         error: (err) => {
           this.error = 'Error al cargar las historias clínicas';
           console.error('Detalles:', err);
-        },
+        }
       });
     this.subscriptions.push(consultasSub);
   }
+
   formatearFecha(fecha: any): string {
+    // Aplicar formateo rápido sin llamadas externas
     if (!fecha) return 'Fecha desconocida';
     const date = fecha instanceof Date ? fecha : new Date(fecha);
     if (isNaN(date.getTime())) return 'Fecha inválida';
+    
     return date.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
+      day: '2-digit', 
+      month: '2-digit', 
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit'
     });
   }
+
   nuevaConsulta(): void {
     if (this.tieneConsultaAbierta) {
-      this.mostrarNotificacion(
-        'Debe cerrar la historia clínica actual antes de crear una nueva.',
-        true
-      );
+      this.mostrarNotificacion('Debe cerrar la historia clínica actual antes de crear una nueva.', true);
       return;
     }
     this.router.navigate(['/crear-consulta', this.numeroDocumento]);
   }
+
   editarConsulta(consulta: Consulta): void {
-    this.router.navigate([
-      '/paciente',
-      this.numeroDocumento,
-      'consulta',
-      consulta.Cid,
-      'editar',
-    ]);
+    this.router.navigate(['/paciente', this.numeroDocumento, 'consulta', consulta.Cid, 'editar']);
   }
+  
   verDetalles(consulta: Consulta): void {
-    this.router.navigate([
-      '/paciente',
-      this.numeroDocumento,
-      'consulta',
-      consulta.Cid,
-    ]);
+    this.router.navigate(['/paciente', this.numeroDocumento, 'consulta', consulta.Cid]);
   }
+
   cerrarConsulta(consulta: Consulta): void {
     if (!consulta.abierto) return;
+    
+    // Activar indicador individual para esta consulta
     this.cargandoCierre[consulta.Cid] = true;
+    
+    // Datos para el cierre
     const datosCierre = {
-      Uid: localStorage.getItem('userId') || '0',
+      Uid: localStorage.getItem('userId') || '0'
     };
-    const cierreSub = this.consultaService
-      .cerrarConsulta(this.numeroDocumento, consulta.Cid, datosCierre)
+  
+    const cierreSub = this.consultaService.cerrarConsulta(this.numeroDocumento, consulta.Cid, datosCierre)
       .pipe(
         finalize(() => {
+          // Desactivar indicador individual
           this.cargandoCierre[consulta.Cid] = false;
         })
       )
       .subscribe({
         next: () => {
+          // Actualizar solo esta consulta
           consulta.abierto = false;
-          this.tieneConsultaAbierta = this.consultas.some((c) => c.abierto);
+          
+          // Verificar si aún hay alguna consulta abierta
+          this.tieneConsultaAbierta = this.consultas.some(c => c.abierto);
+          
+          // Mostrar notificación no bloqueante
           this.mostrarNotificacion('Historia clínica cerrada correctamente');
         },
         error: (err) => {
           console.error('Error al cerrar la consulta:', err);
-          this.mostrarNotificacion(
-            'No se pudo cerrar la historia clínica',
-            true
-          );
-        },
+          this.mostrarNotificacion('No se pudo cerrar la historia clínica', true);
+        }
       });
+    
     this.subscriptions.push(cierreSub);
   }
-  vincularConsentimiento(consulta: Consulta): void {
-    // Verificar primero si ya existe un consentimiento
-    if (this.cargandoPDF[consulta.Cid]) {
-      this.notificacionService.info(
-        'Verificando si ya existe un consentimiento...'
-      );
-      return;
-    }
-
-    this.cargandoPDF[consulta.Cid] = true;
-
-    // Verificamos en el backend si ya existe un consentimiento
-    this.consultaService
-      .verificarExistenciaConsentimiento(consulta.Cid)
-      .pipe(
-        finalize(() => {
-          this.cargandoPDF[consulta.Cid] = false;
-        })
-      )
-      .subscribe({
-        next: (existe) => {
-          // Guardamos el resultado para futuras verificaciones
-          (consulta as any)._tieneConsentimiento = existe;
-
-          if (existe) {
-            // Ya existe un consentimiento, mostramos mensaje y no permitimos crear otro
-            this.notificacionService.info(
-              'Esta consulta ya tiene un consentimiento informado asociado'
-            );
-          } else {
-            // No existe, continuamos con la creación
-            if (!consulta || !consulta.Cid) {
-              this.notificacionService.error(
-                'Error: No se puede identificar la consulta'
-              );
-              return;
-            }
-
-            if (!this.numeroDocumento) {
-              this.notificacionService.error(
-                'Error: No se puede identificar al paciente'
-              );
-              return;
-            }
-
-            // Almacenar la consulta seleccionada
-            this.consultaSeleccionada = consulta;
-
-            // Navegar a la página de creación de consentimiento
-            this.router.navigate([
-              '/paciente',
-              this.numeroDocumento,
-              'consulta',
-              consulta.Cid.toString(),
-              'consentimiento',
-            ]);
-          }
-        },
-        error: (err) => {
-          console.error('Error al verificar si existe consentimiento:', err);
-          this.notificacionService.error(
-            'Error al verificar si existe consentimiento'
-          );
-        },
-      });
-  }
-  verificarEstadoConsentimientos(): void {
-    if (!this.consultas || this.consultas.length === 0) return;
-
-    // Verificamos solo las consultas que no tengan ya la información
-    const consultasSinInfo = this.consultas.filter(
-      (c) =>
-        !c.consentimiento_check &&
-        !c.consentimiento_info &&
-        !(c as any)._tieneConsentimiento
-    );
-
-    // Si no hay consultas sin verificar, no hacemos nada
-    if (consultasSinInfo.length === 0) return;
-
-    // Limitamos a verificar máximo 5 consultas para no sobrecargar
-    const consultasAVerificar = consultasSinInfo.slice(0, 5);
-
-    // Para cada consulta que necesitamos verificar
-    consultasAVerificar.forEach((consulta) => {
-      this.consultaService
-        .verificarExistenciaConsentimiento(consulta.Cid)
-        .subscribe({
-          next: (existe) => {
-            console.log(
-              `Consulta ${consulta.Cid}: Precarga consentimiento: ${existe}`
-            );
-            (consulta as any)._tieneConsentimiento = existe;
-          },
-          error: () => {
-            (consulta as any)._tieneConsentimiento = false;
-          },
-        });
-    });
-  }
+  
   verConsentimientoPDF(consulta: Consulta): void {
+    // Evitar múltiples clics
     if (this.cargandoPDF[consulta.Cid]) return;
+    
+    // Activar indicador de carga
     this.cargandoPDF[consulta.Cid] = true;
-    const pdfSub = this.consultaService
-      .obtenerConsentimientoPDF(consulta.Cid)
+    
+    const pdfSub = this.consultaService.obtenerConsentimientoPDF(consulta.Cid)
       .pipe(
         finalize(() => {
           this.cargandoPDF[consulta.Cid] = false;
@@ -429,51 +245,51 @@ tieneConsentimiento(consulta: Consulta): boolean {
       )
       .subscribe({
         next: (documentoBlob) => {
+          // Determinar el tipo de archivo para la URL
           const tipoArchivo = documentoBlob.type || 'application/octet-stream';
           console.log('Tipo de documento recibido:', tipoArchivo);
+          
+          // Crear URL del blob para visualizar/descargar
           const documentoUrl = URL.createObjectURL(documentoBlob);
+          
+          // Si es un PDF, abrirlo en el navegador
           if (tipoArchivo.includes('pdf')) {
-            this.abrirPDFEnNuevaVentana(
-              documentoUrl,
-              `Consentimiento-${consulta.Cid}`
-            );
+            this.abrirPDFEnNuevaVentana(documentoUrl, `Consentimiento-${consulta.Cid}`);
           } else {
-            this.descargarArchivo(
-              documentoBlob,
-              `Consentimiento-${consulta.Cid}`
-            );
+            // Si es otro formato, intentar descargarlo
+            this.descargarArchivo(documentoBlob, `Consentimiento-${consulta.Cid}`);
           }
         },
         error: (err) => {
           console.error('Error al obtener el PDF:', err);
-
+          
           if (err.status === 404 || err.message?.includes('no encontrado')) {
-            this.mostrarNotificacion(
-              'Esta consulta no tiene un documento de consentimiento',
-              true
-            );
+            this.mostrarNotificacion('Esta consulta no tiene un documento de consentimiento', true);
           } else {
-            this.mostrarNotificacion(
-              'Error al descargar el documento: ' +
-                (err.message || 'Error desconocido'),
-              true
-            );
+            this.mostrarNotificacion('Error al descargar el documento: ' + (err.message || 'Error desconocido'), true);
           }
-        },
+        }
       });
-
+      
     this.subscriptions.push(pdfSub);
   }
+  
+  /**
+   * Método para descargar directamente cualquier tipo de archivo
+   */
   private descargarArchivo(blob: Blob, nombreArchivo: string): void {
-    let extension = '.pdf';
+    // Determinar la extensión basada en el tipo MIME
+    let extension = '.pdf'; // Por defecto
+    
     if (blob.type) {
       const mimeType = blob.type.toLowerCase();
       if (mimeType.includes('pdf')) extension = '.pdf';
-      else if (mimeType.includes('jpeg') || mimeType.includes('jpg'))
-        extension = '.jpg';
+      else if (mimeType.includes('jpeg') || mimeType.includes('jpg')) extension = '.jpg';
       else if (mimeType.includes('png')) extension = '.png';
       else if (mimeType.includes('text')) extension = '.txt';
+      // Puedes añadir más tipos según sea necesario
     }
+    
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -481,29 +297,45 @@ tieneConsentimiento(consulta: Consulta): boolean {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Liberar la URL del objeto después de un tiempo
     setTimeout(() => URL.revokeObjectURL(url), 100);
+    
     this.mostrarNotificacion('Documento descargado correctamente');
   }
+  
+  /**
+   * Abre el PDF en una nueva ventana del navegador
+   */
   private abrirPDFEnNuevaVentana(pdfUrl: string, nombreArchivo: string): void {
+    // Intentar abrir en nueva pestaña
     const nuevaVentana = window.open(pdfUrl, '_blank');
+    
     if (!nuevaVentana) {
+      // Si falla, ofrecer descarga directa
       const link = document.createElement('a');
       link.href = pdfUrl;
       link.download = `${nombreArchivo}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
       this.mostrarNotificacion(
-        'El navegador bloqueó la apertura del documento. Se ha iniciado la descarga automáticamente.',
+        'El navegador bloqueó la apertura del documento. Se ha iniciado la descarga automáticamente.', 
         false
       );
     }
   }
+  
+  /**
+   * Muestra una notificación no bloqueante
+   */
   mostrarNotificacion(mensaje: string, esError: boolean = false): void {
     const div = document.createElement('div');
     div.className = `notificacion ${esError ? 'error' : 'exito'}`;
     div.textContent = mensaje;
     document.body.appendChild(div);
+    
     setTimeout(() => {
       div.classList.add('mostrar');
       setTimeout(() => {
@@ -516,15 +348,9 @@ tieneConsentimiento(consulta: Consulta): boolean {
       }, 2500);
     }, 10);
   }
+  
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }
-  verConsulta(consulta: any): void {
-    this.router.navigate([
-      '/paciente',
-      this.numeroDocumento,
-      'consulta',
-      consulta.Cid,
-    ]);
+    // Limpiar todas las suscripciones
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

@@ -1,23 +1,14 @@
-:host {
-    display: block;
-    padding-left: 300px;
-    padding-top: 20px;
-    height: 100vh;
-    box-sizing: border-box;
-  }
+html, body {
+    height: 1000px;
+    background-color: rgba(195, 181, 170, 0.6);
+}
 .descuentos {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 20px 0 400px 300px;
 }
-.page-title {
-    color: rgba(0, 0, 0, 0.7); 
-    font-size: 42px;
-    font-weight: 600;
-    text-align: center;
-    width: 100%;
-    margin: 0 0 20px 0; 
-  }
+
 .descuentos h2 {
     text-decoration-line: underline;
     font-size: 45px;
@@ -30,6 +21,7 @@
     background-color: #fff;
     padding: 30px;
     border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     margin: 20px auto 20px 300;
     box-sizing: border-box;
     position: relative;
@@ -76,13 +68,13 @@
 .crear-descuento input {
     padding: 12px 15px;
     font-size: 16px;
-    border: 1px solid #000000;
+    border: 2px solid #e0d7ce;
     border-radius: 8px;
     transition: all 0.3s ease;
     box-sizing: border-box;
     width: 350px;
     height: 50px;
-    background-color: rgba(138, 136, 134, 0.2);
+    background-color: #e0dece;
     min-width: 200px;
     max-width: 350px;
 }
@@ -90,16 +82,19 @@
 .crear-descuento input[type="date"] {
     padding: 11px 15px;
 }
+
 .crear-descuento input:focus {
+    border-color: #7d746b;
     outline: none;
-    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2); /* AÑADIR ESTA LÍNEA */
+    box-shadow: 0 0 0 2px rgba(125, 116, 107, 0.2);
 }
+
 .crear-descuento button {
     padding: 14px 20px;
     font-size: 16px;
     font-weight: 600;
     background-color: #7d746b;
-    color: #e0d7ce;
+    color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -115,89 +110,27 @@
 }
 
 @media (max-width: 768px) {
-    /* Estructura básica */
-    :host {
-        padding-left: 0 !important; /* Quitar el padding izquierdo */
-        margin-left: 70px !important; /* Usar margen en vez de padding */
-        width: calc(100% - 70px) !important;
-        display: flex !important;
-        justify-content: center !important; /* Centrar contenido horizontalmente */
-        align-items: flex-start !important;
-        padding-top: 10px !important;
-        height: 100vh;
-        min-height: 100vh !important;
-      }
-      
-    /* Contenedor principal mejorado */
     .crear-descuento {
-        width: 90% !important; /* Ancho relativo */
-        max-width: 450px !important; /* Limitar ancho máximo */
-        margin: 15px auto !important;
-        padding: 20px 15px !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-        left: 0 !important; /* Asegurar que no tenga posición absoluta */
-        transform: none !important; /* Eliminar cualquier transformación */
-      }
-    
-    /* Título más pequeño y mejor espaciado */
+        width: calc(100% - 90px);
+        margin-left: 90px;
+        padding: 20px 15px;
+        max-width: none;
+    }
+
     .crear-descuento h2 {
-      font-size: 22px !important;
-      margin-bottom: 20px !important;
+        font-size: 20px;
     }
-    
-    /* Estructura de form vertical */
-    .crear-descuento form {
-      flex-direction: column !important;
-      gap: 15px !important;
+
+    .crear-descuento .fechas{
+        grid-template-columns: 1fr;
     }
-    
-    /* Cambiar layout para móviles - MUY IMPORTANTE */
-    .crear-descuento .motivo,
-    .crear-descuento .descuento,
-    .crear-descuento .fechas {
-      display: flex !important;
-      flex-direction: column !important;
-      width: 100% !important;
-      gap: 8px !important;
-    }
-    
-    /* Ajustar etiquetas a la izquierda */
-    .crear-descuento label {
-      flex: none !important;
-      width: 100% !important;
-      text-align: left !important;
-      margin-right: 0 !important;
-      margin-bottom: 5px !important;
-      font-size: 15px !important;
-    }
-    
-    /* Ajustar campos para ancho completo */
+
     .crear-descuento input {
-      width: 100% !important;
-      min-width: unset !important;
-      max-width: none !important;
-      height: 45px !important;
-      padding: 10px 12px !important;
-      font-size: 15px !important;
-      box-sizing: border-box !important;
+        padding: 10px 12px;
     }
-    
-    /* Mejorar botón */
+
     .crear-descuento button {
-      padding: 12px 15px !important;
-      margin-top: 20px !important;
-      border-radius: 25px !important;
-    }
-  }
-  
-  /* Para dispositivos más pequeños */
-  @media (max-width: 380px) {
-    :host {
-      padding-left: 60px !important;
-      width: calc(100% - 60px) !important;
+        padding: 12px 15px;
     }
     
-    .crear-descuento h2 {
-      font-size: 20px !important;
-    }
-  }
+}

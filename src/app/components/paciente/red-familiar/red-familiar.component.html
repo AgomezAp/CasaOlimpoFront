@@ -2,11 +2,11 @@
   <div class="card">
     <div class="card-header">
       <button class="btn-back" (click)="volver()">
-        <img src="/Volver.png" alt="Agregar Paciente" class="btn-icon" /> Volver
+        <img src="/Volver.png" alt="Agregar Paciente" class="btn-icon"> Volver
       </button>
       <h2>Red Familiar</h2>
       <button class="btn-add" (click)="abrirModalNuevo()">
-        <img src="/AgregarPaciente.png" class="btn-icon" /> Agregar Familiar
+        <img src="/AgregarPaciente.png" class="btn-icon"> Agregar Familiar
       </button>
     </div>
 
@@ -25,7 +25,7 @@
         <i class="fas fa-users-slash empty-icon"></i>
         <p>Este paciente no tiene miembros en su red familiar registrados</p>
         <button class="btn-primary" (click)="abrirModalNuevo()">
-          <img src="/AgregarPaciente.png" class="btn-icon" />
+          <img src="/AgregarPaciente.png" class="btn-icon"> 
           Agregar Familiar
         </button>
       </div>
@@ -67,7 +67,7 @@
                     title="Editar"
                     (click)="abrirModalEdicion(miembro)"
                   >
-                    <img src="/Editar.png" class="btn-icon" />
+                    <i class="fas fa-edit"></i>
                   </button>
 
                   <button
@@ -76,7 +76,7 @@
                     (click)="confirmarEliminacion(miembro)"
                     [disabled]="miembro.es_responsable && esPacienteMenor"
                   >
-                    <img src="/EliminarUser.png" class="btn-icon" />
+                    <i class="fas fa-trash"></i>
                   </button>
 
                   <button
@@ -85,7 +85,7 @@
                     title="Establecer como responsable"
                     (click)="confirmarEstablecerResponsable(miembro)"
                   >
-                    <img src="/RedFamiliar.png" class="btn-icon" />
+                    <i class="fas fa-user-shield"></i>
                   </button>
                 </div>
               </td>

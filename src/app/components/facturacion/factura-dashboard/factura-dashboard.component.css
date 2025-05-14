@@ -1,18 +1,16 @@
 /* Estilos generales */
 :host {
-  display: block;
-  padding-left: 300px; /* Mantener el ajuste para el navbar */
-  padding-top: 20px;
-  height: auto; /* Cambiado de 100vh a auto para evitar scroll duplicado */
-  min-height: 100vh; /* Asegurar que ocupe al menos toda la altura */
-  box-sizing: border-box;
-  overflow: hidden; /* Prevenir scroll aquí */
-}
+    display: block;
+    padding-left: 300px; /* Ajuste para el navbar */
+    padding-top: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
   
   /* Título de página */
   .page-title {
     color: rgba(0, 0, 0, 0.7);
-    font-size: 42px;
+    font-size: 32px;
     font-weight: 600;
     text-align: center;
     width: 100%;
@@ -32,18 +30,16 @@
   }
   
   .content-container {
-    width: 92%; /* Cambiado de calc(100% - 80px) para más flexibilidad */
-    max-width: 1280px;
-    min-width: unset; /* IMPORTANTE: eliminar cualquier min-width */
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 24px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    padding: 35px 40px;
-    margin: 0 auto 10px;
+    width: 1000px;
+    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco con 85% opacidad */
+    border-radius: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    padding: 35px;
+    margin-bottom: 120px; /* Margen inferior amplio */
     position: relative;
     z-index: 1;
-    transition: all 0.3s ease; /* Añadir transición suave */
   }
+  
   /* Barra de controles superior */
   .controls-row {
     display: flex;
@@ -58,25 +54,25 @@
   }
   
   .search-box input {
-    width: 50%;
-    padding: 12px 15px 12px 40px; /* Cambiado: más padding a la izquierda */
+    width: 100%;
+    padding: 12px 40px 12px 15px;
     border-radius: 25px;
     border: 1px solid #ddd;
     font-size: 14px;
   }
+  
   .search-icon {
     position: absolute;
-    left: 15px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%237d746b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
-    background-repeat: no-repeat;
+    color: #7d746b;
+    font-size: 16px;
   }
+  
   .btn-new {
     background-color: #7d746b;
-    color: #e0d7ce;
+    color: white;
     border: none;
     border-radius: 25px;
     padding: 12px 20px;
@@ -88,29 +84,29 @@
   .btn-new:hover {
     background-color: #64594e;
   }
-
+  
   /* Tabla de facturas */
   .table-container {
     width: 100%;
     overflow-x: auto;
     margin-bottom: 20px;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   }
   
   .facturacion-table {
     width: 100%;
-    border-collapse: collapse; /* Cambiado de separate para mejor compatibilidad */
-    table-layout: auto; /* CRUCIAL: cambiar de fixed a auto */
-    transition: all 0.3s ease;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
   }
+  
   .facturacion-table th {
     background-color: #7d746b;
-    color: #e0d7ce; /* Cambiado a blanco puro para mejor contraste */
+    color: white;
     text-align: left;
-    padding: 16px 20px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    padding: 15px 20px;
+    font-weight: 500;
   }
   
   .facturacion-table td {
@@ -121,10 +117,10 @@
   .facturacion-table tr {
     background-color: white;
   }
-  .facturacion-table tr.odd-row {
-    background-color: rgba(138, 136, 134, 0.08); /* Cambiado al color institucional pero más sutil */
-  }
   
+  .facturacion-table tr.odd-row {
+    background-color: rgba(238, 238, 238, 0.5);
+  }
   
   /* Acciones en tabla */
   .actions {
@@ -135,7 +131,7 @@
   .btn-generate,
   .btn-ver {
     background-color: #7d746b;
-    color: #e0d7ce;
+    color: white;
     border: none;
     border-radius: 25px;
     width: 10px;
@@ -201,7 +197,7 @@
   
   .pagination-btn {
     background-color: #7d746b;
-    color: #e0d7ce;
+    color: white;
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
@@ -243,7 +239,7 @@
   
   .pagination-page-btn.active {
     background-color: #7d746b;
-    color: #e0d7ce;
+    color: white;
     font-weight: bold;
   }
   
@@ -272,118 +268,5 @@
     
     .search-box {
       width: 100%;
-    }
-  }
-  @media screen and (min-height: 700px) and (max-height: 900px) {
-    /* Optimización del contenedor principal */
-    :host {
-      padding-top: 10px;
-      height: calc(100vh - 70px);
-    }
-    
-    /* Reducir tamaño del título */
-    .page-title {
-      font-size: 32px;
-      margin: 0 0 10px 0;
-    }
-    
-    /* Optimizar contenedor principal */
-    .main-content {
-      height: calc(111vh - 110px);
-     
-    }
-    
-    .content-container {
-      padding: 15px 30px;
-      margin-bottom: 5px;
-    }
-    
-    /* Optimizar tabla para altura reducida */
-    .table-container {
-      margin-bottom: 5px;
-      height:450px;
-    }
-    
-    /* Comprimir encabezados de tabla */
-    .facturacion-table th {
-      padding: 10px 15px; 
-      font-size: 0.85rem;
-      height: 40px;
-    }
-    
-    /* Comprimir celdas de tabla */
-    .facturacion-table td {
-      padding: 6px 15px;
-      font-size: 0.85rem;
-      height: 40px;
-    }
-    
-    /* Reducir botones de acciones */
-    .btn-generate,
-    .btn-ver {
-      height: 30px;
-      min-width: 100px;
-      padding: 0 12px;
-      margin: 2px;
-      font-size: 0.85rem;
-    }
-    
-    .btn-icon {
-      width: 16px;
-      height: 16px;
-    }
-    
-    /* Optimizar barra de búsqueda */
-    .search-box input {
-      padding: 8px 12px 8px 35px;
-      height: 32px;
-    }
-    
-    /* Ajustar controles de paginación */
-    .pagination-controls {
-      margin-top: 10px;
-      gap: 8px;
-    }
-    
-    .pagination-page-btn {
-      width: 28px;
-      height: 28px;
-      font-size: 13px;
-    }
-    
-    .pagination-btn {
-      padding: 6px 10px;
-      font-size: 13px;
-    }
-    
-    .pagination-info {
-      font-size: 13px;
-    }
-    
-    /* Ajustar espacio entre filas */
-    .facturacion-table tr {
-      line-height: 1.2;
-    }
-    
-    .facturacion-table th {
-      background-color: #8a8178;
-      color: white;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-    }
-    
-    .facturacion-table td {
-      border-top: none;
-      border-left: none;
-      border-right: none;
-    }
-    
-    .facturacion-table tr:last-child td {
-      border-bottom: none;
-    }
-    
-    .facturacion-table tr.odd-row {
-      background-color: rgba(138, 136, 134, 0.1); 
     }
   }

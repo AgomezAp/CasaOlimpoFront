@@ -136,7 +136,7 @@
   
   .btn-primary {
     background-color: #a39081; /* Color más suave, estilo Casa Olimpo */
-    color: #e0d7ce;
+    color: white;
   }
   
   .btn-primary:hover {
@@ -168,8 +168,8 @@
   }
   
   .btn-upload {
-    background-color: #7d746b; /* Tono marrón suave */
-    color: #e0d7ce;
+    background-color: #9c836e; /* Tono marrón suave */
+    color: white;
     font-weight: 600;
     padding: 10px 20px;
     margin-bottom: 15px;
@@ -177,7 +177,7 @@
   }
   
   .btn-upload:hover {
-    background-color: #7d746b;
+    background-color: #876f5c;
     transform: translateY(-2px);
   }
   

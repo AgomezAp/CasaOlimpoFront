@@ -74,11 +74,7 @@
 
       <div class="action-buttons" *ngIf="editMode">
         <button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
-        <button class="btn-save" (click)="guardarCambios()">
-          <span *ngIf="guardandoCambios" class="spinner-button"></span>
-          <span *ngIf="!guardandoCambios">Guardar</span>
-          <span *ngIf="guardandoCambios">Guardando...</span>
-        </button>
+        <button class="btn-save" (click)="guardarCambios()">Guardar</button>
       </div>
     </div>
 
@@ -282,6 +278,7 @@
           <h3 class="section-title">Información Médica</h3>
           <div class="section-divider"></div>
           <div class="data-grid">
+            
             <div class="data-row">
               <div class="data-field medical-field">
                 <label>Alergias</label>
@@ -300,7 +297,7 @@
                 ></textarea>
               </div>
             </div>
-
+          
             <div class="data-row alt-bg">
               <div class="data-field full-width medical-field">
                 <label>Antecedentes<br />familiares</label>

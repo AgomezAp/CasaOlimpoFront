@@ -18,5 +18,4 @@ export interface Receta {
      };
      consulta?: any;
      fecha_creacion?: string | Date;
-     completada: boolean;
    }

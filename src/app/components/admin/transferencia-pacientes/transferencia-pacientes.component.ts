@@ -44,10 +44,11 @@ export class TransferenciaPacientesComponent implements OnInit {
       comentario: ['']
     });
     
+    // Escuchar cambios en el doctor origen para cargar sus pacientes
     this.transferenciaForm.get('doctorOrigen')?.valueChanges.subscribe(id => {
       if (id) {
         this.cargarPacientesPorDoctor(id);
-        this.pacientesSeleccionados = []; 
+        this.pacientesSeleccionados = []; // Limpiar seleccionados al cambiar de doctor
       } else {
         this.pacientes = [];
         this.pacientesFiltrados = [];
@@ -78,8 +79,8 @@ export class TransferenciaPacientesComponent implements OnInit {
         // Mapear el formato para usar los IDs correctos
         this.doctores = response.data.map((doctor: any) => {
           const mappedDoctor = {
-            id: doctor.Uid,
-            Uid: doctor.Uid, 
+            id: doctor.Uid, // Asumiendo que el ID viene como Uid
+            Uid: doctor.Uid, // Mantener también el Uid original
             nombre: doctor.nombre,
             apellidos: doctor.apellidos || '',
             correo: doctor.correo,
@@ -103,6 +104,7 @@ export class TransferenciaPacientesComponent implements OnInit {
   cargarPacientesPorDoctor(doctorId: string): void {
     this.cargandoPacientes = true;
     
+    // Usar el nuevo método que acepta doctorId como parámetro
     this.pacienteService.obtenerPacientesPorDoctorId(doctorId).subscribe({
       next: (response) => {
         this.pacientes = response.data || [];
@@ -138,19 +140,27 @@ export class TransferenciaPacientesComponent implements OnInit {
 
   toggleSeleccionPaciente(paciente: any): void {
     if (!paciente) return;
+    
     const yaSeleccionado = this.estaPacienteSeleccionado(paciente);
+    
     if (yaSeleccionado) {
+      // Remover de seleccionados
       this.pacientesSeleccionados = this.pacientesSeleccionados.filter(p => 
         p.numero_documento !== paciente.numero_documento
       );
     } else {
+      // Agregar a seleccionados
       this.pacientesSeleccionados = [...this.pacientesSeleccionados, paciente];
     }
     
+    // Opcional: feedback visual
+    console.log(`Paciente ${paciente.nombre} ${yaSeleccionado ? 'deseleccionado' : 'seleccionado'}`);
+    console.log('Total seleccionados:', this.pacientesSeleccionados.length);
   }
   estaPacienteSeleccionado(paciente: any): boolean {
     if (!this.pacientesSeleccionados || !paciente) return false;
     
+    // Usar el número de documento como identificador único
     return this.pacientesSeleccionados.some(p => 
       p.numero_documento === paciente.numero_documento
     );
@@ -158,8 +168,10 @@ export class TransferenciaPacientesComponent implements OnInit {
 
   seleccionarTodos(): void {
     if (this.pacientesSeleccionados.length === this.pacientesFiltrados.length) {
+      // Si todos están seleccionados, deseleccionar todos
       this.pacientesSeleccionados = [];
     } else {
+      // Seleccionar todos los filtrados
       this.pacientesSeleccionados = [...this.pacientesFiltrados];
     }
   }
@@ -175,15 +187,19 @@ export class TransferenciaPacientesComponent implements OnInit {
       return;
     }
     
+    // LOG: Valores del formulario
     console.log('Valores del formulario:', this.transferenciaForm.value);
     console.log('Doctor origen ID (desde form):', this.doctorOrigenId, typeof this.doctorOrigenId);
     console.log('Doctor destino ID (desde form):', this.doctorDestinoId, typeof this.doctorDestinoId);
     
+    // Verificar que los pacientes pertenecen al doctor origen
     const verificacionPacientes = this.pacientesSeleccionados.every(p => {
+      // Convertir IDs a string para comparación consistente
       const pacienteUid = String(p.Uid || '');
       const pacienteDoctorId = String(p.doctor_id || '');
       const doctorOrigenIdStr = String(this.doctorOrigenId || '');
       
+      // LOG: Comparación de IDs para cada paciente
       console.log('Comparando paciente:', {
         nombre: p.nombre,
         pacienteUid,
@@ -200,11 +216,13 @@ export class TransferenciaPacientesComponent implements OnInit {
       return;
     }
     
+    // Confirmación antes de transferir
     const confirmMessage = `¿Está seguro de transferir ${this.pacientesSeleccionados.length} pacientes del Dr. ${this.getDoctorNombre(this.doctorOrigenId)} al Dr. ${this.getDoctorNombre(this.doctorDestinoId)}?`;
     
     if (confirm(confirmMessage)) {
       this.procesandoTransferencia = true;
       
+      // LOG: Lista completa de doctores antes de búsqueda
       console.log('Lista de doctores disponibles:', this.doctores);
       console.log('Buscando doctor origen con ID:', this.doctorOrigenId);
       console.log('Buscando doctor destino con ID:', this.doctorDestinoId);
@@ -232,23 +250,27 @@ export class TransferenciaPacientesComponent implements OnInit {
       }
       
       const transferData = {
-        doctorOrigenId: Number(this.doctorOrigenId), 
-        doctorDestinoId: Number(this.doctorDestinoId), 
+        doctorOrigenId: Number(this.doctorOrigenId), // Convertir a número
+        doctorDestinoId: Number(this.doctorDestinoId), // Convertir a número
         pacientesIds: this.pacientesSeleccionados.map(p => p.numero_documento),
         comentario: this.transferenciaForm.get('comentario')?.value || ''
       };
       
+      // LOG: Datos finales para transferencia
       console.log('Datos para transferencia:', transferData);
       
+      // Transferir pacientes individualmente para mejor manejo de errores
       this.transferirPacientesSecuencial(transferData);
     }
   }
   
+  // Nuevo método para transferencia secuencial
   transferirPacientesSecuencial(transferData: any): void {
     let completados = 0;
     let fallidos = 0;
     let errores: string[] = [];
     
+    // Transferir un paciente a la vez
     const transferirSiguiente = (index: number) => {
       if (index >= transferData.pacientesIds.length) {
         // Proceso completado
@@ -287,11 +309,13 @@ export class TransferenciaPacientesComponent implements OnInit {
           errores.push(`Paciente ${pacienteId}: ${mensajeError}`);
           console.error(`Error al transferir paciente ${pacienteId}:`, error);
           
+          // Continuar con el siguiente paciente
           transferirSiguiente(index + 1);
         }
       });
     };
     
+    // Iniciar proceso
     transferirSiguiente(0);
   }
 

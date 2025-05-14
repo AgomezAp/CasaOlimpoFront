@@ -19,13 +19,15 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { GestionUsuariosComponent } from './components/admin/gestion-usuarios/gestion-usuarios.component';
 import { TransferenciaPacientesComponent } from './components/admin/transferencia-pacientes/transferencia-pacientes.component';
 import { FacturaIdComponent } from './components/facturacion/factura-id/factura-id.component';
-import { VerdatosconsultaComponent } from './components/paciente/verdatosconsulta/verdatosconsulta.component';
-import { CrearConsentimientoComponent } from './components/paciente/crear-consentimiento/crear-consentimiento.component';
+import { GestionMensajeriaComponent } from './components/admin/gestion-mensajeria/gestion-mensajeria.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: LoginComponent,
+    },
+    {
+        path: 'Login', component: LoginComponent
     },
     {
         path: 'registrar', component: RegistrarComponent
@@ -74,20 +76,13 @@ export const routes: Routes = [
         component: RedFamiliarComponent
     },
     {
-        path:'paciente/:numero_documento/consulta/:consulta_id',
-       component:VerdatosconsultaComponent
-    },
-    {
-        path:'paciente/:numero_documento/consulta/:consulta_id/consentimiento',
-        component: CrearConsentimientoComponent
-    },
-    {
         path: 'admin',
         component: DashboardComponent,
         children: [
           { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
           { path: 'usuarios', component: GestionUsuariosComponent },
-          { path: 'transferencia', component: TransferenciaPacientesComponent }
+          { path: 'transferencia', component: TransferenciaPacientesComponent },
+          { path: 'mensajeria', component: GestionMensajeriaComponent}
         ]
       }
     
