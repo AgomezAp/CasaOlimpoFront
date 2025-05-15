@@ -14,11 +14,11 @@ export class GestionMensajeriaComponent {
   intervalId: any;
   qrCode: string = '';
   abortController: AbortController | null = null;
-
+  mensajeriaServer: string ='http://localhost:3050/api/whatsapp/'
    
   async verificar(mostrarMensajes: boolean): Promise<boolean> {
     try {
-      const response = await fetch('http://localhost:3050/api/whatsapp/obtenerClientes', {
+      const response = await fetch(`${this.mensajeriaServer}obtenerClientes`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export class GestionMensajeriaComponent {
       return;
     }
 
-    await fetch('http://localhost:3050/api/whatsapp/eliminarClientes', {
+    await fetch(`${this.mensajeriaServer}eliminarClientes`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ export class GestionMensajeriaComponent {
       sessionId: "1234"
     })
     this.abortController = new AbortController();
-    fetch('http://localhost:3050/api/whatsapp/CrearCliente', {
+    fetch(`${this.mensajeriaServer}CrearCliente`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
