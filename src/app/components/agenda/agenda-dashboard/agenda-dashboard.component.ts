@@ -12,10 +12,11 @@ import { CommonModule } from '@angular/common';
 import { NotificacionService } from '../../../services/notificacion.service';
 import { NotificacionComponent } from '../../notificaciones/notificacion/notificacion.component';
 import { AppointmentReminderService } from '../../../services/appointment-reminder.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-agenda-dashboard',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,RouterLink],
   templateUrl: './agenda-dashboard.component.html',
   styleUrl: './agenda-dashboard.component.css',
 })

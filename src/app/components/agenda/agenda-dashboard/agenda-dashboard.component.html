@@ -347,7 +347,11 @@
   </div>
 
   <!-- Modal para Nueva Cita -->
-  <div class="modal" [class.active]="showNewAppointmentModal" (click)="closeNewAppointmentModal()">
+  <div
+    class="modal"
+    [class.active]="showNewAppointmentModal"
+    (click)="closeNewAppointmentModal()"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Nueva Cita</h3>
@@ -499,10 +503,19 @@
             <div class="form-group half">
               <div class="form-group">
                 <label for="appointmentTime">Hora:</label>
-                <select id="appointmentTime" class="form-control" formControlName="time">
-                  <option *ngFor="let hour of hours" [value]="hour">{{ hour }}</option>
+                <select
+                  id="appointmentTime"
+                  class="form-control"
+                  formControlName="time"
+                >
+                  <option *ngFor="let hour of hours" [value]="hour">
+                    {{ hour }}
+                  </option>
                 </select>
-                <div *ngIf="hours.length === 1 && hours[0] === 'No disponible'" class="validation-message">
+                <div
+                  *ngIf="hours.length === 1 && hours[0] === 'No disponible'"
+                  class="validation-message"
+                >
                   No hay horarios disponibles para esta fecha
                 </div>
               </div>
@@ -558,7 +571,11 @@
   </div>
 
   <!-- Modal para Ver Detalles de Cita -->
-  <div class="modal" [class.active]="showAppointmentDetailsModal" (click)="closeAppointmentDetailsModal()">
+  <div
+    class="modal"
+    [class.active]="showAppointmentDetailsModal"
+    (click)="closeAppointmentDetailsModal()"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div
         class="modal-header"
@@ -587,6 +604,15 @@
           >
             {{ getStatusText(selectedAppointment.status) }}
           </div>
+          <button
+            *ngIf="
+              selectedAppointment.isRegistered && selectedAppointment.patientId
+            "
+            class="view-patient-btn"
+            [routerLink]="['/info-paciente', selectedAppointment.patientId]"
+          >
+            <i class="fas fa-user-md"></i> Ver ficha
+          </button>
         </div>
 
         <div class="detail-section">
@@ -765,7 +791,11 @@
     </div>
   </div>
   <!-- Modal de edición de cita -->
-  <div class="modal" [class.active]="showEditModal" (click)="showEditModal = false">
+  <div
+    class="modal"
+    [class.active]="showEditModal"
+    (click)="showEditModal = false"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Editar Cita</h3>

@@ -1463,7 +1463,22 @@ textarea {
   border-color: #7d746b;
   z-index: 1; /* Poner tab activa por encima */
 }
+.view-patient-btn {
+  margin-left: 10px;
+  background-color: rgb(124, 115, 106);
+  color: #e0d7ce;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+}
 
+.view-patient-btn:hover {
+  background-color: #2980b9;
+}
 /* Resultados de búsqueda de pacientes */
 .patient-selection-options {
   display: flex;
