@@ -73,11 +73,11 @@ export class PacienteNavComponent {
 
   tabs = [
     { id: 'info', label: 'Info' },
-    { id: 'carpeta', label: 'Carpeta' },
     { id: 'hclinica', label: 'H. Clínica' },
+    { id: 'consentimiento', label: 'Consentimiento Informado' },
+    { id: 'carpeta', label: 'Carpeta' },
     { id: 'recetas', label: 'Recetas' },
     { id: 'citas', label: 'Citas' },
-    { id: 'consentimiento', label: 'Consentimiento Informado' },
   ];
   constructor(private route: ActivatedRoute, private router: Router) {}
 
