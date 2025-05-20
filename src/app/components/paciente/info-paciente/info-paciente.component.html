@@ -329,6 +329,10 @@
           *ngIf="activeTab === 'recetas'"
           [pacienteId]="pacienteId"
         ></app-receta>
+        <app-consentimiento-info
+          *ngIf="activeTab === 'consentimiento'"
+          [pacienteId]="pacienteId"
+        ></app-consentimiento-info>
       </div>
     </div>
   </div>

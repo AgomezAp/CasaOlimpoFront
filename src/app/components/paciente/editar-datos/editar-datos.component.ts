@@ -35,7 +35,6 @@ export class EditarDatosComponent implements OnInit {
       objetivos_terapia: ['', Validators.required],
       historia_problema: ['', Validators.required],
       tipo_diagnostico: ['', Validators.required],
-      plan_tratamiento: ['', Validators.required],
       contraindicaciones: ['', Validators.required], 
       recomendaciones: [''],
     });
@@ -77,7 +76,6 @@ export class EditarDatosComponent implements OnInit {
             objetivos_terapia: consulta.objetivos_terapia || '',
             historia_problema: consulta.historia_problema || '',
             tipo_diagnostico: consulta.tipo_diagnostico || '',
-            plan_tratamiento: consulta.plan_tratamiento || '',
             recomendaciones: consulta.recomendaciones || '',
             contraindicaciones:consulta.contraindicaciones|| ''
           });

@@ -60,7 +60,6 @@ export class CrearConsultaComponent implements OnInit {
       objetivos_terapia: ['', Validators.required],
       historia_problema: ['', Validators.required],
       tipo_diagnostico: ['', Validators.required],
-      plan_tratamiento: ['', Validators.required],
       contraindicaciones: ['', Validators.required], 
       recomendaciones: [''],
     });

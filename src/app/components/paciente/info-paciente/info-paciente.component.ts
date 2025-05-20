@@ -17,6 +17,7 @@ import { RecetaComponent } from '../receta/receta.component';
 import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 import { RedfamiliarService } from '../../../services/redfamiliar.service';
 import { NotificacionService } from '../../../services/notificacion.service';
+import { ConsentimientoInfoComponent } from '../consentimiento-info/consentimiento-info.component';
 
 @Component({
   selector: 'app-info-paciente',
@@ -30,7 +31,8 @@ import { NotificacionService } from '../../../services/notificacion.service';
     DashboardCitasComponent,
     RecetaComponent,
     HistoriaClinicaComponent,
-    RouterModule 
+    RouterModule,
+    ConsentimientoInfoComponent
   ],
   templateUrl: './info-paciente.component.html',
   styleUrl: './info-paciente.component.css',
@@ -53,7 +55,6 @@ export class InfoPacienteComponent implements OnInit {
   guardandoCambios = false;
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private pacienteService: PacienteService,
     private formBuilder: FormBuilder,
     private sanitizer: DomSanitizer,

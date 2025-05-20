@@ -113,21 +113,6 @@
       <div class="linea-divisora"></div>
 
       <table class="datos-tabla">
-        <tr class="fila-alternada">
-          <td class="label-celda">Plan de<br />tratamiento:</td>
-          <td class="input-celda">
-            <textarea
-              formControlName="plan_tratamiento"
-              class="form-control"
-              rows="2"
-              [class.invalid]="isFieldInvalid('plan_tratamiento')"
-            ></textarea>
-            <div *ngIf="isFieldInvalid('plan_tratamiento')" class="error-text">
-              Este campo es obligatorio
-            </div>
-          </td>
-        </tr>
-
         <tr>
           <td class="label-celda">Recomendaciones:</td>
           <td class="input-celda">

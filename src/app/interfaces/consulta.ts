@@ -6,7 +6,6 @@ export interface Consulta {
      objetivos_terapia: string;
      historia_problema: string;
      tipo_diagnostico: string;
-     plan_tratamiento: string;
      recomendaciones: string;
      numero_documento: string;
      fecha: Date;

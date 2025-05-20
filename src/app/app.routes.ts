@@ -22,76 +22,93 @@ import { FacturaIdComponent } from './components/facturacion/factura-id/factura-
 import { VerdatosconsultaComponent } from './components/paciente/verdatosconsulta/verdatosconsulta.component';
 import { CrearConsentimientoComponent } from './components/paciente/crear-consentimiento/crear-consentimiento.component';
 import { GestionMensajeriaComponent } from './components/admin/gestion-mensajeria/gestion-mensajeria.component';
+import { ConsentimientoInfoComponent } from './components/paciente/consentimiento-info/consentimiento-info.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: LoginComponent,
-    },
-    {
-        path: 'registrar', component: RegistrarComponent
-    },
-    {
-        path: 'agregar-paciente', component: AgregarPacienteComponent
-    },
-    {
-        path: 'agenda-dashboard', component: AgendaDashboardComponent
-    },
-    {
-        path: 'cumpleaños', component: CumpleanosComponent
-    },
-    {
-        path: 'descuento', component: CrearDescuentoComponent
-    },
-    {
-        path: 'descuento-dashboard', component: DescuentoDashboardComponent
-    },
-    {
-        path: 'receta', component: RecetaComponent
-    },
-    {
-        path: 'paciente-dashboard', component: PacienteDashboardComponent
-    },
-    {
-        path: 'factura-dashboard', component: FacturaDashboardComponent
-    },
-    {
-        path: 'factura-generar', component: GenerarFacturaComponent
-    },
-    {
-        path: 'facturas', component: FacturaIdComponent
-    },
-    {
-        path:'info-paciente/:numero_documento',component: InfoPacienteComponent
-    },
-    {
-        path:'crear-consulta/:numero_documento',component: CrearConsultaComponent
-    },
-    {
-        path:'paciente/:numero_documento/consulta/:consulta_id/editar',component: EditarDatosComponent
-    },
-    {
-        path: 'paciente/:numero_documento/red-familiar',
-        component: RedFamiliarComponent
-    },
-    {
-        path:'paciente/:numero_documento/consulta/:consulta_id',
-       component:VerdatosconsultaComponent
-    },
-    {
-        path:'paciente/:numero_documento/consulta/:consulta_id/consentimiento',
-        component: CrearConsentimientoComponent
-    },
-    {
-        path: 'admin',
-        component: DashboardComponent,
-        children: [
-          { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
-          { path: 'usuarios', component: GestionUsuariosComponent },
-          { path: 'transferencia', component: TransferenciaPacientesComponent },
-          { path: 'mensajeria', component: GestionMensajeriaComponent}
-        ]
-      }
-    
-
+  {
+    path: '',
+    component: LoginComponent,
+  },
+  {
+    path: 'registrar',
+    component: RegistrarComponent,
+  },
+  {
+    path: 'agregar-paciente',
+    component: AgregarPacienteComponent,
+  },
+  {
+    path: 'agenda-dashboard',
+    component: AgendaDashboardComponent,
+  },
+  {
+    path: 'cumpleaños',
+    component: CumpleanosComponent,
+  },
+  {
+    path: 'descuento',
+    component: CrearDescuentoComponent,
+  },
+  {
+    path: 'descuento-dashboard',
+    component: DescuentoDashboardComponent,
+  },
+  {
+    path: 'receta',
+    component: RecetaComponent,
+  },
+  {
+    path: 'paciente-dashboard',
+    component: PacienteDashboardComponent,
+  },
+  {
+    path: 'factura-dashboard',
+    component: FacturaDashboardComponent,
+  },
+  {
+    path: 'factura-generar',
+    component: GenerarFacturaComponent,
+  },
+  {
+    path: 'facturas',
+    component: FacturaIdComponent,
+  },
+  {
+    path: 'info-paciente/:numero_documento',
+    component: InfoPacienteComponent,
+  },
+  {
+    path: 'crear-consulta/:numero_documento',
+    component: CrearConsultaComponent,
+  },
+  {
+    path: 'paciente/:numero_documento/consulta/:consulta_id/editar',
+    component: EditarDatosComponent,
+  },
+  {
+    path: 'paciente/:numero_documento/red-familiar',
+    component: RedFamiliarComponent,
+  },
+  {
+    path: 'paciente/:numero_documento/consulta/:consulta_id',
+    component: VerdatosconsultaComponent,
+  },
+  {
+    path: 'paciente/:numero_documento/consulta/:consulta_id/consentimiento',
+    component: CrearConsentimientoComponent,
+  },
+  {
+    path: 'admin',
+    component: DashboardComponent,
+    children: [
+      { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+      { path: 'usuarios', component: GestionUsuariosComponent },
+      { path: 'transferencia', component: TransferenciaPacientesComponent },
+      { path: 'mensajeria', component: GestionMensajeriaComponent },
+    ],
+  },
+  {
+    path: 'paciente/:numero_documento/consentimiento-info',
+    component: ConsentimientoInfoComponent,
+  },
 ];

@@ -1,24 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { CrearConsentimientoComponent } from '../crear-consentimiento/crear-consentimiento.component';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import { PacienteService } from '../../../services/paciente.service';
+import {
+  ConsentimientoInfo,
+  ConsentimientoInfoService,
+} from '../../../services/consentimiento-info.service';
 import SignaturePad from 'signature_pad';
-import { ConsultaService } from '../../../services/consulta.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 @Component({
-  selector: 'app-crear-consentimiento',
+  selector: 'app-consentimiento-info',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './crear-consentimiento.component.html',
-  styleUrl: './crear-consentimiento.component.css',
+  templateUrl: './consentimiento-info.component.html',
+  styleUrl: './consentimiento-info.component.css',
 })
-export class CrearConsentimientoComponent implements OnInit {
+export class ConsentimientoInfoComponent implements OnInit {
+   @Input() pacienteId: string = ''; 
+  consentimientos: ConsentimientoInfo[] = [];
+  isLoading = false;
+  error = '';
+  success = '';
   consentimientoForm: FormGroup;
   tipoConsentimientoSeleccionado: string = '';
   pdfGenerado: string = '';
@@ -27,15 +36,12 @@ export class CrearConsentimientoComponent implements OnInit {
   nombreDoctor: string = '';
   paciente: any = null;
   firmas: { [key: string]: SignaturePad } = {};
-  pacienteId: string = '';
   consultaId: string = '';
-
   constructor(
     private fb: FormBuilder,
-    private pacienteService: PacienteService,
-    private consultaService: ConsultaService,
+    private route: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute
+    private consentimientoService: ConsentimientoInfoService
   ) {
     this.consentimientoForm = this.fb.group({
       consentimiento_check: [false, Validators.requiredTrue],
@@ -43,36 +49,88 @@ export class CrearConsentimientoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.pacienteId = params['numero_documento'];
-      this.consultaId = params['consulta_id'];
-    });
-    this.cargarDatosPaciente();
-  }
-
-  obtenerPacienteIdDeUrl(): string {
-    // Implementar según cómo obtengas el ID del paciente
-    // Por ejemplo:
-    const url = window.location.href;
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id') || '';
-  }
-  cargarDatosPaciente(): void {
+   if (!this.pacienteId) {
+      this.pacienteId = this.route.snapshot.paramMap.get('numero_documento') || '';
+    }
     if (this.pacienteId) {
-      // Cambiamos a un método existente en ConsultaService
-      this.consultaService
-        .obtenerInformacionBasicaPaciente(this.pacienteId)
-        .subscribe(
-          (data: any) => {
-            this.paciente = data;
-          },
-          (error: any) => {
-            console.error('Error al cargar datos del paciente:', error);
-          }
-        );
+      this.cargarConsentimientos();
     }
   }
 
+  cargarConsentimientos(): void {
+    if (!this.pacienteId) return;
+
+    this.isLoading = true;
+    this.error = '';
+
+    this.consentimientoService
+      .obtenerConsentimientosPaciente(this.pacienteId)
+      .subscribe({
+        next: (response) => {
+          this.consentimientos = response.data || [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.error = err.message || 'Error al cargar los consentimientos';
+          this.isLoading = false;
+        },
+      });
+  }
+  descargarConsentimiento(Cid: number): void {
+    this.isLoading = true;
+    this.error = '';
+    this.success = '';
+
+    this.consentimientoService.descargarConsentimiento(Cid).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `consentimiento_${Cid}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = err.message || 'Error al descargar el consentimiento';
+        this.isLoading = false;
+      },
+    });
+  }
+
+  eliminarConsentimiento(Cid: number): void {
+    if (!confirm('¿Está seguro que desea eliminar este consentimiento?'))
+      return;
+
+    this.isLoading = true;
+    this.error = '';
+    this.success = '';
+
+    this.consentimientoService.eliminarConsentimiento(Cid).subscribe({
+      next: (response) => {
+        this.success = 'Consentimiento eliminado correctamente';
+        this.cargarConsentimientos();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = err.message || 'Error al eliminar el consentimiento';
+        this.isLoading = false;
+      },
+    });
+  }
+  showConsentimientoModal = false;
+
+  // Modificar el método actual para mostrar el modal en lugar de navegar
+  crearNuevoConsentimiento(): void {
+    this.showConsentimientoModal = true;
+  }
+
+  // Método para cerrar el modal
+  cerrarModalConsentimiento(): void {
+    this.showConsentimientoModal = false;
+  }
   seleccionarTipoConsentimiento(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.tipoConsentimientoSeleccionado = select.value;
@@ -586,7 +644,7 @@ export class CrearConsentimientoComponent implements OnInit {
             width: tempDiv.offsetWidth,
             height: tempDiv.scrollHeight,
           })
-            .then((canvas) => {
+            .then((canvas: any) => {
               try {
                 const imgData = canvas.toDataURL('image/jpeg', 1.0);
                 const pdf = new jsPDF('p', 'mm', 'a4');
@@ -595,7 +653,7 @@ export class CrearConsentimientoComponent implements OnInit {
                 const pdfHeight = pdf.internal.pageSize.getHeight();
                 const imgWidth = canvas.width;
                 const imgHeight = canvas.height;
-             
+
                 const imgX = 0; // Elimina el centrado para usar todo el ancho
                 const ratio = pdfWidth / imgWidth;
 
@@ -660,7 +718,7 @@ export class CrearConsentimientoComponent implements OnInit {
                 reject(error);
               }
             })
-            .catch((error) => {
+            .catch((error: any) => {
               document.body.removeChild(tempDiv);
               botonesLimpiar.forEach((boton) => {
                 (boton as HTMLElement).style.display = '';
@@ -713,17 +771,32 @@ export class CrearConsentimientoComponent implements OnInit {
       // Crear blob
       const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
 
-      // Enviar al servidor
-      this.consultaService
-        .guardarConsentimiento(this.consultaId, pdfBlob)
+      // CORRECCIÓN: Convertir Blob a File
+      const fileName = `consentimiento_${
+        this.tipoConsentimientoSeleccionado
+      }_${new Date().getTime()}.pdf`;
+      const pdfFile = new File([pdfBlob], fileName, {
+        type: 'application/pdf',
+      });
+
+      // Verificar que el pacienteId existe
+      if (!this.pacienteId) {
+        throw new Error('ID de paciente no disponible');
+      }
+
+      // Usar el File en lugar del Blob
+      this.consentimientoService
+        .guardarConsentimiento(this.pacienteId, pdfFile)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             this.guardando = false;
             alert('Consentimiento guardado correctamente');
-            // Navegar de regreso a la historia clínica
-            this.router.navigate(['/info-paciente', this.pacienteId]);
+            // Recargar la lista de consentimientos
+            this.cargarConsentimientos();
+            // Cerrar el modal
+            this.cerrarModalConsentimiento();
           },
-          error: (err) => {
+          error: (err: any) => {
             this.guardando = false;
             console.error('Error al guardar el consentimiento:', err);
             alert(
