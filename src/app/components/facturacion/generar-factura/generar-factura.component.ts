@@ -14,13 +14,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
 })
 export class GenerarFacturaComponent {
   paciente: any;
+  loading: boolean = false;
   precio: number = 0;
   descuento: any = 0;
   procedimiento: string = ''; 
   total: number = 0;
   tipoPago: string = 'Efectivo';
   descuentos: any[] = [];
-  factura: any = {} 
+  factura: any = {};
   constructor(
     private facturacionService: FacturacionService,
     private router: Router,
@@ -56,15 +57,15 @@ export class GenerarFacturaComponent {
   }
 
   calcularTotal(): void {
-    let descuentoAplicado =  0;
-    if (this.descuento.includes('%')) {
-      const porcentaje = parseFloat(this.descuento.replace('%','')) || 0;
-      descuentoAplicado = this.precio * (porcentaje / 100);
-    } else {
-      descuentoAplicado = parseFloat(this.descuento) || 0;
-    }
-    this.total = Math.max(0, this.precio - descuentoAplicado);
+  let descuentoAplicado = 0;
+  if (this.descuento && this.descuento.toString().includes('%')) {
+    const porcentaje = parseFloat(this.descuento.replace('%','')) || 0;
+    descuentoAplicado = this.precio * (porcentaje / 100);
+  } else {
+    descuentoAplicado = parseFloat(this.descuento) || 0;
   }
+  this.total = Math.max(0, this.precio - descuentoAplicado);
+}
 
   // agregarNuevo(valor: string): void {
   //   if (!this.descuentos.find(d => d.porcentaje === valor)) {
@@ -72,6 +73,7 @@ export class GenerarFacturaComponent {
   //   }
   // }
   crearFactura(): void {
+    this.loading = true
     const facturadata = {
       numero_documento: this.paciente.numero_documento,
       tipo_pago: this.tipoPago,
@@ -91,10 +93,12 @@ export class GenerarFacturaComponent {
         this.notificacionService.success('Factura creada exitosamente');
         console.log('Factura creada:', facturadata);
         this.router.navigate(['/factura-dashboard']); // Redirige al dashboard después de crear la factura
+        this.loading = false
       },
       error: (err) => {
         console.error('Error al crear la factura:', err);
         this.notificacionService.error('No se pudo crear la factura');
+        this.loading = false
       }
     });
   }

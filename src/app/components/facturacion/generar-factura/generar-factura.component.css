@@ -89,6 +89,23 @@
 .facturacion-form .procedimiento input:nth-child(2) {
   margin-left: -10px;/* Mueve el elemento hacia la izquierda */
 }
+.loader-container {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+  }
+  
+  .loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #7d746b;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
 
 /* Estilos para cada campo */
 .facturacion-form .contact > div,
