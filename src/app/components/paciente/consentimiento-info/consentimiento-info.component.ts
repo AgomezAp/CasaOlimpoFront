@@ -15,7 +15,7 @@ import {
 import SignaturePad from 'signature_pad';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-consentimiento-info',
   imports: [CommonModule, ReactiveFormsModule],
@@ -23,7 +23,7 @@ import html2canvas from 'html2canvas';
   styleUrl: './consentimiento-info.component.css',
 })
 export class ConsentimientoInfoComponent implements OnInit {
-   @Input() pacienteId: string = ''; 
+  @Input() pacienteId: string = '';
   consentimientos: ConsentimientoInfo[] = [];
   isLoading = false;
   error = '';
@@ -41,6 +41,7 @@ export class ConsentimientoInfoComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private consentimientoService: ConsentimientoInfoService
   ) {
     this.consentimientoForm = this.fb.group({
@@ -49,14 +50,17 @@ export class ConsentimientoInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   if (!this.pacienteId) {
-      this.pacienteId = this.route.snapshot.paramMap.get('numero_documento') || '';
+    if (!this.pacienteId) {
+      this.pacienteId =
+        this.route.snapshot.paramMap.get('numero_documento') || '';
     }
     if (this.pacienteId) {
       this.cargarConsentimientos();
     }
   }
-
+  volver() {
+    this.location.back();
+  }
   cargarConsentimientos(): void {
     if (!this.pacienteId) return;
 
