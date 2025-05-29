@@ -53,28 +53,15 @@ export class CumpleanosComponent implements OnInit {
   }
 
   enviarMensaje(): void {
-    const dataActual = (document.getElementById('hora') as HTMLInputElement)?.value || '';
-    console.log(dataActual)
-    this.cumpleService.obtenerMensaje({mensaje : this.mensaje, hora: this.hora}).subscribe({
+    this.cumpleService.obtenerMensaje({mensaje : this.mensaje}).subscribe({
       next: () => {
-        const horaActual = new Date();
-        console.log(horaActual)
-        const [hora, minutos] = this.hora.split(':').map(Number);
-        console.log(hora, minutos)
-        console.log(this.hora)
-        const horaSeleccionada = new Date();
-        horaSeleccionada.setHours(hora, minutos, 0);
-        console.log(horaSeleccionada)
-        if (horaSeleccionada <= horaActual) {
-          this.notificacionService.error('La hora seleccionada debe ser mayor a la hora actual');
-          return;
-        }
         console.log('Datos guardados exitosamente')
         this.notificacionService.success('Mensaje actualizado correctamente');
         
       },
       error: (err) => {
         console.error('Error al guardar los datos: ', err)
+        this.notificacionService.error('No se pudo guardar el mensaje');
       }
     });
   }

@@ -20,7 +20,7 @@ import { Observable } from "rxjs";
         return this.http.get(`${this.appUrl}${this.apiUrl}/obtenerCumple`)
     }
 
-    obtenerMensaje(data: any): Observable<any> {
+    obtenerMensaje(data: {mensaje: string}): Observable<any> {
       return this.http.post(`${this.appUrl}${this.apiUrl}/obtenerMensaje`, data);
     }
 
