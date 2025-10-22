@@ -14,7 +14,7 @@ export class GestionMensajeriaComponent {
   intervalId: any;
   qrCode: string = '';
   abortController: AbortController | null = null;
-  mensajeriaServer: string ='http://localhost:3050/api/whatsapp/'
+  mensajeriaServer: string ='https://mensajeria.casaolimpopacientes.com/api/whatsapp/'
    
   async verificar(mostrarMensajes: boolean): Promise<boolean> {
     try {
@@ -70,20 +70,21 @@ export class GestionMensajeriaComponent {
 
   
 
-  async eliminar(): Promise<void> {
+  async eliminar(mostrarMensajes: boolean): Promise<void> {
     const sesionActiva = await this.verificar(false);
 
     if (!sesionActiva) {
       console.log('No hay sesion activa');
-      this.mensaje = 'Sesión actual eliminada. Recuerda crear una nueva lo antes posible.';
-      this.estiloMensaje = 'success';
-      setTimeout(() => {
-        this.mensaje = '';
-        this.estiloMensaje = '';
-      }, 10000);
+      if (mostrarMensajes) {
+        this.mensaje = 'Sesión actual eliminada. Recuerda crear una nueva lo antes posible.';
+        this.estiloMensaje = 'success';
+        setTimeout(() => {
+          this.mensaje = '';
+          this.estiloMensaje = '';
+        }, 10000);
+      }
       return;
     }
-
     await fetch(`${this.mensajeriaServer}eliminarClientes`, {
       method: 'DELETE',
       headers: {
@@ -94,12 +95,14 @@ export class GestionMensajeriaComponent {
       .then(response => {
         if (response.ok) {
           console.log('Sesion eliminada correctamente');
-          this.mensaje = 'Sesión actual eliminada. Recuerda crear una nueva lo antes posible.';
-          this.estiloMensaje = 'success';
-          setTimeout(() => {
-            this.mensaje = '';
-            this.estiloMensaje = '';
-          }, 10000);
+          if (mostrarMensajes) {
+            this.mensaje = 'Sesión actual eliminada. Recuerda crear una nueva lo antes posible.';
+            this.estiloMensaje = 'success';
+            setTimeout(() => {
+              this.mensaje = '';
+              this.estiloMensaje = '';
+            }, 10000);
+          }
         } else {
           throw new Error('No se pudo eliminar la sesión')
         }
@@ -107,17 +110,22 @@ export class GestionMensajeriaComponent {
       .then(data => console.log('Eliminar response:', data))
       .catch(error => {
         console.error('Error:', error);
-        this.mensaje = 'Ocurrió un error al eliminar la sesión, intentalo de nuevo más tarde.';
-        this.estiloMensaje = 'error';
-        setTimeout(() => {
-          this.mensaje = '';
-          this.estiloMensaje = '';
-        }, 10000);
+        if (mostrarMensajes) {
+          this.mensaje = 'Ocurrió un error al eliminar la sesión, intentalo de nuevo más tarde.';
+          this.estiloMensaje = 'error';
+          setTimeout(() => {
+            this.mensaje = '';
+            this.estiloMensaje = '';
+          }, 10000);
+        }
       });
   }
 
   async nuevoSSE(): Promise<void> {
     const sesionActiva = await this.verificar(false);
+    this.mensaje = 'Conectando espero un momento'
+    this.estiloMensaje = 'warning'
+
 
     if (sesionActiva) {
       console.log('Sesion activa');
@@ -182,6 +190,9 @@ export class GestionMensajeriaComponent {
           readStream();
         }).catch(error => {
           console.error('Error al leer el flujo:', error);
+          this.eliminar(false).then(() => {
+            setTimeout(() => this.nuevoSSE(), 2000)
+          });
         });
       };
       readStream();
@@ -190,7 +201,15 @@ export class GestionMensajeriaComponent {
         console.log('Conexion cancelada por el cliente');
       } else {
         console.error('Error en la conexion', error);
-        this.mensaje = 'Ocurrió un error al conectar';
+        this.mensaje = 'Espera un momento, reconectando...';
+        setTimeout(() => {
+              this.mensaje = '';
+              this.estiloMensaje = '';
+            }, 10000);
+        this.estiloMensaje = 'warning';
+        this.eliminar(false).then(() => {
+          setTimeout(() => this.nuevoSSE(), 2000)
+        });
       }
     });
   }
